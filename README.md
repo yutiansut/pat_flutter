@@ -1,5 +1,11 @@
 ## PAT_flutter - Hari
 
+
+Git Clone by branch:
+-------------------
+
+	git clone https://balahariprasath@bitbucket.org/daikanpheonix/pat_flutter.git -b hpat_flutter
+
 # Flutter Installation
 
 Step - 1:
@@ -25,14 +31,23 @@ Step - 3:
 
    Add Following Lines:
 
-    export ANDROID_HOME=$HOME/Android/Sdk
-    export PATH=$PATH:$ANDROID_HOME/emulator
-    export PATH=$PATH:$ANDROID_HOME/tools
-    export PATH=$PATH:$ANDROID_HOME/tools/bin
-    export PATH=$PATH:$ANDROID_HOME/platform-tools
+    # Android SDK path
+	export ANDROID_HOME=$HOME/Android/Sdk
+	export PATH=$PATH:$ANDROID_HOME/emulator
+	export PATH=$PATH:$ANDROID_HOME/tools
+	export PATH=$PATH:$ANDROID_HOME/tools/bin
+	export PATH=$PATH:$ANDROID_HOME/platform-tools
+	export PATH=$PATH:/opt/gradle/gradle-5.2.1/bin
+	# Flutter Path
+	export PATH=$PATH:/home/hari/workspace/flutter/flutter/bin
+
+   optional:
+
+   	* If you are install default-jdk then no need to add following JAVA PATH 
+
+    # JAVA PATH
     export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
     export PATH=$PATH:JAVA_HOME
-    export PATH=$PATH:/home/saasmate/BALAWRK/Flutter/flutter/bin
    
 Step - 4:
 --------
@@ -49,8 +64,26 @@ Step - 5:
     cd flutter_path
     cd bin
     ./flutter --version
-    
+   
    This will install the Dart SDK
+
+   * Dependencies for Flutter
+
+		sudo apt-get install lib32stdc++6
+
+   * Add Android licenses
+
+    	flutter doctor --android-licenses
+
+   * Install flutter Plugins in Android Studio and visual studio
+
+   		* In visual Studio:
+
+   			`Extentions -> Search -> flutter -> Install Flutter Extension`
+
+   		* In Android Studio:
+
+   			`File -> Settings -> Plugins -> Search -> flutter -> Install Flutter Plugin`
 
 Step - 6:
 -----------
