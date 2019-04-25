@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import './circular_percent_indicator.dart';
 import './income.dart';
+import './expense.dart';
+import './lend.dart';
 
 void main() {
   runApp(new MyApp());
@@ -27,12 +29,25 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   static const List<IconData> icons = const [ Icons.sms, Icons.mail, Icons.phone ];
 
+
   @override
   void initState() {
     _controller = new AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 10),
     );
+  }
+
+  pages(i){
+    if(i == 0){
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new Incomes()));
+    } 
+    if(i == 1){
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new Expenses()));
+    }
+    if(i == 2){
+      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new Lenders()));
+    }
   }
 
   Widget build(BuildContext context) {
@@ -146,22 +161,6 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               )
             ]),
       ),
-      drawer: new Drawer(
-          child: new ListView(
-            children: <Widget>[
-              new UserAccountsDrawerHeader(
-                accountName: new Text("Balavignesh"),
-                accountEmail: new Text("crystelpheonix@gmail.com"),
-                currentAccountPicture: new CircleAvatar(backgroundColor: Colors.black26,child: new Text("B"),),
-                decoration: new BoxDecoration(color: Colors.lightGreen),
-              ),
-              new ListTile(title: new Text("Income"),trailing: new Icon(Icons.access_alarm),onTap: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new Incomes())),),
-              new ListTile(title: new Text("Expenses"),trailing: new Icon(Icons.airline_seat_flat_angled),),
-              new ListTile(title: new Text("Lender"),trailing: new Icon(Icons.close),),
-              new ListTile(title: new Text("Close"),trailing: new Icon(Icons.close),onTap: (){Navigator.pop(context);},),
-            ],
-          ),
-        ),
       floatingActionButton: new Column(
         mainAxisSize: MainAxisSize.min,
         children: new List.generate(icons.length, (int index) {
@@ -183,7 +182,9 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 backgroundColor: backgroundColor,
                 mini: true,
                 child: new Icon(icons[index], color: foregroundColor),
-                onPressed: () {},
+                onPressed: () {
+                  pages(index);
+                },
               ),
             ),
           );

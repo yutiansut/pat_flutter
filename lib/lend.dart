@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import './income_salary.dart';
-import './income_reward.dart';
+import './borrows_page.dart';
+import './lender_pager.dart';
 
 
-class Incomes extends StatelessWidget {
+class Lenders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,15 +18,15 @@ class Incomes extends StatelessWidget {
                 Tab(icon: Icon(Icons.directions_transit))
               ],
             ),
-            title: Text('Incomes'),
+            title: Text('Lendes'),
             leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
           ),
           body: TabBarView(
             children: [
-              IncomeSalary(),
-              IncomeReward(),
+              LenderPage(),
+              BorrowPage()
             ],
           ),
         ),
