@@ -27,7 +27,11 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController _controller;
 
-  static const List<IconData> icons = const [ Icons.sms, Icons.mail, Icons.phone ];
+  static const List<Image> icons = const [ 
+    Image(width: 50, image: AssetImage("assets/income.png")),
+    Image(width: 50, image: AssetImage("assets/profit.png")),
+    Image(width: 50, image: AssetImage("assets/borrow_lend.png"))
+  ];
 
 
   @override
@@ -61,8 +65,8 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   style:
                       new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
-                backgroundColor: Colors.grey,
-                progressColor: Colors.blue,
+                backgroundColor: Colors.transparent,
+                progressColor: Colors.transparent,
               ),
               new CircularPercentIndicator(
                 radius: 130.0,
@@ -89,24 +93,9 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   style:
                       new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
-                // footer: new Text(
-                //   "Sales this week",
-                //   style:
-                //       new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-                // ),
                 circularStrokeCap: CircularStrokeCap.round,
                 progressColor: Colors.purple,
               ),
-              // Padding(
-              //   padding: EdgeInsets.all(15.0),
-              //   child: new CircularPercentIndicator(
-              //     radius: 60.0,
-              //     lineWidth: 5.0,
-              //     percent: 1.0,
-              //     center: new Text("100%"),
-              //     progressColor: Colors.green,
-              //   ),
-              // ),
               Container(
                 padding: EdgeInsets.all(15.0),
                 child: new Row(
@@ -142,13 +131,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     new Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                     ),
-                    // new CircularPercentIndicator(
-                    //   radius: 45.0,
-                    //   lineWidth: 4.0,
-                    //   percent: 0.90,
-                    //   center: new Text("90%"),
-                    //   progressColor: Colors.green,
-                    // )
+                  
                   ],
                 ),
               )
@@ -159,7 +142,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         children: new List.generate(icons.length, (int index) {
           Widget child = new Container(
             height: 70.0,
-            width: 56.0,
+            width: 50.0,
             alignment: FractionalOffset.topCenter,
             child: new ScaleTransition(
               scale: new CurvedAnimation(
@@ -172,9 +155,9 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ),
               child: new FloatingActionButton(
                 heroTag: null,
-                backgroundColor: backgroundColor,
+                backgroundColor: Colors.white,
                 mini: true,
-                child: new Icon(icons[index], color: foregroundColor),
+                child: icons[index],
                 onPressed: () {
                   pages(index);
                 },
@@ -185,13 +168,15 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         }).toList()..add(
           new FloatingActionButton(
             heroTag: null,
+            backgroundColor: Colors.white,
             child: new AnimatedBuilder(
               animation: _controller,
               builder: (BuildContext context, Widget child) {
                 return new Transform(
                   transform: new Matrix4.rotationZ(_controller.value * 0.5 * math.pi),
                   alignment: FractionalOffset.center,
-                  child: new Icon(_controller.isDismissed ? Icons.share : Icons.close),
+                  child: _controller.isDismissed ?  Image(width: 80,height: 80, image: AssetImage("assets/root.png")) : new Icon(Icons.close),
+          
                 );
               },
             ),
