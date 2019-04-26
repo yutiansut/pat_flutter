@@ -169,6 +169,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           new FloatingActionButton(
             heroTag: null,
             backgroundColor: Colors.white,
+            foregroundColor: Colors.teal,
             child: new AnimatedBuilder(
               animation: _controller,
               builder: (BuildContext context, Widget child) {
