@@ -39,15 +39,8 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   pages(i){
-    if(i == 0){
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new Incomes()));
-    } 
-    if(i == 1){
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new Expenses()));
-    }
-    if(i == 2){
-      Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new Lenders()));
-    }
+    var page = [new Incomes(), new Expenses(), new Lenders()];
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> page[i]));
   }
 
   Widget build(BuildContext context) {
