@@ -5,12 +5,12 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 class INForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return Income_salaryFrom();
+    return Income_RewardFrom();
   }
 }
 
 
-class Income_salaryFrom extends State<INForm> {
+class Income_RewardFrom extends State<INForm> {
 
   final formats = {
     InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
@@ -48,7 +48,7 @@ class Income_salaryFrom extends State<INForm> {
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Salary'),
+          title: Text('Reward'),
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
@@ -73,7 +73,7 @@ class Income_salaryFrom extends State<INForm> {
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Contact & Company' ,
+                          labelText: 'Source' ,
                           hintText: 'Name eg:Bala or Dostrix',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
@@ -96,7 +96,7 @@ class Income_salaryFrom extends State<INForm> {
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Salary Amount',
+                          labelText: 'Reward Amount',
                           hintText: 'Rupees',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
@@ -169,7 +169,7 @@ class Income_salaryFrom extends State<INForm> {
   }
 
   Widget getImageAsset() {
-    AssetImage assetImage = AssetImage('assets/salary.png');
+    AssetImage assetImage = AssetImage('assets/reward.png');
     Image image = Image(
       image: assetImage,
       width: 125.0,

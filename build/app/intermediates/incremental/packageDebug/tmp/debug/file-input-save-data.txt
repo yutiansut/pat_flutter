@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Sat Apr 27 16:14:04 IST 2019
+#Sat Apr 27 18:06:12 IST 2019
 17.baseType=DIRECTORY
 4.path=flutter_assets/assets/borrow_lend.png
 22.set=ASSET

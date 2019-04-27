@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../forms/income_reward_form.dart';
 import '../models/dummy_data.dart';
 
 class IncomeReward extends StatelessWidget {
@@ -49,7 +50,7 @@ class IncomeReward extends StatelessWidget {
 	      ),
 	      backgroundColor: Colors.transparent,
 	      onPressed: (){
-	        print("Ink Clicked");
+	        Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new INForm()));
 	      }
 	    )
   );

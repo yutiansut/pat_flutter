@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-class INForm extends StatefulWidget {
+class EXPForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return Income_salaryFrom();
+    return Expense_onlineForm();
   }
 }
 
 
-class Income_salaryFrom extends State<INForm> {
+class Expense_onlineForm extends State<EXPForm> {
 
   final formats = {
     InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
@@ -48,7 +48,7 @@ class Income_salaryFrom extends State<INForm> {
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Salary'),
+          title: Text('Online Purchase'),
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
@@ -73,8 +73,8 @@ class Income_salaryFrom extends State<INForm> {
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Contact & Company' ,
-                          hintText: 'Name eg:Bala or Dostrix',
+                          labelText: 'OnlineStore' ,
+                          hintText: 'Name eg:Amazon',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
                             color: Colors.yellowAccent,
@@ -96,7 +96,7 @@ class Income_salaryFrom extends State<INForm> {
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Salary Amount',
+                          labelText: 'Expense Amount',
                           hintText: 'Rupees',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
@@ -169,7 +169,7 @@ class Income_salaryFrom extends State<INForm> {
   }
 
   Widget getImageAsset() {
-    AssetImage assetImage = AssetImage('assets/salary.png');
+    AssetImage assetImage = AssetImage('assets/onlinexp.png');
     Image image = Image(
       image: assetImage,
       width: 125.0,

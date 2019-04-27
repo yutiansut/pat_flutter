@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/dummy_data.dart';
+import '../forms/expense_purchase.dart';
 
 class ExpensePurchase extends StatelessWidget {
    @override
@@ -49,7 +50,7 @@ class ExpensePurchase extends StatelessWidget {
 	      ),
 	      backgroundColor: Colors.transparent,
 	      onPressed: (){
-	        print("Ink Clicked");
+	        Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new EXPForm()));
 	      }
 	    )
   );
