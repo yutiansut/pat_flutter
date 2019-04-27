@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import './circular_percent_indicator.dart';
-import './income.dart';
-import './expense.dart';
-import './lend.dart';
+import './pages/circular_percent_indicator.dart';
+import './pages/income.dart';
+import './pages/expense.dart';
+import './pages/lend.dart';
 
 void main() {
   runApp(new MyApp());
