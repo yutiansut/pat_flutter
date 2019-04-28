@@ -129,11 +129,7 @@ class LenderForm extends State<LENDForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              setState(() {
-                                if (_formKey.currentState.validate()) {
-                                  this.displayResult = _calculateTotalReturns();
-                                }
-                              });
+                              print('good');
                             },
                           ),
                         ),
@@ -146,9 +142,7 @@ class LenderForm extends State<LENDForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              setState(() {
-                                _reset();
-                              });
+                              print('hello');
                             },
                           ),
                         ),
@@ -200,12 +194,6 @@ class LenderForm extends State<LENDForm> {
     return result;
   }
 
-  void _reset() {
-    principalController.text = '';
-    roiController.text = '';
-    termController.text = '';
-    displayResult = '';
-    _currentItemSelected = _currencies[0];
-  }
+
 }
 
