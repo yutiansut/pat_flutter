@@ -1,47 +1,70 @@
 import 'package:flutter/material.dart';
-import '../models/dummy_data.dart';
+import 'package:sqflite/sqflite.dart';
 import '../forms/income_salary_form.dart';
+import '../utils/db_helper.dart';
 
-class IncomeSalary extends StatelessWidget {
+
+class IncomeSale extends StatefulWidget {
   @override
-  Widget build(BuildContext context) => new Scaffold(
-   body: new ListView.builder(
-      itemCount: dummyData.length,
-      itemBuilder: (context, i) => new Column(
-            children: <Widget>[
-              new Divider(
-                height: 10.0,
-              ),
-              new ListTile(
-                leading: new CircleAvatar(
-                  foregroundColor: Theme.of(context).primaryColor,
-                  backgroundColor: Colors.grey,
-                  backgroundImage: new NetworkImage(dummyData[i].avatarUrl),
-                ),
-                title: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Text(
-                      dummyData[i].name,
-                      style: new TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    new Text(
-                      dummyData[i].time,
-                      style: new TextStyle(color: Colors.grey, fontSize: 14.0),
-                    ),
-                  ],
-                ),
-                subtitle: new Container(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: new Text(
-                    dummyData[i].message,
-                    style: new TextStyle(color: Colors.grey, fontSize: 15.0),
-                  ),
-                ),
-              )
-            ],
-          ),
-    ),
+  State<StatefulWidget> createState() {
+    return IncomeSalary();
+  }
+}
+
+class IncomeSalary extends State<IncomeSale> {
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+	List<Map<String, dynamic>> salaryList;
+  int count = 0;
+
+  @override
+  void initState(){
+    super.initState();
+    updateListView(); 
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print(salaryList);
+    if (salaryList == null) {
+			salaryList = List<Map<String, dynamic>>();
+      updateListView(); 
+		}
+
+    return new Scaffold(
+     body: ListView.builder(
+			itemCount: count,
+			itemBuilder: (BuildContext context, int position) {
+          return Card(
+					color: Colors.white,
+					elevation: 2.0,
+					child: ListTile(
+
+						leading: CircleAvatar(
+							backgroundColor: Colors.black,
+						),
+
+						title: Text(this.salaryList[position]['contact']),
+
+						subtitle: Text(this.salaryList[position]['amount']),
+
+						trailing: GestureDetector(
+							child: Icon(Icons.delete, color: Colors.grey,),
+							onTap: () {
+								_delete(context, this.salaryList[position]['id']);
+							},
+						),
+
+
+						// onTap: () {
+						// 	debugPrint("ListTile Tapped");
+						// 	navigateToDetail(this.noteList[position],'Edit Note');
+						// },
+
+					),
+				);	
+			},
+		),
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
@@ -54,4 +77,33 @@ class IncomeSalary extends StatelessWidget {
 	      }
 	    )
   );
-}
+  }
+
+  Future<List<Map<String, dynamic>>> updateListView() async {
+      final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+      dbFuture.then((database) {
+        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getSalaryList();
+          noteListFuture.then((noteList) {
+              setState(() {
+                 this.salaryList = noteList;
+                this.count = salaryList.length;
+              });
+        });
+      });
+  }
+
+  void _delete(BuildContext context, int id) async {
+		int result = await databaseHelper.deleteSalary(id);
+		if (result != 0) {
+			_showSnackBar(context, 'Salary Deleted Successfully');
+			updateListView();
+		}
+	}
+
+  void _showSnackBar(BuildContext context, String message) {
+
+		final snackBar = SnackBar(content: Text(message));
+		Scaffold.of(context).showSnackBar(snackBar);
+	}
+
+} 

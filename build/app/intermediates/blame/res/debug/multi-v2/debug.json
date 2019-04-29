@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/inmortaliumpheonix/P/Flut/BIT/pat_flutter/build/app/intermediates/res/merged/debug/values_values.arsc.flat",
+            "outputFile": "/home/saasmate/BALAWRK/Flutter/BIT/pat_flutter/build/app/intermediates/res/merged/debug/values_values.arsc.flat",
             "map": [
                 {
-                    "source": "/home/inmortaliumpheonix/P/Flut/BIT/pat_flutter/android/app/src/main/res/values/styles.xml",
+                    "source": "/home/saasmate/BALAWRK/Flutter/BIT/pat_flutter/android/app/src/main/res/values/styles.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

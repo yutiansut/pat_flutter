@@ -28,10 +28,18 @@ dependencies:
   datetime_picker_formfield: ^0.1.8
   sqflite: any
   path_provider: any
+  async_loader: ^0.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: "^0.7.0"
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/icon.png"
 
 
 # For information on the generic Dart part of this file, see the

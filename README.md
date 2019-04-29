@@ -86,6 +86,22 @@ Step - 9:
 
 	flutter run
 
+Step - 10:
+----------
+
+   Icon Setup for android and ios
+
+   https://pub.dartlang.org/packages/flutter_launcher_icons
+
+Step - 11:
+----------
+
+   Build Signed apk by using following tutorial
+
+   https://flutter.dev/docs/deployment/android
+
 # Note:
    
    * Before run the above command you should connect android device or any anroid emulator to the System.
+
+

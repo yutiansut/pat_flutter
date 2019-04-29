@@ -57,7 +57,7 @@ class DatabaseHelper{
   String barcolDesc = 'description';
 
   //Lendes Properties
-  String lendestable = 'lends _table';
+  String lendestable = 'lends_table';
   String lendcolId = 'id';
   String lendcolLendername = 'lendername';
   String lendcolAmount = 'amount';
@@ -111,7 +111,7 @@ class DatabaseHelper{
     await db.execute('CREATE TABLE $expensepurchaseTb($exppurcolId INTEGER PRIMARY KEY AUTOINCREMENT, $exppurcolStore TEXT, $exppurcolProduct TEXT, $exppurcolAmount DOUBLE, $exppurcolDate DATETIME, $exppurcolDesc TEXT)');
 
     //create barrows table
-    await db.execute('CRTAE TABLE $barrowstable($barcolId INTEGER PRIMARY KEY AUTOINCREMENT, $barcolBarrowername TEXT, $barcolLenderamount DOUBLE, $barcolDate DATETIME, $barcolDesc TEXT)');
+    await db.execute('CREATE TABLE $barrowstable($barcolId INTEGER PRIMARY KEY AUTOINCREMENT, $barcolBarrowername TEXT, $barcolLenderamount DOUBLE, $barcolDate DATETIME, $barcolDesc TEXT)');
 
     //create lens table
     await db.execute('CREATE TABLE $lendestable($lendcolId INTEGER PRIMARY KEY AUTOINCREMENT, $lendcolLendername TEXT, $lendcolAmount DOUBLE, $lendcolDate DATETIME, $lendcolDesc TEXT)');
@@ -135,5 +135,37 @@ class DatabaseHelper{
     var result = await db.insert(salarytable, salary.toMap());
     return result;
   }
+
+  //Update salary table
+  Future<dynamic> updateSalary(Salary salary) async{
+    Database db = await this.database;
+    var result = await db.update(salarytable, salary.toMap(), where: '$colContact = ?', whereArgs: [salary.id] );
+    return result;
+  }
+
+  //DELETE salary table data
+  Future<dynamic> deleteSalary(int id) async{
+      Database db = await this.database;
+      var result = await db.rawDelete('DELETE FROM $salarytable where $colId = $id');
+      return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getSalaryList() async {
+
+		var noteMapList = await getSalaryMapList(); // Get 'Map List' from database
+		int count = noteMapList.length;         // Count the number of map entries in db table
+
+    // print(noteMapList);
+		// List<Salary> noteList = List<Salary>();
+		// // For loop to create a 'Note List' from a 'Map List'
+
+		// for (int i = 0; i < count; i++) {
+		// 	noteList.add(Salary.fromMapObject(noteMapList[i]));
+		// }
+    
+		return noteMapList;
+	}
+
+
 
 }

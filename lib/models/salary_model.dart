@@ -6,10 +6,10 @@ class Salary{
   String _desc;
 
   //default Constructor
-  Salary(this._contact,this._amount,this._date,[this._desc]);
+  Salary(this._contact,this._amount,[this._date, this._desc]);
 
   //Named Constructor
-  Salary.withId(this._id,this._contact,this._amount,this._date,[this._desc]);
+  Salary.withId(this._id,this._contact,this._amount,[this._date, this._desc]);
 
   //Getters
   int get id => _id;
@@ -19,9 +19,9 @@ class Salary{
   String get desc => _desc;
 
   //Setters
-  set contact(String contact){
-    if(contact.length <= 25){
-      this._contact = contact;
+  set contact(String newContact){
+    if(newContact.length <= 25){
+      this._contact = newContact;
     }
   }
 
@@ -58,7 +58,7 @@ class Salary{
   Salary.fromMapObject(Map<String,dynamic> map){
     this._id = map['_id'];
     this._contact = map['_contact'];
-    this._amount = map['amount'];
+    this._amount = 0.0;
     this._date = map['date'];
     this._desc = map['description'];
   }
