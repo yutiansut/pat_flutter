@@ -7,7 +7,7 @@ import '../models/reward_model.dart';
 import '../models/expense_online_model.dart';
 import '../models/expense_purchase_model.dart';
 import '../models/lender_model.dart';
-import '../models/barrower_model.dart';
+import '../models/barrows_model.dart';
 
 class DatabaseHelper{
   static DatabaseHelper _databaseHelper; //Singleton DatabaseHelper
@@ -51,16 +51,16 @@ class DatabaseHelper{
   //Barrows  properties
   String barrowstable = 'barrows_table';
   String barcolId = 'id';
-  String barcolBarrowername = 'barrowername';
-  String barcolLenderamount = 'lendamount';
+  String barcolLendername = 'lendername';
+  String barcolBarroweramount = 'barrowamount';
   String barcolDate = 'date';
   String barcolDesc = 'description';
 
   //Lendes Properties
   String lendestable = 'lends_table';
   String lendcolId = 'id';
-  String lendcolLendername = 'lendername';
-  String lendcolAmount = 'amount';
+  String lendcolBarrowername = 'barrowername';
+  String lendcolAmount = 'lendamount';
   String lendcolDate = 'date';
   String lendcolDesc = 'description';
 
@@ -111,17 +111,17 @@ class DatabaseHelper{
     await db.execute('CREATE TABLE $expensepurchaseTb($exppurcolId INTEGER PRIMARY KEY AUTOINCREMENT, $exppurcolStore TEXT, $exppurcolProduct TEXT, $exppurcolAmount DOUBLE, $exppurcolDate DATETIME, $exppurcolDesc TEXT)');
 
     //create barrows table
-    await db.execute('CREATE TABLE $barrowstable($barcolId INTEGER PRIMARY KEY AUTOINCREMENT, $barcolBarrowername TEXT, $barcolLenderamount DOUBLE, $barcolDate DATETIME, $barcolDesc TEXT)');
+    await db.execute('CREATE TABLE $barrowstable($barcolId INTEGER PRIMARY KEY AUTOINCREMENT, $barcolLendername TEXT, $barcolBarroweramount DOUBLE, $barcolDate DATETIME, $barcolDesc TEXT)');
 
     //create lens table
-    await db.execute('CREATE TABLE $lendestable($lendcolId INTEGER PRIMARY KEY AUTOINCREMENT, $lendcolLendername TEXT, $lendcolAmount DOUBLE, $lendcolDate DATETIME, $lendcolDesc TEXT)');
+    await db.execute('CREATE TABLE $lendestable($lendcolId INTEGER PRIMARY KEY AUTOINCREMENT, $lendcolBarrowername TEXT, $lendcolAmount DOUBLE, $lendcolDate DATETIME, $lendcolDesc TEXT)');
 
   }
 
 
   //CRUD OPERATIONS
  
-  //GET All the data from the table 
+  //GET All the data from the salary table 
   Future<List<Map<String, dynamic>>> getSalaryMapList() async{
     Database db = await this.database;
 
@@ -150,22 +150,194 @@ class DatabaseHelper{
       return result;
   }
 
+  //Get SalaryList
   Future<List<Map<String, dynamic>>> getSalaryList() async {
 
-		var noteMapList = await getSalaryMapList(); // Get 'Map List' from database
-		int count = noteMapList.length;         // Count the number of map entries in db table
+		var salaryMapList = await getSalaryMapList(); // Get 'Map List' from database
+		return salaryMapList;
+	}
 
-    // print(noteMapList);
-		// List<Salary> noteList = List<Salary>();
-		// // For loop to create a 'Note List' from a 'Map List'
+  //REWARD CURD OPERATIONS
 
-		// for (int i = 0; i < count; i++) {
-		// 	noteList.add(Salary.fromMapObject(noteMapList[i]));
-		// }
-    
-		return noteMapList;
+  //Get all reward datas from reward table
+  Future<List<Map<String, dynamic>>> getRewardMapList() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM $rewardtable');
+    return result;
+  }
+
+
+  //Insert reward operation 
+  Future<dynamic> insertReward(Reward reward) async{
+    Database db = await this.database;
+    var result = await db.insert(rewardtable, reward.toMap());
+    return result;
+  }
+
+
+  //Update reward table
+  Future<dynamic> updateReward(Reward reward) async{
+    Database db = await this.database;
+    var result = await db.update(rewardtable, reward.toMap(), where: '$rewcolContact = ?', whereArgs: [reward.id] );
+    return result;
+  }
+
+  //DELETE reward table data
+  Future<dynamic> deleteReward(int id) async{
+      Database db = await this.database;
+      var result = await db.rawDelete('DELETE FROM $rewardtable where $rewcolId = $id');
+      return result;
+  }
+
+  //Get RewardList 
+  Future<List<Map<String, dynamic>>> getRewardList() async {
+		var rewardMapList = await getRewardMapList(); // Get 'Map List' from database
+		return rewardMapList;
+	}
+
+  //CURD OPERATION FOR EXPENSE ONLINE
+
+  //Get all expenseonline datas from expense_online table
+  Future<List<Map<String, dynamic>>> getExpenseOnlineMapList() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM $expenseonlineTb');
+    return result;
+  }
+
+  //Insert expenseonline data operation 
+  Future<dynamic> insertExpOnline(ExpenseOnline exponline) async{
+    Database db = await this.database;
+    var result = await db.insert(expenseonlineTb, exponline.toMap());
+    return result;
+  }
+
+  //Update expenseonline table
+  Future<dynamic> updateExpOnline(ExpenseOnline exponline) async{
+    Database db = await this.database;
+    var result = await db.update(expenseonlineTb, exponline.toMap(), where: '$exponcolStore = ?', whereArgs: [exponline.id] );
+    return result;
+  }
+
+  //DELETE expenseonline table data
+  Future<dynamic> deleteExpOnline(int id) async{
+      Database db = await this.database;
+      var result = await db.rawDelete('DELETE FROM $expenseonlineTb where $exponcolId = $id');
+      return result;
+  }
+
+  //Get expenseonlineList
+  Future<List<Map<String, dynamic>>> getExpOnlineList() async {
+		var exponlineMapList = await getExpenseOnlineMapList(); // Get 'Map List' from database
+		return exponlineMapList;
+	}
+
+  //CURD OPERATION for ExpensePurchase
+
+  //get All the data from expense_purchase table
+  Future<List<Map<String, dynamic>>> getExpensePurchaseMapList() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM $expensepurchaseTb');
+    return result;
+  }
+
+  //Insert expense purchase table data Operation
+  Future<dynamic> insertExpPurchase(ExpensePurchase exppurchase) async{
+    Database db = await this.database;
+    var result = await db.insert(expensepurchaseTb, exppurchase.toMap());
+    return result;
+  }
+
+  //Update expense purchase table
+  Future<dynamic> updateExpPurchase(ExpensePurchase exppurchase) async{
+    Database db = await this.database;
+    var result = await db.update(expensepurchaseTb, exppurchase.toMap(), where: '$exppurcolStore = ?', whereArgs: [exppurchase.id] );
+    return result;
+  }
+
+  //Delete Expense purchase table
+  Future<dynamic> deleteExpPurchase(int id) async{
+      Database db = await this.database;
+      var result = await db.rawDelete('DELETE FROM $expensepurchaseTb where $exppurcolId = $id');
+      return result;
+  }
+
+  //Get ExpensePurchaseList 
+  Future<List<Map<String, dynamic>>> getExpPurchaseList() async {
+		var exppurchaseMapList = await getExpensePurchaseMapList(); // Get 'Map List' from database
+		return exppurchaseMapList;
+	}
+
+  //CURD OPERATION for Barrows table
+
+  //get All the data from barrows table
+  Future<List<Map<String, dynamic>>> getBarrowsMapList() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM $barrowstable');
+    return result;
+  }
+
+  //insert the data into barrows table
+  Future<dynamic> insertBarrows(Barrow barrows) async{
+    Database db = await this.database;
+    var result = await db.insert(barrowstable, barrows.toMap());
+    return result;
+  }
+
+  //update the data into barrows table
+  Future<dynamic> updateBarrows(Barrow barrows) async{
+    Database db = await this.database;
+    var result = await db.update(barrowstable, barrows.toMap(), where: '$barcolLendername = ?', whereArgs: [barrows.id] );
+    return result;
+  }
+
+  //Delete the barrows table data
+  Future<dynamic> deleteBarrows(int id) async{
+      Database db = await this.database;
+      var result = await db.rawDelete('DELETE FROM $barrowstable where $barcolId = $id');
+      return result;
+  }
+
+  //Get BarrowsList
+  Future<List<Map<String, dynamic>>> getBarrowsList() async {
+		var barrowsMapList = await getBarrowsMapList(); // Get 'Map List' from database
+		return barrowsMapList;
 	}
 
 
+  //CRUD OPERATION for lends table
+
+  //get all the data from lends table
+  Future<List<Map<String, dynamic>>> getLendsMapList() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM $lendestable');
+    return result;
+  }
+
+  //insert the data into barrows table
+  Future<dynamic> insertLends(Lender lends) async{
+    Database db = await this.database;
+    var result = await db.insert(lendestable, lends.toMap());
+    return result;
+  }
+
+  //update the data into barrows table
+  Future<dynamic> updateLends(Lender lends) async{
+    Database db = await this.database;
+    var result = await db.update(lendestable, lends.toMap(), where: '$lendcolBarrowername = ?', whereArgs: [lends.id] );
+    return result;
+  }
+
+  //Delete the lends table data
+  Future<dynamic> deleteLends(int id) async{
+      Database db = await this.database;
+      var result = await db.rawDelete('DELETE FROM $lendestable where $lendcolId = $id');
+      return result;
+  }
+
+  //Get LendsList 
+  Future<List<Map<String, dynamic>>> getLendsList() async {
+		var lendsMapList = await getLendsMapList(); // Get 'Map List' from database
+		return lendsMapList;
+	}
 
 }

@@ -1,34 +1,33 @@
 class Lender{
 
     int _id;
-    String _lendername;
-    double _amount;
+    String _barrowername;
+    double _lendamount;
     DateTime _date;
     String _desc;
 
     //default constructor
-    Lender(this._lendername,this._amount,this._date,[this._desc]);
+    Lender(this._barrowername,this._lendamount,this._date,[this._desc]);
 
-    //Named constructor 
-    Lender.withId(this._id,this._lendername,this._amount,this._date,[this._desc]);
+    //Named Constructor
+    Lender.withId(this._id,this._barrowername,this._lendamount,this._date,[this._desc]);
 
     //Getters
     int get id => _id;
-    String get lendername => _lendername;
-    double get amount => _amount;
+    String get barrowername => _barrowername;
+    double get lendamount => _lendamount;
     DateTime get date => _date;
-    String get dec => _desc;
-
+    String get desc => _desc;
 
     //Setters
-    set lendername(String name){
-      if(name.length <= 20){
-        this._lendername = name;
+    set barrowername(String banname){
+      if(banname.length <= 20){
+        this._barrowername = banname;
       }
     }
 
-    set amount(double amo){
-      this._amount = amo;
+    set lendamount(double lendamo){
+      this._lendamount = lendamo;
     }
 
     set date(DateTime date){
@@ -40,29 +39,27 @@ class Lender{
     }
 
 
-    //Convert the input data into MapObject
+
+    //converts the input data into Map Object
     Map<String,dynamic> toMap(){
       var map = Map<String,dynamic>();
 
       if(_id != null){
         map['id'] = _id;
-      }
-      map['lendername'] = _lendername;
-      map['amount'] = _amount;
+      } 
+      map['barrowername'] = _barrowername;
+      map['lendamount'] = _lendamount;
       map['date'] = _date;
       map['description'] = _desc;
 
       return map;
     }
 
-
-
-    //Get the Data From MapObject
-
+    //Get the date from MapObject
     Lender.fromMapObject(Map<String,dynamic> map){
       this._id = map['id'];
-      this._lendername = map['lendername'];
-      this._amount = map['amount'];
+      this._barrowername = map['barrowername'];
+      this._lendamount = map['lendamount'];
       this._date = map['date'];
       this._desc = map['description'];
     }

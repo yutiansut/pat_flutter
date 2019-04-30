@@ -6,6 +6,7 @@ import '../utils/db_helper.dart';
 import '../utils/common.dart';
 
 
+
 class INForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -180,7 +181,7 @@ class Income_salaryFrom extends State<INForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              getSalaryFormValues(context);
+                              getSalaryFormValues();
                             },
                           ),
                         ),
@@ -231,7 +232,7 @@ class Income_salaryFrom extends State<INForm> {
 
  
 
-  void getSalaryFormValues(BuildContext context) async{
+  void getSalaryFormValues() async{
     double sal = num.tryParse(salarycontroller.text).toDouble();
     salary_d.contact = contactcontoller.text;
     salary_d.amount = sal;
@@ -240,9 +241,12 @@ class Income_salaryFrom extends State<INForm> {
     dynamic result = await databaseHelper.insertSalary(salary_d);
     print(result);
     if(result != 0){
-      com.showSnackBar(context, 'Saved Successfully');
+      print('Saved Successfully');
+      Navigator.pop(context, false);
+      // com.showSnackBar(context, 'Saved Successfully');
     }else{
-      com.showSnackBar(context, 'Not Saved.');
+      print('Not Saved.');
+      // com.showSnackBar(context, 'Not Saved.');
     }
   }
 }
