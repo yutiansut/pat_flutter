@@ -6,6 +6,10 @@ Git Clone by branch:
 
 	git clone https://balahariprasath@bitbucket.org/daikanpheonix/pat_flutter.git -b hpat_flutter
 
+   cd pat_flutter
+
+   flutter packages get
+
 # Flutter Installation
 
 Step - 1:
