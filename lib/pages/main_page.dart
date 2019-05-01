@@ -6,8 +6,6 @@ import 'accounts.dart';
 
 
 class MainPage extends StatefulWidget {
-
-  int _currentTab = 0;
   @override
   _MainPageState createState() => _MainPageState();
 }

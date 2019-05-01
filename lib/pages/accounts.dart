@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../Xwidgets/XlistView.dart';
+import '../Xwidgets/XlistTile.dart';
 
 class AccountsPage extends StatefulWidget {
   
@@ -14,25 +14,12 @@ class _AccountsPageState  extends State<AccountsPage>{
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
-      padding: EdgeInsets.all(.5),
+      padding: EdgeInsets.all(0.8),
       children: <Widget>[
-        ListTile(
-          title: Text("Income"),
-          subtitle: Text("SubTitle"),
-          trailing: Chip(
-            label: Text("2000", style: TextStyle(fontWeight: FontWeight.bold),),
-            avatar: CircleAvatar(
-              child: Image(image: AssetImage("assets/rupee-16.png")),
-              backgroundColor: Colors.amber,
-              foregroundColor: Colors.white,
-            ),
-            backgroundColor: Colors.amber,
-          ),
-          onTap: (){
-            print("Pressed1");
-          },
-        ),
-        Divider()
+        XListTile(desc: "Room Rent", category: "Expense", amount: 2500),
+        XListTile(desc: "Salary", category: "Income", amount: 27500),
+        XListTile(desc: "Abi", category: "Borrow", amount: 500),
+        XListTile(desc: "BalaVignesh", category: "Lend", amount: 2500),
       ],
     );
   } 
