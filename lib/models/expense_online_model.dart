@@ -8,10 +8,10 @@ class ExpenseOnline{
   String _desc;
 
   //default constructor
-  ExpenseOnline(this._product,this._storename,this._amount,this._date,[this._desc]);
+  ExpenseOnline(this._product,this._storename,this._amount,[this._date,this._desc]);
 
   //NamedConstructor
-  ExpenseOnline.withId(this._id,this._product,this._storename,this._amount,this._date,[this._desc]);
+  ExpenseOnline.withId(this._id,this._product,this._storename,this._amount,[this._date,this._desc]);
 
   //Getters
   int get id => _id;

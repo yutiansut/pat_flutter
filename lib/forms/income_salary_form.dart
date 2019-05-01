@@ -224,10 +224,6 @@ class Income_salaryFrom extends State<INForm> {
     contactcontoller.text = '';
     timecontoller.text = '';
     descontroller.text = '';
-
-    var res = await databaseHelper.getSalaryMapList();
-    print(res);
-  
   }
 
  

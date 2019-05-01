@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Tue Apr 30 18:42:44 IST 2019
+#Tue Apr 30 20:33:07 IST 2019
 17.baseType=DIRECTORY
 4.path=flutter_assets/assets/borrow_lend.png
 25.base=/home/inmortaliumpheonix/P/Flut/BIT/pat_flutter/build/app/intermediates/merged_assets/debug/mergeDebugAssets/out

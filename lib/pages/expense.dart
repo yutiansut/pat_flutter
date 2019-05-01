@@ -33,7 +33,7 @@ class Expenses extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              ExpenseOnline(),
+              ExpOnline(),
               ExpensePurchase()
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../utils/db_helper.dart';
+import '../models/reward_model.dart';
 
 class INForm extends StatefulWidget {
   @override
@@ -11,6 +13,14 @@ class INForm extends StatefulWidget {
 
 
 class Income_RewardFrom extends State<INForm> {
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  Reward reward_d = Reward('', 0, DateTime.now());
+  List<Reward> rewardlist;
+  int count = 0;
+
+ 
+
 
   final formats = {
     InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
@@ -25,33 +35,42 @@ class Income_RewardFrom extends State<INForm> {
 
   var _formKey = GlobalKey<FormState>();
 
-  var _currencies = ['Rupees', 'Dollars', 'Pounds'];
+
   final double _minimumPadding = 5.0;
 
-  var _currentItemSelected = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _currentItemSelected = _currencies[0];
-  }
 
-  TextEditingController principalController = TextEditingController();
-  TextEditingController roiController = TextEditingController();
-  TextEditingController termController = TextEditingController();
+
+  TextEditingController contactcontoller = TextEditingController();
+  TextEditingController rewardcontroller = TextEditingController();
+  TextEditingController timecontoller = TextEditingController();
+  TextEditingController descontroller = TextEditingController();
 
   var displayResult = '';
 
    @override
   Widget build(BuildContext context){
+    if(rewardlist == null){
+      rewardlist = List<Reward>();
+    }
+
+
      TextStyle textStyle = Theme.of(context).textTheme.title;
 
      return new Scaffold(
        appBar: AppBar(
           title: Text('Reward'),
+          backgroundColor: Colors.black,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
+            actions: <Widget>[
+              Image(
+	            width: 50,
+	            image: AssetImage("assets/reward.png"),
+	          )
+            ],
+          
        ),
         body: Form(
         key: _formKey,
@@ -59,21 +78,21 @@ class Income_RewardFrom extends State<INForm> {
             padding: EdgeInsets.all(_minimumPadding * 2),
             child: ListView(
               children: <Widget>[
-                getImageAsset(),
+                // getImageAsset(),
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
                     child: TextFormField(
-                      keyboardType: TextInputType.number,
+                      // keyboardType: TextInputType.text,
                       style: textStyle,
-                      controller: principalController,
+                      controller: contactcontoller,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please enter principal amount';
+                          return 'Please enter the contact name';
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Source' ,
+                          labelText: 'Contact & Company' ,
                           hintText: 'Name eg:Bala or Dostrix',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
@@ -82,17 +101,19 @@ class Income_RewardFrom extends State<INForm> {
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
-                    )),
+  
+                    ),
+                  ),
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: roiController,
+                      controller: rewardcontroller,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please enter rate of interest';
+                          return 'Please enter the Reward amount';
                         }
                       },
                       decoration: InputDecoration(
@@ -106,13 +127,41 @@ class Income_RewardFrom extends State<INForm> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
+                    Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      // keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: descontroller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the description';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Description',
+                          hintText: 'optional',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )),
                 DateTimePickerFormField(
               inputType: inputType,
               format: formats[inputType],
               editable: editable,
+              controller: timecontoller,
               decoration: InputDecoration(
                   labelText: 'Date/Time', hasFloatingPlaceholder: false),
-              onChanged: (dt) => setState(() => date = dt),
+              onChanged: (dt) => setState((){ 
+                print(dt);
+                date = dt;
+                print(date);
+                }),
             ),
                 
                 Padding(
@@ -129,11 +178,7 @@ class Income_RewardFrom extends State<INForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              setState(() {
-                                if (_formKey.currentState.validate()) {
-                                  this.displayResult = _calculateTotalReturns();
-                                }
-                              });
+                              getRewardFormValues();
                             },
                           ),
                         ),
@@ -168,44 +213,30 @@ class Income_RewardFrom extends State<INForm> {
     );
   }
 
-  Widget getImageAsset() {
-    AssetImage assetImage = AssetImage('assets/reward.png');
-    Image image = Image(
-      image: assetImage,
-      width: 125.0,
-      height: 125.0,
-    );
+ 
 
-    return Container(
-      child: image,
-      margin: EdgeInsets.all(_minimumPadding * 10),
-    );
+  void _reset() async{
+    rewardcontroller.text = '';
+    contactcontoller.text = '';
+    timecontoller.text = '';
+    descontroller.text = '';
   }
 
-  void _onDropDownItemSelected(String newValueSelected) {
-    setState(() {
-      this._currentItemSelected = newValueSelected;
-    });
-  }
-
-  String _calculateTotalReturns() {
-    double principal = double.parse(principalController.text);
-    double roi = double.parse(roiController.text);
-    double term = double.parse(termController.text);
-
-    double totalAmountPayable = principal + (principal * roi * term) / 100;
-
-    String result =
-        'After $term years, your investment will be worth $totalAmountPayable $_currentItemSelected';
-    return result;
-  }
-
-  void _reset() {
-    principalController.text = '';
-    roiController.text = '';
-    termController.text = '';
-    displayResult = '';
-    _currentItemSelected = _currencies[0];
+  void getRewardFormValues() async{
+    double sal = num.tryParse(rewardcontroller.text).toDouble();
+    reward_d.contact = contactcontoller.text;
+    reward_d.amount = sal;
+    reward_d.date = date;
+    reward_d.desc = descontroller.text;
+    dynamic result = await databaseHelper.insertReward(reward_d);
+    print(result);
+    if(result != 0){
+      print('Reward Saved Successfully');
+      Navigator.pop(context, false);
+      
+    }else{
+      print('Not Saved.');
+    }
   }
 }
 

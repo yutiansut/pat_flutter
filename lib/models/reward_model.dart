@@ -7,10 +7,10 @@ class Reward{
     String _desc;
 
     //default constructor
-    Reward(this._contact,this._amount,this._date,[this._desc]);
+    Reward(this._contact,this._amount,[this._date,this._desc]);
 
     //Named constructor
-    Reward.withId(this._id,this._contact,this._amount,this._date,[this._desc]);
+    Reward.withId(this._id,this._contact,this._amount,[this._date,this._desc]);
 
     //Getters
     int get id => _id;
@@ -58,7 +58,7 @@ class Reward{
   Reward.fromMapObject(Map<String,dynamic> map){
     this._id = map['_id'];
     this._contact = map['_contact'];
-    this._amount = map['amount'];
+    this._amount = 0.0;
     this._date = map['date'];
     this._desc = map['description'];
   }
