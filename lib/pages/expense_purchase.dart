@@ -1,47 +1,68 @@
 import 'package:flutter/material.dart';
-import '../models/dummy_data.dart';
+import 'package:sqflite/sqflite.dart';
 import '../forms/expense_purchase.dart';
+import '../utils/db_helper.dart';
 
-class ExpensePurchase extends StatelessWidget {
+class ExpensePur extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return ExpensePurchase();
+  }
+}
+
+class ExpensePurchase extends State<ExpensePur> {
+
    @override
-  Widget build(BuildContext context) => new Scaffold(
-   body: new ListView.builder(
-      itemCount: dummyData.length,
-      itemBuilder: (context, i) => new Column(
-            children: <Widget>[
-              new Divider(
-                height: 10.0,
-              ),
-              new ListTile(
-                leading: new CircleAvatar(
-                  foregroundColor: Theme.of(context).primaryColor,
-                  backgroundColor: Colors.grey,
-                  backgroundImage: new NetworkImage(dummyData[i].avatarUrl),
-                ),
-                title: new Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    new Text(
-                      dummyData[i].name,
-                      style: new TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    new Text(
-                      dummyData[i].time,
-                      style: new TextStyle(color: Colors.grey, fontSize: 14.0),
-                    ),
-                  ],
-                ),
-                subtitle: new Container(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: new Text(
-                    dummyData[i].message,
-                    style: new TextStyle(color: Colors.grey, fontSize: 15.0),
-                  ),
-                ),
-              )
-            ],
-          ),
-    ),
+  void initState(){
+    super.initState();
+    updateListView(); 
+  }
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+	List<Map<String, dynamic>> exppurList;
+  int count = 0;
+
+   @override
+  Widget build(BuildContext context) { 
+    if (exppurList == null) {
+			exppurList = List<Map<String, dynamic>>();
+      updateListView(); 
+		}
+    
+  return new Scaffold(
+   body: ListView.builder(
+			itemCount: count,
+			itemBuilder: (BuildContext context, int position) {
+          return Card(
+					color: Colors.white,
+					elevation: 2.0,
+					child: ListTile(
+
+						leading: CircleAvatar(
+							backgroundColor: Colors.black,
+						),
+
+						title: Text(this.exppurList[position]['storename']),
+
+						subtitle: Text(this.exppurList[position]['product']),
+
+						trailing: GestureDetector(
+							child: Icon(Icons.delete, color: Colors.grey,),
+							onTap: () {
+								_delete(context, this.exppurList[position]['id']);
+							},
+						),
+
+
+						// onTap: () {
+						// 	debugPrint("ListTile Tapped");
+						// 	navigateToDetail(this.noteList[position],'Edit Note');
+						// },
+
+					),
+				);	
+			},
+		),
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
@@ -54,4 +75,32 @@ class ExpensePurchase extends StatelessWidget {
 	      }
 	    )
   );
+  }
+
+  Future<List<Map<String, dynamic>>> updateListView() async {
+      final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+      dbFuture.then((database) {
+        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getExpPurchaseList();
+          noteListFuture.then((noteList) {
+              setState(() {
+                 this.exppurList = noteList;
+                this.count = exppurList.length;
+              });
+        });
+      });
+  }
+
+  void _delete(BuildContext context, int id) async {
+		int result = await databaseHelper.deleteExpPurchase(id);
+		if (result != 0) {
+			_showSnackBar(context, 'Purchase Expense Deleted Successfully');
+			updateListView();
+		}
+	}
+
+  void _showSnackBar(BuildContext context, String message) {
+
+		final snackBar = SnackBar(content: Text(message));
+		Scaffold.of(context).showSnackBar(snackBar);
+	}
 }

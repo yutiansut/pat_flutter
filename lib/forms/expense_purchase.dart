@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../utils/db_helper.dart';
+import '../models/expense_purchase_model.dart';
 
 class EXPForm extends StatefulWidget {
   @override
@@ -11,6 +13,10 @@ class EXPForm extends StatefulWidget {
 
 
 class Expense_purchaseForm extends State<EXPForm> {
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  ExpensePurchase exppur_d = ExpensePurchase('', '',0, DateTime.now());
+  List<ExpensePurchase> expensePurchaselist;
+  int count = 0;
 
   final formats = {
     InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
@@ -25,33 +31,41 @@ class Expense_purchaseForm extends State<EXPForm> {
 
   var _formKey = GlobalKey<FormState>();
 
-  var _currencies = ['Rupees', 'Dollars', 'Pounds'];
+
   final double _minimumPadding = 5.0;
 
-  var _currentItemSelected = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _currentItemSelected = _currencies[0];
-  }
+   var displayResult = '';
 
-  TextEditingController principalController = TextEditingController();
-  TextEditingController roiController = TextEditingController();
-  TextEditingController termController = TextEditingController();
-
-  var displayResult = '';
+  TextEditingController onlinestroecontoller = TextEditingController();
+  TextEditingController productcontroller = TextEditingController();
+  TextEditingController expenseamountcontroller = TextEditingController();
+  TextEditingController timecontoller = TextEditingController();
+  TextEditingController descontroller = TextEditingController();
 
    @override
   Widget build(BuildContext context){
+
+    if(expensePurchaselist == null){
+      expensePurchaselist = List<ExpensePurchase>();
+    }
+
      TextStyle textStyle = Theme.of(context).textTheme.title;
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Purchase'),
+          title: Text('Offline Expense'),
+          backgroundColor: Colors.black,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
+            actions: <Widget>[
+              Image(
+	            width: 50,
+	            image: AssetImage("assets/purchase.png"),
+	          )
+            ],
+          
        ),
         body: Form(
         key: _formKey,
@@ -59,22 +73,47 @@ class Expense_purchaseForm extends State<EXPForm> {
             padding: EdgeInsets.all(_minimumPadding * 2),
             child: ListView(
               children: <Widget>[
-                getImageAsset(),
+                // getImageAsset(),
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
                     child: TextFormField(
-                      keyboardType: TextInputType.number,
+                      // keyboardType: TextInputType.text,
                       style: textStyle,
-                      controller: principalController,
+                      controller: onlinestroecontoller,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please enter principal amount';
+                          return 'Please enter the store name';
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Purchase' ,
-                          hintText: 'Name eg:Store Name',
+                          labelText: 'CartName & Storename' ,
+                          hintText: 'Name eg:amazon or Dostrix',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+  
+                    ),
+                  ),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      style: textStyle,
+                      controller: productcontroller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the productname';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Product Name',
+                          hintText: 'Eg: Sampoo',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
                             color: Colors.yellowAccent,
@@ -83,16 +122,16 @@ class Expense_purchaseForm extends State<EXPForm> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
-                Padding(
+                    Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: roiController,
+                      controller: expenseamountcontroller,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please enter rate of interest';
+                          return 'Please enter the Product amount';
                         }
                       },
                       decoration: InputDecoration(
@@ -106,13 +145,41 @@ class Expense_purchaseForm extends State<EXPForm> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
+                    Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      // keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: descontroller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the description';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Description',
+                          hintText: 'optional',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )),
                 DateTimePickerFormField(
               inputType: inputType,
               format: formats[inputType],
               editable: editable,
+              controller: timecontoller,
               decoration: InputDecoration(
                   labelText: 'Date/Time', hasFloatingPlaceholder: false),
-              onChanged: (dt) => setState(() => date = dt),
+              onChanged: (dt) => setState((){ 
+                print(dt);
+                date = dt;
+                print(date);
+                }),
             ),
                 
                 Padding(
@@ -129,11 +196,7 @@ class Expense_purchaseForm extends State<EXPForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              setState(() {
-                                if (_formKey.currentState.validate()) {
-                                  this.displayResult = _calculateTotalReturns();
-                                }
-                              });
+                              getSalaryFormValues();
                             },
                           ),
                         ),
@@ -168,44 +231,37 @@ class Expense_purchaseForm extends State<EXPForm> {
     );
   }
 
-  Widget getImageAsset() {
-    AssetImage assetImage = AssetImage('assets/purchase.png');
-    Image image = Image(
-      image: assetImage,
-      width: 125.0,
-      height: 125.0,
-    );
+  
 
-    return Container(
-      child: image,
-      margin: EdgeInsets.all(_minimumPadding * 10),
-    );
+  
+
+  void _reset() async{
+    onlinestroecontoller.text = '';
+    productcontroller.text = '';
+    expenseamountcontroller.text = '';
+    timecontoller.text = '';
+    descontroller.text = '';
   }
 
-  void _onDropDownItemSelected(String newValueSelected) {
-    setState(() {
-      this._currentItemSelected = newValueSelected;
-    });
-  }
+ 
 
-  String _calculateTotalReturns() {
-    double principal = double.parse(principalController.text);
-    double roi = double.parse(roiController.text);
-    double term = double.parse(termController.text);
-
-    double totalAmountPayable = principal + (principal * roi * term) / 100;
-
-    String result =
-        'After $term years, your investment will be worth $totalAmountPayable $_currentItemSelected';
-    return result;
-  }
-
-  void _reset() {
-    principalController.text = '';
-    roiController.text = '';
-    termController.text = '';
-    displayResult = '';
-    _currentItemSelected = _currencies[0];
+  void getSalaryFormValues() async{
+    double expon = num.tryParse(expenseamountcontroller.text).toDouble();
+    exppur_d.storename = onlinestroecontoller.text;
+    exppur_d.product = productcontroller.text;
+    exppur_d.amount = expon;
+    exppur_d.date = date;
+    exppur_d.desc = descontroller.text;
+    dynamic result = await databaseHelper.insertExpPurchase(exppur_d);
+    print(result);
+    if(result != 0){
+      print('Purchase is Saved Successfully');
+      Navigator.pop(context, false);
+      // com.showSnackBar(context, 'Saved Successfully');
+    }else{
+      print('Not Saved.');
+      // com.showSnackBar(context, 'Not Saved.');
+    }
   }
 }
 

@@ -41,12 +41,13 @@ class IncomeRewardList extends State<IncomeReward> {
 					child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: Colors.black,
+							backgroundColor: Colors.black87,
+              child: Text(this.rewardList[position]['contact'][0], style: TextStyle(color: Colors.yellow, fontSize: 28.0),),
 						),
 
 						title: Text(this.rewardList[position]['contact']),
 
-						// subtitle: Text(this.rewardList[position]['amount']),
+						subtitle: Text(this.rewardList[position]['amount'].toString()),
 
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),

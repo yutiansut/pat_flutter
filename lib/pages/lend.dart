@@ -34,7 +34,7 @@ class Lenders extends StatelessWidget {
           body: TabBarView(
             children: [
               LenderPage(),
-              BorrowPage()
+              Barrows()
             ],
           ),
         ),

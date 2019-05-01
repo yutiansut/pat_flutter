@@ -7,10 +7,10 @@ class Barrow{
     String _desc;
 
     //default constructor
-    Barrow(this._lendername,this._barrowamount,this._date,[this._desc]);
+    Barrow(this._lendername,this._barrowamount,[this._date,this._desc]);
 
     //Named constructor 
-    Barrow.withId(this._id,this._lendername,this._barrowamount,this._date,[this._desc]);
+    Barrow.withId(this._id,this._lendername,this._barrowamount,[this._date,this._desc]);
 
     //Getters
     int get id => _id;

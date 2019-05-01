@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import '../utils/db_helper.dart';
+import '../models/barrows_model.dart';
 
 class LENDForm extends StatefulWidget {
   @override
@@ -11,6 +13,11 @@ class LENDForm extends StatefulWidget {
 
 
 class LenderForm extends State<LENDForm> {
+
+  DatabaseHelper databaseHelper = DatabaseHelper();
+  Barrow barrow_d = Barrow('', 0, DateTime.now());
+  List<Barrow> barrowlist;
+  int count = 0;
 
   final formats = {
     InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
@@ -25,33 +32,43 @@ class LenderForm extends State<LENDForm> {
 
   var _formKey = GlobalKey<FormState>();
 
-  var _currencies = ['Rupees', 'Dollars', 'Pounds'];
+
   final double _minimumPadding = 5.0;
 
-  var _currentItemSelected = '';
 
-  @override
-  void initState() {
-    super.initState();
-    _currentItemSelected = _currencies[0];
-  }
 
-  TextEditingController principalController = TextEditingController();
-  TextEditingController roiController = TextEditingController();
-  TextEditingController termController = TextEditingController();
+
+  TextEditingController lendercontoller = TextEditingController();
+  TextEditingController barrowcontroller = TextEditingController();
+  TextEditingController timecontoller = TextEditingController();
+  TextEditingController descontroller = TextEditingController();
 
   var displayResult = '';
 
+
    @override
   Widget build(BuildContext context){
+
+    if(barrowlist == null){
+      barrowlist = List<Barrow>();
+    }
+
      TextStyle textStyle = Theme.of(context).textTheme.title;
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Barrow'),
+          title: Text('Barrows'),
+          backgroundColor: Colors.black,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
+            actions: <Widget>[
+              Image(
+	            width: 50,
+	            image: AssetImage("assets/barrow.png"),
+	          )
+            ],
+          
        ),
         body: Form(
         key: _formKey,
@@ -59,22 +76,22 @@ class LenderForm extends State<LENDForm> {
             padding: EdgeInsets.all(_minimumPadding * 2),
             child: ListView(
               children: <Widget>[
-                getImageAsset(),
+                // getImageAsset(),
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
                     child: TextFormField(
-                      keyboardType: TextInputType.number,
+                      // keyboardType: TextInputType.text,
                       style: textStyle,
-                      controller: principalController,
+                      controller: lendercontoller,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please enter principal amount';
+                          return 'Please enter the contact name';
                         }
                       },
                       decoration: InputDecoration(
-                          labelText: 'Lender' ,
-                          hintText: 'Name eg:Bala',
+                          labelText: 'Lender Name' ,
+                          hintText: 'Name eg:Bala or Kalai',
                           labelStyle: textStyle,
                           errorStyle: TextStyle(
                             color: Colors.yellowAccent,
@@ -82,17 +99,19 @@ class LenderForm extends State<LENDForm> {
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
-                    )),
+  
+                    ),
+                  ),
                 Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: roiController,
+                      controller: barrowcontroller,
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Please enter rate of interest';
+                          return 'Please enter the barrow amount';
                         }
                       },
                       decoration: InputDecoration(
@@ -106,13 +125,41 @@ class LenderForm extends State<LENDForm> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
+                    Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      // keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: descontroller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the description';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Description',
+                          hintText: 'optional',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )),
                 DateTimePickerFormField(
               inputType: inputType,
               format: formats[inputType],
               editable: editable,
+              controller: timecontoller,
               decoration: InputDecoration(
                   labelText: 'Date/Time', hasFloatingPlaceholder: false),
-              onChanged: (dt) => setState(() => date = dt),
+              onChanged: (dt) => setState((){ 
+                print(dt);
+                date = dt;
+                print(date);
+                }),
             ),
                 
                 Padding(
@@ -129,7 +176,7 @@ class LenderForm extends State<LENDForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              print('good');
+                              getSalaryFormValues();
                             },
                           ),
                         ),
@@ -142,7 +189,9 @@ class LenderForm extends State<LENDForm> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              print('hello');
+                              setState(() {
+                                _reset();
+                              });
                             },
                           ),
                         ),
@@ -162,37 +211,34 @@ class LenderForm extends State<LENDForm> {
     );
   }
 
-  Widget getImageAsset() {
-    AssetImage assetImage = AssetImage('assets/barrow.png');
-    Image image = Image(
-      image: assetImage,
-      width: 125.0,
-      height: 125.0,
-    );
-
-    return Container(
-      child: image,
-      margin: EdgeInsets.all(_minimumPadding * 10),
-    );
+  void _reset() async{
+    lendercontoller.text = '';
+    barrowcontroller.text = '';
+    timecontoller.text = '';
+    descontroller.text = '';
   }
 
-  void _onDropDownItemSelected(String newValueSelected) {
-    setState(() {
-      this._currentItemSelected = newValueSelected;
-    });
+ 
+
+  void getSalaryFormValues() async{
+    double sal = num.tryParse(barrowcontroller.text).toDouble();
+    barrow_d.lendername = lendercontoller.text;
+    barrow_d.amount = sal;
+    barrow_d.date = date;
+    barrow_d.description = descontroller.text;
+    dynamic result = await databaseHelper.insertBarrows(barrow_d);
+    print(result);
+    if(result != 0){
+      print('Saved Successfully');
+      Navigator.pop(context, false);
+      // com.showSnackBar(context, 'Saved Successfully');
+    }else{
+      print('Not Saved.');
+      // com.showSnackBar(context, 'Not Saved.');
+    }
   }
 
-  String _calculateTotalReturns() {
-    double principal = double.parse(principalController.text);
-    double roi = double.parse(roiController.text);
-    double term = double.parse(termController.text);
-
-    double totalAmountPayable = principal + (principal * roi * term) / 100;
-
-    String result =
-        'After $term years, your investment will be worth $totalAmountPayable $_currentItemSelected';
-    return result;
-  }
+  
 
 
 }

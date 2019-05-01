@@ -57,7 +57,7 @@ class Expense_onlineForm extends State<EXPForm> {
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Salary'),
+          title: Text('Online Expense'),
           backgroundColor: Colors.black,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
