@@ -52,15 +52,5 @@ class Reward{
     map['description'] = _desc;
 
     return map;
-  }
-
-  //Extract the data from MapObject
-  // Reward.fromMapObject(Map<String,dynamic> map){
-  //   this._id = map['_id'];
-  //   this._contact = map['_contact'];
-  //   this._amount = 0.0;
-  //   this._date = map['date'];
-  //   this._desc = map['description'];
-  // }
-    
+  }  
 }

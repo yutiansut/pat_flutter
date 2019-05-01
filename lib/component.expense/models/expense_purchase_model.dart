@@ -62,14 +62,4 @@ class ExpensePurchase{
 
     return map;  
   }
-
-  //Get the Data from MapObjects
-  // ExpensePurchase.fromMapObject(Map<String,dynamic> map){
-  //   this._id = map['id'];
-  //   this._storename = map['storename'];
-  //   this._product = map['product'];
-  //   this._amount = map['amount'];
-  //   this._date = map['date'];
-  //   this._desc = map['description'];
-  // }
 }

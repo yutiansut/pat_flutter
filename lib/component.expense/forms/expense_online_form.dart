@@ -29,12 +29,8 @@ class Expense_onlineForm extends State<EXPForm> {
   InputType inputType = InputType.both;
   bool editable = true;
   DateTime date;
-
   var _formKey = GlobalKey<FormState>();
-
-
   final double _minimumPadding = 5.0;
-
 
   var displayResult = '';
 
@@ -43,8 +39,6 @@ class Expense_onlineForm extends State<EXPForm> {
   TextEditingController expenseamountcontroller = TextEditingController();
   TextEditingController timecontoller = TextEditingController();
   TextEditingController descontroller = TextEditingController();
-
-
 
    @override
   Widget build(BuildContext context){

@@ -54,17 +54,4 @@ class Barrow{
 
       return map;
     }
-
-
-
-    //Get the Data From MapObject
-
-    // Barrow.fromMapObject(Map<String,dynamic> map){
-    //   this._id = map['id'];
-    //   this._lendername = map['lendername'];
-    //   this._barrowamount = map['barrowamount'];
-    //   this._date = map['date'];
-    //   this._desc = map['description'];
-    // }
-
 }

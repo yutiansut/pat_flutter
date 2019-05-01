@@ -48,8 +48,6 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).cardColor;
-    Color foregroundColor = Theme.of(context).accentColor;
     return new Scaffold(
       appBar: new AppBar(title: new Text('Personal Account Tracker')),
       body: Center(

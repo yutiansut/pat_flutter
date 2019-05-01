@@ -29,14 +29,8 @@ class BarrowsForm extends State<BarrowForm> {
   InputType inputType = InputType.both;
   bool editable = true;
   DateTime date;
-
   var _formKey = GlobalKey<FormState>();
-
-
   final double _minimumPadding = 5.0;
-
-
-
 
   TextEditingController lendercontoller = TextEditingController();
   TextEditingController barrowcontroller = TextEditingController();
@@ -237,9 +231,5 @@ class BarrowsForm extends State<BarrowForm> {
       // com.showSnackBar(context, 'Not Saved.');
     }
   }
-
-  
-
-
 }
 

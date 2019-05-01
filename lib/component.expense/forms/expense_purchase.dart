@@ -11,7 +11,6 @@ class EXPForm extends StatefulWidget {
   }
 }
 
-
 class Expense_purchaseForm extends State<EXPForm> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   ExpensePurchase exppur_d = ExpensePurchase('', '',0, DateTime.now());
@@ -28,14 +27,9 @@ class Expense_purchaseForm extends State<EXPForm> {
   InputType inputType = InputType.both;
   bool editable = true;
   DateTime date;
-
   var _formKey = GlobalKey<FormState>();
-
-
   final double _minimumPadding = 5.0;
-
-
-   var displayResult = '';
+  var displayResult = '';
 
   TextEditingController onlinestroecontoller = TextEditingController();
   TextEditingController productcontroller = TextEditingController();

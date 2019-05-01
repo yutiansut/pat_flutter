@@ -11,7 +11,6 @@ class INForm extends StatefulWidget {
   }
 }
 
-
 class Income_RewardFrom extends State<INForm> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();

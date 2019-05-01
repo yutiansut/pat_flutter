@@ -53,13 +53,4 @@ class Salary{
 
     return map;
   }
-
-  //Extract the data from MapObject
-  // Salary.fromMapObject(Map<String,dynamic> map){
-  //   this._id = map['_id'];
-  //   this._contact = map['_contact'];
-  //   this._amount = 0.0;
-  //   this._date = map['date'];
-  //   this._desc = map['description'];
-  // }
 }

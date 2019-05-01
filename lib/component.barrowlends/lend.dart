@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import './pages/borrows_page.dart';
 import './pages/lender_pager.dart';
 
-
 class Lenders extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

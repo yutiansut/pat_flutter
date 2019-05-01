@@ -11,7 +11,6 @@ class LENDForm extends StatefulWidget {
   }
 }
 
-
 class LenderForm extends State<LENDForm> {
 
    DatabaseHelper databaseHelper = DatabaseHelper();
@@ -29,14 +28,8 @@ class LenderForm extends State<LENDForm> {
   InputType inputType = InputType.both;
   bool editable = true;
   DateTime date;
-
   var _formKey = GlobalKey<FormState>();
-
-
   final double _minimumPadding = 5.0;
-
-
-
 
   TextEditingController barrowercontoller = TextEditingController();
   TextEditingController lendamounttroller = TextEditingController();
@@ -217,8 +210,6 @@ class LenderForm extends State<LENDForm> {
     descontroller.text = '';
   }
 
- 
-
   void getSalaryFormValues() async{
     double sal = num.tryParse(lendamounttroller.text).toDouble();
     lends_d.barrowername =  barrowercontoller.text;
@@ -236,7 +227,5 @@ class LenderForm extends State<LENDForm> {
       // com.showSnackBar(context, 'Not Saved.');
     }
   }
-
-  
 }
 

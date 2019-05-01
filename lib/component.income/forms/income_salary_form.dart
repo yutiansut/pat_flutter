@@ -4,16 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import '../utils/incomedb_helper.dart';
 
-
-
-
 class INForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return Income_salaryFrom();
   }
 }
-
 
 class Income_salaryFrom extends State<INForm> {
 
@@ -216,17 +212,12 @@ class Income_salaryFrom extends State<INForm> {
     );
   }
 
-  
-
-
   void _reset() async{
     salarycontroller.text = '';
     contactcontoller.text = '';
     timecontoller.text = '';
     descontroller.text = '';
   }
-
- 
 
   void getSalaryFormValues() async{
     double sal = num.tryParse(salarycontroller.text).toDouble();

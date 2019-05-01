@@ -37,9 +37,7 @@ class Lender{
     set description(String desc){
       this._desc = desc;
     }
-
-
-
+    
     //converts the input data into Map Object
     Map<String,dynamic> toMap(){
       var map = Map<String,dynamic>();
@@ -54,14 +52,4 @@ class Lender{
 
       return map;
     }
-
-    //Get the date from MapObject
-    // Lender.fromMapObject(Map<String,dynamic> map){
-    //   this._id = map['id'];
-    //   this._barrowername = map['barrowername'];
-    //   this._lendamount = map['lendamount'];
-    //   this._date = map['date'];
-    //   this._desc = map['description'];
-    // }
-
 }
