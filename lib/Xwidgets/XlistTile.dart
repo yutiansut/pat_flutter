@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import './../config/config.dart' as conf;
-
-// Categ Badge Colors
-const Map<String, dynamic> categColor = <String, dynamic>{
-  "income": Colors.green,
-  "expense": Colors.red,
-  "borrow": Colors.orange,
-  "lend": Colors.teal,
-};
-
+import '../config/config.dart' as conf;
+import '../pages/category.dart' as categ;
 
 class XListTile extends StatefulWidget {
   String desc = "";
@@ -31,7 +23,7 @@ class _XListTileState  extends State<XListTile>{
         ListTile(
           title: Text(widget.desc),
           subtitle: Text(widget.category),
-          leading: CircleAvatar(backgroundColor: categColor[widget.category.toLowerCase()], child: Text(widget.category[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
+          leading: CircleAvatar(backgroundColor: categ.categColor[widget.category.toLowerCase()], child: Text(widget.category[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
           trailing: Chip(
             label: Text(widget.amount.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
             avatar: CircleAvatar(
@@ -39,7 +31,7 @@ class _XListTileState  extends State<XListTile>{
               backgroundColor: Colors.white,
               // foregroundColor: Colors.white,
             ),
-            backgroundColor: categColor[widget.category.toLowerCase()],
+            backgroundColor: categ.categColor[widget.category.toLowerCase()],
           ),
           onTap: (){
             print("Pressed1");

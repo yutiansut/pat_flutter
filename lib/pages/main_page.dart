@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/config.dart' as conf;
-import './../styles/styles.dart' as stylex;
+import '../styles/styles.dart' as stylex;
 import 'dashboard.dart';
 import 'accounts.dart';
 
@@ -39,7 +39,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
             length: 2,
             child: Scaffold(
                 appBar: AppBar(
-                    title: Text(conf.appName),
+                    title: Text(conf.appName, textAlign: TextAlign.center,),
                     bottom: TabBar(
                       controller: _tabController,
                       indicatorColor: Colors.white,
