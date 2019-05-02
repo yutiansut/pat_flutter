@@ -47,6 +47,8 @@ class IncomeSalary extends State<IncomeSale> {
 						title: Text(this.salaryList[position]['contact']),
 
 						subtitle: Text(this.salaryList[position]['amount']),
+            
+      
 
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),

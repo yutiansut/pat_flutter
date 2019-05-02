@@ -10,4 +10,10 @@
 
     https://linuxize.com/post/how-to-enable-ssh-on-ubuntu-18-04/
 
+    https://github.com/Solido/awesome-flutter
+
+    https://github.com/iampawan/FlutterExampleApps
+
+    https://www.youtube.com/watch?v=xRPEbLOGWbc
+
     
