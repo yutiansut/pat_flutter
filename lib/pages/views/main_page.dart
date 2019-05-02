@@ -16,7 +16,6 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
   final List<Tab> myTabs = <Tab>[
     Tab(text: "Dashboard"),
     Tab(text: "Accounts"),
-    Tab(text: "Category"),
   ];
 
   TabController _tabController;
@@ -58,7 +57,6 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   children: [
                     DashboardPage(),
                     AccountsPage(),
-                    CategList(),
                   ],
                 ),
                 drawer: Drawer(

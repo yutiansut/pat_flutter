@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:sqflite/sqflite.dart';
-
 
 // Categ Badge Colors
 const Map<String, dynamic> categColor = <String, dynamic>{
@@ -11,26 +9,26 @@ const Map<String, dynamic> categColor = <String, dynamic>{
 };
 
 // DB Fields
-String categoryTable = 'category_table';
+String accountTypeTable = 'account_type_table';
 String colId = 'id';
 String colName = 'name';
 String colCreateDate = 'createDate';
 
 // DB CreateQry
-String createQry = 'CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colCreateDate TEXT)';
+String createQry = 'CREATE TABLE $accountTypeTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colCreateDate TEXT)';
 String defaultOrderBy = '$colName ASC';
 
 
-class ModelCategory {
+class ModelAccountType {
     int _id;
     String _name;
     String _createDate = DateTime.now().toString();
 
     //default constructor
-    ModelCategory(this._name,[this._createDate]);
+    ModelAccountType(this._name,[this._createDate]);
 
     //Named constructor
-    ModelCategory.withId(this._id,this._name,[this._createDate]);
+    ModelAccountType.withId(this._id,this._name,[this._createDate]);
 
     //Getters
     int get id => _id;
@@ -67,8 +65,8 @@ class ModelCategory {
     //   this._createDate = map['createDate'];
     // }
 
-    factory ModelCategory.fromMap(Map<String, dynamic> map){
-      return ModelCategory.withId(map['id'], map['name'], map['createDate']);
+    factory ModelAccountType.fromMap(Map<String, dynamic> map){
+      return ModelAccountType.withId(map['id'], map['name'], map['createDate']);
     }
 
 }

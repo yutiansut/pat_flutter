@@ -27,8 +27,8 @@ class CategDetailState extends State<CategDetail> {
 	String appBarTitle;
 	ModelCategory categ;
 
-	TextEditingController titleController = TextEditingController();
-	TextEditingController descriptionController = TextEditingController();
+	TextEditingController nameController = TextEditingController();
+	// TextEditingController descriptionController = TextEditingController();
 
 	CategDetailState(this.categ, this.appBarTitle);
 
@@ -37,8 +37,8 @@ class CategDetailState extends State<CategDetail> {
 
 		TextStyle textStyle = Theme.of(context).textTheme.title;
 
-		titleController.text = categ.name;
-		descriptionController.text = categ.name;
+		nameController.text = categ.name;
+		// descriptionController.text = categ.name;
 
     return WillPopScope(
 
@@ -92,14 +92,14 @@ class CategDetailState extends State<CategDetail> {
 				    Padding(
 					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
 					    child: TextField(
-						    controller: titleController,
+						    controller: nameController,
 						    style: textStyle,
 						    onChanged: (value) {
 						    	debugPrint('Something changed in Title Text Field');
-						    	updateTitle();
+						    	updateName();
 						    },
 						    decoration: InputDecoration(
-							    labelText: 'Title',
+							    labelText: 'Name',
 							    labelStyle: textStyle,
 							    border: OutlineInputBorder(
 								    borderRadius: BorderRadius.circular(5.0)
@@ -109,24 +109,24 @@ class CategDetailState extends State<CategDetail> {
 				    ),
 
 				    // Third Element
-				    Padding(
-					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					    child: TextField(
-						    controller: descriptionController,
-						    style: textStyle,
-						    onChanged: (value) {
-							    debugPrint('Something changed in Description Text Field');
-							    updateDescription();
-						    },
-						    decoration: InputDecoration(
-								    labelText: 'Description',
-								    labelStyle: textStyle,
-								    border: OutlineInputBorder(
-										    borderRadius: BorderRadius.circular(5.0)
-								    )
-						    ),
-					    ),
-				    ),
+				    // Padding(
+					  //   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+					  //   child: TextField(
+						//     controller: descriptionController,
+						//     style: textStyle,
+						//     onChanged: (value) {
+						// 	    debugPrint('Something changed in Description Text Field');
+						// 	    updateDescription();
+						//     },
+						//     decoration: InputDecoration(
+						// 		    labelText: 'Description',
+						// 		    labelStyle: textStyle,
+						// 		    border: OutlineInputBorder(
+						// 				    borderRadius: BorderRadius.circular(5.0)
+						// 		    )
+						//     ),
+					  //   ),
+				    // ),
 
 				    // Fourth Element
 				    Padding(
@@ -211,14 +211,14 @@ class CategDetailState extends State<CategDetail> {
 	// }
 
 	// Update the title of Note object
-  void updateTitle(){
-    categ.name = titleController.text;
+  void updateName(){
+    categ.name = nameController.text;
   }
 
 	// Update the description of Note object
-	void updateDescription() {
-		categ.createDate = descriptionController.text;
-	}
+	// void updateDescription() {
+	// 	categ.createDate = descriptionController.text;
+	// }
 
 	// Save data to database
 	void _save() async {
@@ -234,9 +234,9 @@ class CategDetailState extends State<CategDetail> {
 		}
 
 		if (result != 0) {  // Success
-			_showAlertDialog('Status', 'Note Saved Successfully');
+			_showAlertDialog('Status', 'Category Saved Successfully');
 		} else {  // Failure
-			_showAlertDialog('Status', 'Problem Saving Note');
+			_showAlertDialog('Status', 'Problem Saving Category');
 		}
 
 	}
@@ -255,9 +255,9 @@ class CategDetailState extends State<CategDetail> {
 		// Case 2: User is trying to delete the old note that already has a valid ID.
 		int result = await helper.delete(categoryTable, colId, categ.id);
 		if (result != 0) {
-			_showAlertDialog('Status', 'Note Deleted Successfully');
+			_showAlertDialog('Status', 'Category Deleted Successfully');
 		} else {
-			_showAlertDialog('Status', 'Error Occured while Deleting Note');
+			_showAlertDialog('Status', 'Error Occured while Deleting Category');
 		}
 	}
 
