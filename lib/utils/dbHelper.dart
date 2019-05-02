@@ -83,18 +83,18 @@ class DatabaseHelper {
 	}
 
 	// Get the 'Map List' [ List<Map> ] and convert it to 'Note List' [ List<Note> ]
-	Future<List<Map<String, dynamic>>> getList(String table, String order) async {
+	Future<List<dynamic>> getList(String table, String order) async {
 
 		var mapList = await getMapList(table, order); // Get 'Map List' from database
-		// int count = mapList.length; // Count the number of map entries in db table
+		int count = mapList.length; // Count the number of map entries in db table
 
-		// List<categ.ModelCategory> objList = List<categ.ModelCategory>();
-		// // For loop to create a 'Note List' from a 'Map List'
-		// for (int i = 0; i < count; i++) {
-		// 	objList.add(categ.ModelCategory.fromMapObject(mapList[i]));
-		// }
+		List<categ.ModelCategory> objList = List<categ.ModelCategory>();
+		// For loop to create a 'Note List' from a 'Map List'
+		for (int i = 0; i < count; i++) {
+			objList.add(categ.ModelCategory.fromMap(mapList[i]));
+		}
 
-		return mapList;
+		return objList;
 	}
 
 }

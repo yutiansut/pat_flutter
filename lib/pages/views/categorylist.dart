@@ -18,14 +18,14 @@ class CategList extends StatefulWidget {
 class CategListState extends State<CategList> {
 
 	DatabaseHelper databaseHelper = DatabaseHelper();
-	List<Map<String, dynamic>> categList;
+	List<ModelCategory> categList;
 	int count = 0;
 
 	@override
   Widget build(BuildContext context) {
 
 		if (categList == null) {
-			categList = List<Map<String, dynamic>>();
+			categList = List<ModelCategory>();
 			updateListView();
 		}
 
@@ -40,7 +40,7 @@ class CategListState extends State<CategList> {
 	    floatingActionButton: FloatingActionButton(
 		    onPressed: () {
 		      debugPrint('FAB clicked');
-		      navigateToDetail({"name": ''}, 'Add Category');
+		      navigateToDetail(ModelCategory(''), 'Add Category');
 		    },
 
 		    tooltip: 'Add Category',
@@ -64,13 +64,13 @@ class CategListState extends State<CategList> {
 					child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: getCategColor(this.categList[position]['name']),
-							child: getCategIcon(this.categList[position]['name']),
+							backgroundColor: getCategColor(this.categList[position].name),
+							child: getCategIcon(this.categList[position].name),
 						),
 
-						title: Text(this.categList[position]['name'], style: titleStyle,),
+						title: Text(this.categList[position].name, style: titleStyle,),
 
-						subtitle: Text(this.categList[position]['createDate']),
+						subtitle: Text(this.categList[position].createDate),
 
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),
@@ -119,9 +119,9 @@ class CategListState extends State<CategList> {
       );
 	}
 
-	void _delete(BuildContext context, dynamic categ) async {
+	void _delete(BuildContext context, ModelCategory categ) async {
 
-		int result = await databaseHelper.delete(categoryTable, colId, categ['id']);
+		int result = await databaseHelper.delete(categoryTable, colId, categ.id);
 		if (result != 0) {
 			_showSnackBar(context, 'Category Deleted Successfully');
 			updateListView();
@@ -134,7 +134,7 @@ class CategListState extends State<CategList> {
 		Scaffold.of(context).showSnackBar(snackBar);
 	}
 
-  void navigateToDetail(dynamic categ, String title) async {
+  void navigateToDetail(ModelCategory categ, String title) async {
 	  bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
 		  return CategDetail(categ, title);
 	  }));
@@ -149,7 +149,7 @@ class CategListState extends State<CategList> {
 		final Future<Database> dbFuture = databaseHelper.initializeDatabase();
 		dbFuture.then((database) {
 
-			Future<List<Map<String, dynamic>>> categListFuture = databaseHelper.getList(categoryTable, "$colId ASC");
+			Future<List<dynamic>> categListFuture = databaseHelper.getList(categoryTable, "$colId ASC");
 			categListFuture.then((catList) {
 				setState(() {
 				  this.categList = catList;

@@ -67,6 +67,10 @@ class ModelCategory {
       this._createDate = map['createDate'];
     }
 
+    factory ModelCategory.fromMap(Map<String, dynamic> map){
+      return ModelCategory.withId(map['id'], map['name'], map['createDate']);
+    }
+
 }
 
 // List<ModelCategory> defaultCateg = <ModelCategory>[

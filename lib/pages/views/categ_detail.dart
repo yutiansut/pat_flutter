@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class CategDetail extends StatefulWidget {
 
 	final String appBarTitle;
-	final ModelCategory categ;
+	ModelCategory categ;
 
 	CategDetail(this.categ, this.appBarTitle);
 
