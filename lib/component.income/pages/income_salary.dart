@@ -38,6 +38,7 @@ class IncomeSalary extends State<IncomeSale> {
           return Card(
 					color: Colors.white,
 					elevation: 2.0,
+
 					child: ListTile(
 
 						leading: CircleAvatar(
@@ -46,9 +47,28 @@ class IncomeSalary extends State<IncomeSale> {
 
 						title: Text(this.salaryList[position]['contact']),
 
-						subtitle: Text(this.salaryList[position]['amount']),
+						subtitle: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[Text("1ddddddddddddd")],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[Text("13")],
+                      )
+                    ],
+                  )
+              ],
+            ),
             
-      
+            
 
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),
@@ -56,6 +76,7 @@ class IncomeSalary extends State<IncomeSale> {
 								_delete(context, this.salaryList[position]['id']);
 							},
 						),
+            
 
 
 						// onTap: () {
