@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../config/config.dart' as conf;
-import '../pages/category.dart' as categ;
+import '../pages/models/category.dart' as categ;
 
 class XListTile extends StatefulWidget {
   String desc = "";

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../config/config.dart' as conf;
-import '../styles/styles.dart' as stylex;
+import '../../config/config.dart' as conf;
+import '../../styles/styles.dart' as stylex;
 import 'dashboard.dart';
 import 'accounts.dart';
+import './categorylist.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
   final List<Tab> myTabs = <Tab>[
     Tab(text: "Dashboard"),
     Tab(text: "Accounts"),
+    Tab(text: "Category"),
   ];
 
   TabController _tabController;
@@ -36,7 +38,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
 
     return MaterialApp(
         home: DefaultTabController(
-            length: 2,
+            length: 3,
             child: Scaffold(
                 appBar: AppBar(
                     title: Text(conf.appName, textAlign: TextAlign.center,),
@@ -56,6 +58,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   children: [
                     DashboardPage(),
                     AccountsPage(),
+                    CategList(),
                   ],
                 ),
                 drawer: Drawer(
@@ -67,7 +70,10 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                         currentAccountPicture: CircleAvatar(backgroundColor: Colors.black26,child: Text(conf.appAuthor[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
                         decoration: new BoxDecoration(color: stylex.violet),
                       ),
-                      ListTile(title: Text("Dashboard"), trailing: Icon(Icons.access_alarm),onTap: () => _tabController.animateTo((1 + 1) % 2),),
+                      ListTile(
+                        title: Text("Dashboard"),
+                        trailing: Icon(Icons.access_alarm),onTap: () => _tabController.animateTo((1 + 1) % 2),
+                      ),
                       ListTile(
                         title: Text("Accounts"),
                         trailing: Icon(Icons.access_alarm),
@@ -75,7 +81,14 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                           // _tabController.animateTo((_tabController.index + 1) % 2);
                           _tabController.animateTo((2 + 1) % 2);
                         },
-                      )
+                      ),
+                      ListTile(
+                        title: Text("Category"),
+                        trailing: Icon(Icons.view_compact),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategList()));
+                        },
+                      ),
                     ],
                   ),
                 ),
