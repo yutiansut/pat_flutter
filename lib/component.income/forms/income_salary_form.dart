@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/salary_model.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import '../utils/incomedb_helper.dart';
+import '../../main.utils/pat_db_helper.dart';
 
 class INForm extends StatefulWidget {
   @override

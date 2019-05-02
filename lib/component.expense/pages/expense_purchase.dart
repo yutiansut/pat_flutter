@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../forms/expense_purchase.dart';
-import '../utils/expensedb_helper.dart';
+import '../../main.utils/pat_db_helper.dart';
 
 class ExpensePur extends StatefulWidget {
   @override

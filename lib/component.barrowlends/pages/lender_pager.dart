@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../forms/lender_form.dart';
 import 'package:sqflite/sqflite.dart';
-import '../utils/barrowlend_helper.dart';
+import '../../main.utils/pat_db_helper.dart';
+
 
 class Lends extends StatefulWidget {
   @override
@@ -80,7 +81,7 @@ class LenderPage extends State<Lends> {
   Future<List<Map<String, dynamic>>> updateListView() async {
       final Future<Database> dbFuture = databaseHelper.initializeDatabase();
       dbFuture.then((database) {
-        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getBarrowsList();
+        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getLendsList();
           noteListFuture.then((noteList) {
               setState(() {
                  this.lendssList = noteList;

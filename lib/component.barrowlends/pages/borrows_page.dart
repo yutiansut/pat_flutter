@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../forms/borrows_form.dart';
-import '../utils/barrowlend_helper.dart';
+import '../../main.utils/pat_db_helper.dart';
+
 
 class Barrows extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class BorrowPage extends State<Barrows> {
 			barrowsList = List<Map<String, dynamic>>();
       updateListView(); 
 		}
+
     return new Scaffold(
    body: ListView.builder(
 			itemCount: count,
@@ -79,7 +81,7 @@ class BorrowPage extends State<Barrows> {
   Future<List<Map<String, dynamic>>> updateListView() async {
       final Future<Database> dbFuture = databaseHelper.initializeDatabase();
       dbFuture.then((database) {
-        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getLendsList();
+        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getBarrowsList();
           noteListFuture.then((noteList) {
               setState(() {
                  this.barrowsList = noteList;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../forms/income_salary_form.dart';
-import '../utils/incomedb_helper.dart';
+import '../../main.utils/pat_db_helper.dart';
 
 
 class IncomeSale extends StatefulWidget {

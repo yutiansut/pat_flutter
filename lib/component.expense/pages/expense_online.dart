@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../forms/expense_online_form.dart';
-import '../utils/expensedb_helper.dart';
+import '../../main.utils/pat_db_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ExpOnline extends StatefulWidget {
@@ -29,7 +29,7 @@ class ExpenseOnline extends State<ExpOnline> {
 			exponlineList = List<Map<String, dynamic>>();
       updateListView(); 
 		}
-    
+    print(exponlineList);
     return new Scaffold(
    body: ListView.builder(
 			itemCount: count,
