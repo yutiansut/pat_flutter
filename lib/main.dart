@@ -4,7 +4,9 @@ import 'main.utils/circular_percent_indicator.dart';
 import 'component.barrowlends/lend.dart';
 import 'component.expense/expense.dart';
 import 'component.income/income.dart';
-// import 'component.income/pages/income_salary.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
+
 
 void main() {
   runApp(new MyApp());
@@ -34,6 +36,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     Image(width: 50, image: AssetImage("assets/borrow_lend.png"))
   ];
 
+bool _dialVisible = true;
 
   @override
   void initState() {
@@ -50,148 +53,55 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text('Personal Account Tracker')),
-      body: Center(
-        child: ListView(
-            children: <Widget>[
-              new CircularPercentIndicator(
-                radius: 130.0,
-                lineWidth: 10.0,
-                percent: 0.8,
-                header: new Text("Statistics"),
-                center: new Text(
-                  "Income",
-                  style:
-                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-                backgroundColor: Colors.transparent,
-                progressColor: Colors.transparent,
-              ),
-              new CircularPercentIndicator(
-                radius: 130.0,
-                animation: true,
-                animationDuration: 1200,
-                lineWidth: 15.0,
-                percent: 0.4,
-                center: new Text(
-                  "Expenses",
-                  style:
-                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-                circularStrokeCap: CircularStrokeCap.butt,
-                backgroundColor: Colors.yellow,
-                progressColor: Colors.red,
-              ),
-              new CircularPercentIndicator(
-                radius: 120.0,
-                lineWidth: 13.0,
-                animation: true,
-                percent: 0.7,
-                center: new Text(
-                  "Borrows",
-                  style:
-                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-                circularStrokeCap: CircularStrokeCap.round,
-                progressColor: Colors.purple,
-              ),
-              Container(
-                padding: EdgeInsets.all(15.0),
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    new CircularPercentIndicator(
-                      radius: 45.0,
-                      lineWidth: 4.0,
-                      percent: 0.10,
-                      center: new Text("10%"),
-                      progressColor: Colors.red,
-                    ),
-                    new Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    ),
-                    new CircularPercentIndicator(
-                      radius: 45.0,
-                      lineWidth: 4.0,
-                      percent: 0.30,
-                      center: new Text("30%"),
-                      progressColor: Colors.orange,
-                    ),
-                    new Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    ),
-                    new CircularPercentIndicator(
-                      radius: 45.0,
-                      lineWidth: 4.0,
-                      percent: 0.60,
-                      center: new Text("60%"),
-                      progressColor: Colors.yellow,
-                    ),
-                    new Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    ),
-                  
-                  ],
-                ),
-              )
-            ]),
-      ),
-      floatingActionButton: new Column(
-        mainAxisSize: MainAxisSize.min,
-        children: new List.generate(icons.length, (int index) {
-          Widget child = new Container(
-            height: 70.0,
-            width: 50.0,
-            alignment: FractionalOffset.topCenter,
-            child: new ScaleTransition(
-              scale: new CurvedAnimation(
-                parent: _controller,
-                curve: new Interval(
-                  0.0,
-                  1.0 - index / icons.length / 2.0,
-                  curve: Curves.easeOut
-                ),
-              ),
-              child: new FloatingActionButton(
-                elevation: 0.0,  // for removing background shadow in float button
-                heroTag: null,
-                backgroundColor: Colors.transparent,
-                mini: true,
-                child: icons[index],
-                onPressed: () {
-                  pages(index);
-                },
-              ),
+      appBar: new AppBar(title: new Text('Personal Account Tracker'),
+      backgroundColor: Colors.pinkAccent,),
+      floatingActionButton: SpeedDial(
+          // both default to 16
+          marginRight: 18,
+          marginBottom: 20,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          // child: Icon(Icons.add),
+          visible: _dialVisible,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'),
+          onClose: () => print('DIAL CLOSED'),
+          tooltip: 'Speed Dial',
+          heroTag: 'speed-dial-hero-tag',
+          backgroundColor: Colors.pinkAccent,
+          foregroundColor: Colors.black,
+          elevation: 8.0,
+          shape: StadiumBorder(),
+          children: [
+            SpeedDialChild(
+              elevation: 0.0,
+              child: icons[0],
+              backgroundColor: Colors.transparent,
+              label: 'Income',
+        
+              onTap: () => pages(0)
             ),
-          );
-          return child;
-        }).toList()..add(
-          new FloatingActionButton(
-            elevation: 0.0,
-            heroTag: null,
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.teal,
-            child: new AnimatedBuilder(
-              animation: _controller,
-              builder: (BuildContext context, Widget child) {
-                return new Transform(
-                  transform: new Matrix4.rotationZ(_controller.value * 0.5 * math.pi),
-                  alignment: FractionalOffset.center,
-                  child: _controller.isDismissed ?  Image(width: 80,height: 80, image: AssetImage("assets/root.png")) : new Icon(Icons.close),
-          
-                );
-              },
+            SpeedDialChild(
+              elevation: 0.0,
+              child: icons[1],
+              backgroundColor: Colors.transparent,
+              label: 'Expense',
+              
+              onTap: () => pages(1),
             ),
-            onPressed: () {
-              if (_controller.isDismissed) {
-                _controller.forward();
-              } else {
-                _controller.reverse();
-              }
-            },
-          ),
+            SpeedDialChild(
+              elevation: 0.0,
+              child: icons[2],
+              backgroundColor: Colors.transparent,
+              label: 'BarrowLend',
+              
+              onTap: () => pages(2),
+            ),
+          ],
         ),
-      ),
     );
   }
 }

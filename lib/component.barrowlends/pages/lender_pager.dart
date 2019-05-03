@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../forms/lender_form.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../main.utils/pat_db_helper.dart';
+import '../../main.utils/common.utils.dart' as com;
 
 
 class Lends extends StatefulWidget {
@@ -53,13 +54,6 @@ class LenderPage extends State<Lends> {
 								_delete(context, this.lendssList[position]['id']);
 							},
 						),
-
-
-						// onTap: () {
-						// 	debugPrint("ListTile Tapped");
-						// 	navigateToDetail(this.noteList[position],'Edit Note');
-						// },
-
 					),
 				);	
 			},
@@ -98,14 +92,10 @@ class LenderPage extends State<Lends> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteLends(id);
 		if (result != 0) {
-			_showSnackBar(context, 'Barrow is Deleted Successfully');
+			com.CommanUtils().showSnackBars(context, "Deleted Successfully");
 			updateListView();
 		}
 	}
 
-  void _showSnackBar(BuildContext context, String message) {
 
-		final snackBar = SnackBar(content: Text(message));
-		Scaffold.of(context).showSnackBar(snackBar);
-	}
 }

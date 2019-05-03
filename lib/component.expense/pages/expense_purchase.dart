@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../forms/expense_purchase.dart';
 import '../../main.utils/pat_db_helper.dart';
+import '../../main.utils/common.utils.dart' as com;
 
 class ExpensePur extends StatefulWidget {
   @override
@@ -97,7 +98,7 @@ class ExpensePurchase extends State<ExpensePur> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteExpPurchase(id);
 		if (result != 0) {
-			_showSnackBar(context, 'Purchase Expense Deleted Successfully');
+		com.CommanUtils().showSnackBars(context, "Deleted Successfully");
 			updateListView();
 		}
 	}

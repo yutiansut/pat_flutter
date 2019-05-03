@@ -3,6 +3,7 @@ import '../forms/income_reward_form.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../main.utils/pat_db_helper.dart';
 
+enum ConfirmAction { CANCEL, ACCEPT }
 
 class IncomeReward extends StatefulWidget {
   @override
@@ -33,29 +34,71 @@ class IncomeRewardList extends State<IncomeReward> {
     return new Scaffold(
       
    body: ListView.builder(
+       padding: EdgeInsets.all(2),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
-        print(this.rewardList[position]['amount']);
           return Card(
 					color: Colors.white,
 					elevation: 2.0,
+          // margin: EdgeInsets.all(10.0),
 					child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: Colors.black87,
-              child: Text(this.rewardList[position]['contact'][0], style: TextStyle(color: Colors.yellow, fontSize: 28.0),),
+              child: Text(this.rewardList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),),
+							backgroundColor: Colors.black,
 						),
 
 						title: Text(this.rewardList[position]['contact']),
+          
 
-						subtitle: Text(this.rewardList[position]['amount'].toString()),
+						subtitle: Column(
+              // mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        // mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Column(
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        // mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Text(this.rewardList[position]['description'].toString())
+                        ],
+                      )
+                    ],
+                  )
+              ],
+            ),
+            
+            
 
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_delete(context, this.rewardList[position]['id']);
-							},
-						),
+						trailing: Column(
+              children: <Widget>[
+                Chip(
+                  label: Text(this.rewardList[position]['amount'].toString()),
+                  avatar:  Image(
+                      width: 50,
+                      image: AssetImage("assets/rupees.png"),
+                    ),
+                  backgroundColor: Colors.greenAccent,
+                ),
+
+              ],
+            ),
+            onLongPress: () async {
+              await _asyncConfirmDialog(context, this.rewardList[position]['id']);
+            },
+            
 
 
 						// onTap: () {
@@ -101,7 +144,6 @@ class IncomeRewardList extends State<IncomeReward> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteReward(id);
 		if (result != 0) {
-			_showSnackBar(context, 'Reward Deleted Successfully');
 			updateListView();
 		}else{
       print('Reward deleted');
@@ -113,4 +155,33 @@ class IncomeRewardList extends State<IncomeReward> {
 		final snackBar = SnackBar(content: Text(message));
 		Scaffold.of(context).showSnackBar(snackBar);
 	}
+
+  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, id) async {
+    return showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Dialog'),
+          content: const Text(
+              'Do you want to delete ?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+              },
+            ),
+            FlatButton(
+              child: const Text('ACCEPT'),
+              onPressed: () {
+                _delete(context, id);
+                Navigator.of(context).pop(ConfirmAction.ACCEPT);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }

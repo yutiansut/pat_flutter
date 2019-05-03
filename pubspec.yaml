@@ -29,6 +29,7 @@ dependencies:
   sqflite: any
   path_provider: any
   async_loader: ^0.1.2
+  flutter_speed_dial: ^1.1.1
 
 dev_dependencies:
   flutter_test:

@@ -17,4 +17,8 @@
         https://www.youtube.com/watch?v=xRPEbLOGWbc
 
         https://pusher.com/tutorials/flutter-listviews
+
+        https://github.com/jonasbark/flutter_stripe_payment
+        
+        https://pub.dartlang.org/packages/color
     

@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import '../forms/income_salary_form.dart';
 import '../../main.utils/pat_db_helper.dart';
 
+enum ConfirmAction { CANCEL, ACCEPT }
 
 class IncomeSale extends StatefulWidget {
   @override
@@ -33,35 +34,46 @@ class IncomeSalary extends State<IncomeSale> {
 
     return new Scaffold(
      body: ListView.builder(
+       padding: EdgeInsets.all(2),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
 					color: Colors.white,
 					elevation: 2.0,
-
+          // margin: EdgeInsets.all(10.0),
 					child: ListTile(
 
 						leading: CircleAvatar(
+              child: Text(this.salaryList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),),
 							backgroundColor: Colors.black,
 						),
 
 						title: Text(this.salaryList[position]['contact']),
+          
 
 						subtitle: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                   Row(
                     children: <Widget>[
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[Text("1ddddddddddddd")],
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        // mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          ],
                       ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[Text("13")],
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        // mainAxisSize: MainAxisSize.max,
+                        children: <Widget>[
+                          Text(this.salaryList[position]['description'].toString())
+                        ],
                       )
                     ],
                   )
@@ -70,12 +82,22 @@ class IncomeSalary extends State<IncomeSale> {
             
             
 
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_delete(context, this.salaryList[position]['id']);
-							},
-						),
+						trailing: Column(
+              children: <Widget>[
+                Chip(
+                  label: Text(this.salaryList[position]['amount'].toString()),
+                  avatar:  Image(
+                      width: 50,
+                      image: AssetImage("assets/rupees.png"),
+                    ),
+                  backgroundColor: Colors.greenAccent,
+                ),
+
+              ],
+            ),
+            onLongPress: () async {
+              await _asyncConfirmDialog(context, this.salaryList[position]['id']);
+            },
             
 
 
@@ -121,7 +143,7 @@ class IncomeSalary extends State<IncomeSale> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteSalary(id);
 		if (result != 0) {
-			_showSnackBar(context, 'Salary Deleted Successfully');
+			// _showSnackBar(context, 'Salary Deleted Successfully');
 			updateListView();
 		}
 	}
@@ -131,5 +153,35 @@ class IncomeSalary extends State<IncomeSale> {
 		final snackBar = SnackBar(content: Text(message));
 		Scaffold.of(context).showSnackBar(snackBar);
 	}
+
+ 
+  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, id) async {
+    return showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Dialog'),
+          content: const Text(
+              'Do you want to delete ?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+              },
+            ),
+            FlatButton(
+              child: const Text('ACCEPT'),
+              onPressed: () {
+                _delete(context, id);
+                Navigator.of(context).pop(ConfirmAction.ACCEPT);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 
 } 

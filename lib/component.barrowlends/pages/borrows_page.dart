@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../forms/borrows_form.dart';
 import '../../main.utils/pat_db_helper.dart';
+import '../../main.utils/common.utils.dart' as com;
 
 
 class Barrows extends StatefulWidget {
@@ -98,7 +99,7 @@ class BorrowPage extends State<Barrows> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteBarrows(id);
 		if (result != 0) {
-			_showSnackBar(context, 'Barrow is Deleted Successfully');
+			com.CommanUtils().showSnackBars(context, "Deleted Successfully");
 			updateListView();
 		}
 	}
