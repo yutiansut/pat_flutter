@@ -224,7 +224,7 @@ class BarrowsForm extends State<BarrowForm> {
     print(result);
     if(result != 0){
       print('Saved Successfully');
-      Navigator.pop(context, false);
+      Navigator.pop(context, true);
       // com.showSnackBar(context, 'Saved Successfully');
     }else{
       print('Not Saved.');

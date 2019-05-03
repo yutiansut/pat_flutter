@@ -95,8 +95,11 @@ class IncomeSalary extends State<IncomeSale> {
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,
-	      onPressed: (){
-	         Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new INForm()));
+	      onPressed: () async{
+	         var result = await Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new INForm()));
+           if(result == true){
+             updateListView();
+           }
 	      }
 	    )
   );

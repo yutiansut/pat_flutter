@@ -250,7 +250,7 @@ class Expense_purchaseForm extends State<EXPForm> {
     print(result);
     if(result != 0){
       print('Purchase is Saved Successfully');
-      Navigator.pop(context, false);
+      Navigator.pop(context, true);
       // com.showSnackBar(context, 'Saved Successfully');
     }else{
       print('Not Saved.');

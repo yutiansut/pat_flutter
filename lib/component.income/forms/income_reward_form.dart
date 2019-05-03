@@ -231,7 +231,7 @@ class Income_RewardFrom extends State<INForm> {
     print(result);
     if(result != 0){
       print('Reward Saved Successfully');
-      Navigator.pop(context, false);
+      Navigator.pop(context, true);
       
     }else{
       print('Not Saved.');

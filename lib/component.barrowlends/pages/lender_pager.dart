@@ -71,8 +71,12 @@ class LenderPage extends State<Lends> {
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,
-	      onPressed: (){
-	         Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new LENDForm()));
+	      onPressed: () async{
+	        var result = Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new LENDForm()));
+
+          if(result == true){
+            updateListView();
+          }
 	      }
 	    )
   );
