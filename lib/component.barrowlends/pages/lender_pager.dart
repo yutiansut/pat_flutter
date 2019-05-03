@@ -14,6 +14,8 @@ class Lends extends StatefulWidget {
 
 class LenderPage extends State<Lends> {
 
+  TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
+
   DatabaseHelper databaseHelper = DatabaseHelper();
 	List<Map<String, dynamic>> lendssList;
   int count = 0;
@@ -33,27 +35,47 @@ class LenderPage extends State<Lends> {
 
     return new Scaffold(
    body: ListView.builder(
+     padding: EdgeInsets.all(12),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
 					color: Colors.white,
 					elevation: 2.0,
 					child: ListTile(
-
 						leading: CircleAvatar(
-							backgroundColor: Colors.black,
+							backgroundColor: Colors.greenAccent,
+              child: Text(this.lendssList[position]['barrowername'][0].toUpperCase() , textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28,color: Colors.red)),
 						),
 
-						title: Text(this.lendssList[position]['barrowername']),
+						title: Text(this.lendssList[position]['barrowername'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
 
-						subtitle: Text(this.lendssList[position]['lendamount'].toString()),
+						subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+    
+              children: <Widget>[
+                Text(this.lendssList[position]['description'], style: descStyle,),
+                          
+              ],
+            ),
 
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_asyncConfirmDialog(context, this.lendssList[position]['id']);
-							},
-						),
+
+						trailing: Column(
+              children: <Widget>[
+                Chip(
+                  label: Text(this.lendssList[position]['lendamount'].toString(),style: TextStyle(color: Colors.white)),
+                  avatar:  Image(
+                      width: 50,
+                      image: AssetImage("assets/rupees.png"),
+                    ),
+                  backgroundColor: Colors.purpleAccent,
+                ),
+
+              ],
+            ),
+            onLongPress: () async {
+              await _asyncConfirmDialog(context, this.lendssList[position]['id']);
+            },
 					),
 				);	
 			},
@@ -66,13 +88,14 @@ class LenderPage extends State<Lends> {
 	      ),
 	      backgroundColor: Colors.transparent,
 	      onPressed: () async{
-	        var result = Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new LENDForm()));
+	        var result = await Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new LENDForm()));
 
           if(result == true){
             updateListView();
           }
 	      }
-	    )
+	    ),
+      backgroundColor: Colors.black
   );
   }
 

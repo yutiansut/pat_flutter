@@ -15,7 +15,7 @@ class EXPForm extends StatefulWidget {
 class Expense_onlineForm extends State<EXPForm> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  ExpenseOnline exponline_d = ExpenseOnline('','',0,DateTime.now());
+  ExpenseOnline exponline_d = ExpenseOnline('',0,DateTime.now());
   List<ExpenseOnline> Exponlinelist;
   int count = 0;
 
@@ -35,7 +35,6 @@ class Expense_onlineForm extends State<EXPForm> {
   var displayResult = '';
 
   TextEditingController onlinestroecontoller = TextEditingController();
-  TextEditingController productcontroller = TextEditingController();
   TextEditingController expenseamountcontroller = TextEditingController();
   TextEditingController timecontoller = TextEditingController();
   TextEditingController descontroller = TextEditingController();
@@ -52,7 +51,7 @@ class Expense_onlineForm extends State<EXPForm> {
      return new Scaffold(
        appBar: AppBar(
           title: Text('Online Expense'),
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.purpleAccent,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
@@ -96,29 +95,6 @@ class Expense_onlineForm extends State<EXPForm> {
   
                     ),
                   ),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: _minimumPadding, bottom: _minimumPadding),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      style: textStyle,
-                      controller: productcontroller,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Please enter the productname';
-                        }
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Product Name',
-                          hintText: 'Eg: Sampoo',
-                          labelStyle: textStyle,
-                          errorStyle: TextStyle(
-                            color: Colors.yellowAccent,
-                            fontSize: 15.0
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
-                    )),
                     Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
@@ -230,7 +206,6 @@ class Expense_onlineForm extends State<EXPForm> {
 
   void _reset() async{
     onlinestroecontoller.text = '';
-    productcontroller.text = '';
     expenseamountcontroller.text = '';
     timecontoller.text = '';
     descontroller.text = '';
@@ -241,7 +216,6 @@ class Expense_onlineForm extends State<EXPForm> {
   void getSalaryFormValues() async{
     double expon = num.tryParse(expenseamountcontroller.text).toDouble();
     exponline_d.storename = onlinestroecontoller.text;
-    exponline_d.product = productcontroller.text;
     exponline_d.amount = expon;
     exponline_d.date = date;
     exponline_d.desc = descontroller.text;

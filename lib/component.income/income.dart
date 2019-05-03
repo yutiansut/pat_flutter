@@ -29,7 +29,7 @@ class Incomes extends StatelessWidget {
             leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.purpleAccent,
           ),
           body: TabBarView(
             children: [

@@ -52,7 +52,7 @@ class BarrowsForm extends State<BarrowForm> {
      return new Scaffold(
        appBar: AppBar(
           title: Text('Barrows'),
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.pinkAccent,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

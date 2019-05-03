@@ -13,6 +13,7 @@ class Barrows extends StatefulWidget {
 }
 
 class BorrowPage extends State<Barrows> {
+  TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
   DatabaseHelper databaseHelper = DatabaseHelper();
 	List<Map<String, dynamic>> barrowsList;
   int count = 0;
@@ -33,6 +34,7 @@ class BorrowPage extends State<Barrows> {
 
     return new Scaffold(
    body: ListView.builder(
+     padding: EdgeInsets.all(12),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
@@ -41,19 +43,41 @@ class BorrowPage extends State<Barrows> {
 					child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: Colors.black,
+              child: Text(this.barrowsList[position]['lendername'][0].toUpperCase() , textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28,color: Colors.redAccent)),
+							backgroundColor: Colors.amberAccent,
 						),
 
-						title: Text(this.barrowsList[position]['lendername']),
+						title: Text(this.barrowsList[position]['lendername'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
 
-						subtitle: Text(this.barrowsList[position]['barrowamount'].toString()),
+						subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+    
+              children: <Widget>[
+                Text(this.barrowsList[position]['description'], style: descStyle,),
+                
+                  
+                  // Text(this.exppurList[position]['description'], style: descStyle,)
+                
+              ],
+            ),
 
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_asyncConfirmDialog(context, this.barrowsList[position]['id']);
-							},
-						),
+						trailing: Column(
+              children: <Widget>[
+                Chip(
+                  label: Text(this.barrowsList[position]['barrowamount'].toString(),style: TextStyle(color: Colors.white)),
+                  avatar:  Image(
+                      width: 50,
+                      image: AssetImage("assets/rupees.png"),
+                    ),
+                  backgroundColor: Colors.deepPurpleAccent,
+                ),
+
+              ],
+            ),
+            onLongPress: () async {
+              await _asyncConfirmDialog(context, this.barrowsList[position]['id']);
+            },
 
 
 						// onTap: () {
@@ -79,7 +103,8 @@ class BorrowPage extends State<Barrows> {
               updateListView();
             }
         }
-	    )
+	    ),
+      backgroundColor: Colors.black,
   );
   }
 

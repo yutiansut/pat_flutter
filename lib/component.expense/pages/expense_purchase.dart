@@ -45,11 +45,13 @@ TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 					child: ListTile(
 
 						leading: CircleAvatar(
-              child: Text(this.exppurList[position]['storename'][0].toUpperCase() , textAlign: TextAlign.center),
-							backgroundColor: Colors.black,
+              child: Text(this.exppurList[position]['storename'][0].toUpperCase() , textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28,color: Colors.white)),
+              
+							backgroundColor: Colors.green
 						),
 
-						title: Text(this.exppurList[position]['storename'], ),
+						title: Text(this.exppurList[position]['storename'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold) ),
 
 						subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

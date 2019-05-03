@@ -54,7 +54,7 @@ bool _dialVisible = true;
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(title: new Text('Personal Account Tracker'),
-      backgroundColor: Colors.pinkAccent,),
+      backgroundColor: Colors.purpleAccent,),
       floatingActionButton: SpeedDial(
           // both default to 16
           marginRight: 18,
@@ -71,7 +71,7 @@ bool _dialVisible = true;
           onClose: () => print('DIAL CLOSED'),
           tooltip: 'Speed Dial',
           heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Colors.pinkAccent,
+          backgroundColor: Colors.purpleAccent,
           foregroundColor: Colors.black,
           elevation: 8.0,
           shape: StadiumBorder(),
