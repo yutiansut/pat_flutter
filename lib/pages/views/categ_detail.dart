@@ -32,16 +32,17 @@ class CategDetailState extends State<CategDetail> {
 	TextEditingController typeController = TextEditingController();
 	// TextEditingController descriptionController = TextEditingController();
 	
-  List accountList;
+  List accountList = [];
   List acm2olist;
 	int acTypecount = 0;
+  String typeIdText;
 
 	CategDetailState(this.categ, this.appBarTitle);
 
   @override
   void initState() {
     super.initState();
-    getM2O();
+    getM2O();  //Initiate many2one field data
   }
 
 	@override
@@ -81,14 +82,19 @@ class CategDetailState extends State<CategDetail> {
             children: <Widget>[
 
               // First element
-              ListTile(
+              /* ListTile(
                 title: DropdownButton(
                     items: accountList != null ? accountList.map((item){
                       return DropdownMenuItem<String> (
                         value: item['id'].toString(),
                         child: Text(item['name']),
                       );
-                    }).toList() : [],
+                    }).toList() : ['New'].map((String item){
+                      return DropdownMenuItem<String> (
+                        value: '0',
+                        child: Text('New'),
+                      );
+                    }),
 
                     style: textStyle,
 
@@ -102,6 +108,26 @@ class CategDetailState extends State<CategDetail> {
                       });
                     }
                 ),
+              ), */
+
+              Row(
+                children: <Widget>[
+                  DropdownButton(
+                    items: ['1','2','3'].map((item){
+                      return DropdownMenuItem<String> (
+                        value: item,
+                        child: Text(item),
+                      );
+                    }).toList(),
+                    value: this.typeIdText,
+                    onChanged: (value){
+                      setState(() {
+                        this.typeIdText = value;
+                        categ.typeId = int.parse(value);
+                      });
+                    },
+                  ),
+                ],
               ),
 
               // Second Element
@@ -205,6 +231,8 @@ class CategDetailState extends State<CategDetail> {
 	void updateAccountTypeAsInt(String value) {
     if(acm2olist != null){
       acm2olist.forEach((item){
+        print(item);
+        print(item[1] + '--------------------'+ value);
         if(item[0] == value){
           categ.typeId = item[0];
         }
@@ -245,6 +273,7 @@ class CategDetailState extends State<CategDetail> {
 
 		categ.createDate = DateFormat.yMMMd().format(DateTime.now());
 		int result;
+    print(categ.toString()+ "---------hari--------");
 		if (categ.id != null) {  // Case 1: Update operation
 			result = await helper.update(categoryTable, categ, colId);
 		} else { // Case 2: Insert Operation
@@ -332,6 +361,7 @@ class CategDetailState extends State<CategDetail> {
         this.accountList = m2oList;
         this.acm2olist = acList;
         this.acTypecount = count;
+        this.typeIdText = categ.typeId.toString();
       });
 		});
   }
