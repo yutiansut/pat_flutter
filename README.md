@@ -2,9 +2,11 @@
 
 # Tutorial Pages
 
-   https://kodestat.gitbook.io/flutter/
+   - https://kodestat.gitbook.io/flutter/
 
-   https://www.flaticon.com/free-icon/
+   - https://www.flaticon.com/free-icon/
+
+   - http://androidkt.com/flutter-alertdialog-example/
 
 
 Git Clone by branch:

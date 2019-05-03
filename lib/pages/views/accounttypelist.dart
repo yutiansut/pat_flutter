@@ -1,51 +1,52 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../models/category.dart';
-import '../../utils/dbHelper.dart';
-import 'categ_detail.dart';
 import 'package:sqflite/sqflite.dart';
+import '../../utils/dbHelper.dart';
+
+import '../models/account_type.dart';
+import 'account_type_detail.dart';
 
 
-class CategList extends StatefulWidget {
+class AccountTypeList extends StatefulWidget {
 
 	@override
   State<StatefulWidget> createState() {
 
-    return CategListState();
+    return AccountTypeListState();
   }
 }
 
-class CategListState extends State<CategList> {
+class AccountTypeListState extends State<AccountTypeList> {
 
 	DatabaseHelper databaseHelper = DatabaseHelper();
-	List<ModelCategory> categList;
+	List<ModelAccountType> accountList;
 	int count = 0;
 
 	@override
   Widget build(BuildContext context) {
 
-		if (categList == null) {
-			categList = List<ModelCategory>();
+		if (accountList == null) {
+			accountList = List<ModelAccountType>();
 			updateListView();
 		}
 
     return Scaffold(
 
 	    appBar: AppBar(
-		    title: Text('Category'),
+		    title: Text('Account Type'),
 	    ),
 
-	    body: getCategListView(),
+	    body: getAccountTypeListView(),
 
 	    floatingActionButton: FloatingActionButton(
         elevation: 0.0,
         
 		    onPressed: () {
 		      debugPrint('FAB clicked');
-		      navigateToDetail(ModelCategory('', 0), 'Add Category');
+		      navigateToDetail(ModelAccountType(''), 'Add Account Type');
 		    },
 
-		    tooltip: 'Add Category',
+		    tooltip: 'Add Account Type',
 
 		    child: Image(
           width: 50,
@@ -58,7 +59,7 @@ class CategListState extends State<CategList> {
     );
   }
 
-  ListView getCategListView() {
+  ListView getAccountTypeListView() {
 
 		TextStyle titleStyle = Theme.of(context).textTheme.subhead;
 
@@ -71,30 +72,29 @@ class CategListState extends State<CategList> {
 					child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: getCategColor(this.categList[position].name),
-							child: getCategIcon(this.categList[position].name),
+							backgroundColor: getCategColor(this.accountList[position].name),
+							child: getCategIcon(this.accountList[position].name),
 						),
 
-						title: Text(this.categList[position].name, style: titleStyle,),
+						title: Text(this.accountList[position].name, style: titleStyle,),
 
 						subtitle: Row(
               children: <Widget>[
-                Text(this.categList[position].createDate),
-                Text(this.categList[position].typeId.toString()),
+                Text(this.accountList[position].createDate),
               ],
             ),
 
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),
 							onTap: () {
-								_delete(context, this.categList[position]);
+								_delete(context, this.accountList[position]);
 							},
 						),
 
 
 						onTap: () {
 							debugPrint("ListTile Tapped");
-							navigateToDetail(this.categList[position],'Edit Category');
+							navigateToDetail(this.accountList[position],'Edit AccountType');
 						},
 
 					),
@@ -131,11 +131,11 @@ class CategListState extends State<CategList> {
       );
 	}
 
-	void _delete(BuildContext context, ModelCategory categ) async {
+	void _delete(BuildContext context, ModelAccountType categ) async {
 
-		int result = await databaseHelper.delete(categoryTable, colId, categ.id);
+		int result = await databaseHelper.delete(accountTypeTable, colId, categ.id);
 		if (result != 0) {
-			_showSnackBar(context, 'Category Deleted Successfully');
+			_showSnackBar(context, 'Account Type Deleted Successfully');
 			updateListView();
 		}
 	}
@@ -146,9 +146,9 @@ class CategListState extends State<CategList> {
 		Scaffold.of(context).showSnackBar(snackBar);
 	}
 
-  void navigateToDetail(ModelCategory categ, String title) async {
+  void navigateToDetail(ModelAccountType acType, String title) async {
 	  bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-		  return CategDetail(categ, title);
+		  return AcTypeDetail(acType, title);
 	  }));
 
 	  if (result == true) {
@@ -161,10 +161,10 @@ class CategListState extends State<CategList> {
 		final Future<Database> dbFuture = databaseHelper.initializeDatabase();
 		dbFuture.then((database) {
 
-			Future<List<dynamic>> categListFuture = databaseHelper.getObjList(categoryTable, "$colId ASC");
-			categListFuture.then((catList) {
+			Future<List<dynamic>> accountTypeFuture = databaseHelper.getObjList(accountTypeTable, "$colId ASC");
+			accountTypeFuture.then((catList) {
 				setState(() {
-				  this.categList = catList;
+				  this.accountList = catList;
 				  this.count = catList.length;
 				});
 			});

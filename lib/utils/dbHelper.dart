@@ -2,7 +2,8 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import '../pages/models/category.dart' as categ;
+import './../pages/models/category.dart' as categ;
+import './../pages/models/account_type.dart' as accountType;
 
 class DatabaseHelper {
 
@@ -42,6 +43,7 @@ class DatabaseHelper {
 	void _createDb(Database db, int newVersion) async {
 
 		await db.execute(categ.createQry);
+		await db.execute(accountType.createQry);
 	}
 
 	// Fetch Operation: Get all note objects from database
@@ -50,6 +52,14 @@ class DatabaseHelper {
 
 //		var result = await db.rawQuery('SELECT * FROM $noteTable order by $colPriority ASC');
 		var result = await db.query(table, orderBy: order);
+		return result;
+	}
+
+  Future<List<Map<String, dynamic>>> getM2OList(String table, String order) async {
+		Database db = await this.database;
+
+		var result = await db.rawQuery('SELECT id,name FROM $table order by order');
+		// var result = await db.query(table, orderBy: order);
 		return result;
 	}
 
@@ -69,9 +79,11 @@ class DatabaseHelper {
 
 	// Delete Operation: Delete a Note object from database
 	Future<int> delete(String table, String fieldId, int id) async {
-		var db = await this.database;
-		int result = await db.rawDelete('DELETE FROM $table WHERE $fieldId = $id');
-		return result;
+
+    var db = await this.database;
+    int result = await db.rawDelete('DELETE FROM $table WHERE $fieldId = $id');
+    return result;
+		
 	}
 
 	// Get number of Note objects in database
@@ -83,18 +95,27 @@ class DatabaseHelper {
 	}
 
 	// Get the 'Map List' [ List<Map> ] and convert it to 'Note List' [ List<Note> ]
-	Future<List<dynamic>> getList(String table, String order) async {
-
+	Future<List<dynamic>> getObjList(String table, String order) async {
 		var mapList = await getMapList(table, order); // Get 'Map List' from database
 		int count = mapList.length; // Count the number of map entries in db table
 
-		List<categ.ModelCategory> objList = List<categ.ModelCategory>();
-		// For loop to create a 'Note List' from a 'Map List'
-		for (int i = 0; i < count; i++) {
-			objList.add(categ.ModelCategory.fromMap(mapList[i]));
-		}
-
-		return objList;
+    if (table == categ.categoryTable){
+      List<categ.ModelCategory> objList = List<categ.ModelCategory>();
+      // For loop to create a 'Note List' from a 'Map List'
+      for (int i = 0; i < count; i++) {
+        objList.add(categ.ModelCategory.fromMap(mapList[i]));
+      }
+		  return objList;
+    }
+    else if (table == accountType.accountTypeTable) {
+      List<accountType.ModelAccountType> objList = List<accountType.ModelAccountType>();
+      // For loop to create a 'Note List' from a 'Map List'
+      for (int i = 0; i < count; i++) {
+        objList.add(accountType.ModelAccountType.fromMap(mapList[i]));
+      }
+		  return objList;
+    }
+    return [];  
 	}
 
 }

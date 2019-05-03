@@ -1,8 +1,10 @@
-// import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
-import '../models/category.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../utils/dbHelper.dart';
 import 'package:intl/intl.dart';
+import '../models/category.dart';
+import '../models/account_type.dart' as actype;
 
 class CategDetail extends StatefulWidget {
 
@@ -20,7 +22,6 @@ class CategDetail extends StatefulWidget {
 
 class CategDetailState extends State<CategDetail> {
 
-	// static var _priorities = ['High', 'Low'];
 
 	DatabaseHelper helper = DatabaseHelper();
 
@@ -28,7 +29,12 @@ class CategDetailState extends State<CategDetail> {
 	ModelCategory categ;
 
 	TextEditingController nameController = TextEditingController();
+	TextEditingController typeController = TextEditingController();
 	// TextEditingController descriptionController = TextEditingController();
+	
+  List accountList;
+  List acm2olist;
+	int acTypecount = 0;
 
 	CategDetailState(this.categ, this.appBarTitle);
 
@@ -38,7 +44,10 @@ class CategDetailState extends State<CategDetail> {
 		TextStyle textStyle = Theme.of(context).textTheme.title;
 
 		nameController.text = categ.name;
+		typeController.text = categ.typeId.toString();
 		// descriptionController.text = categ.name;
+
+    getM2O();
 
     return WillPopScope(
 
@@ -48,171 +57,170 @@ class CategDetailState extends State<CategDetail> {
 	    },
 
 	    child: Scaffold(
-	    appBar: AppBar(
-		    title: Text(appBarTitle),
-		    leading: IconButton(icon: Icon(
-				    Icons.arrow_back),
-				    onPressed: () {
-		    	    // Write some code to control things, when user press back button in AppBar
-		    	    moveToLastScreen();
-				    }
-		    ),
-	    ),
+        appBar: AppBar(
+          title: Text(appBarTitle),
+          leading: IconButton(icon: Icon(
+              Icons.arrow_back),
+              onPressed: () {
+                // Write some code to control things, when user press back button in AppBar
+                moveToLastScreen();
+              }
+          ),
+        ),
 
-	    body: Padding(
-		    padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
-		    child: ListView(
-			    children: <Widget>[
+        body: Padding(
+          // padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
+          padding: EdgeInsets.all(5),
+          child: ListView(
+            children: <Widget>[
 
-			    	// First element
-				    /* ListTile(
-					    title: DropdownButton(
-							    items: _priorities.map((String dropDownStringItem) {
-							    	return DropdownMenuItem<String> (
-									    value: dropDownStringItem,
-									    child: Text(dropDownStringItem),
-								    );
-							    }).toList(),
+              // First element
+              ListTile(
+                title: DropdownButton(
+                    items: accountList.map((item){
+                      return DropdownMenuItem<String> (
+                        value: item['id'].toString(),
+                        child: Text(item['name']),
+                      );
+                    }).toList(),
 
-							    style: textStyle,
+                    style: textStyle,
 
-							    // value: getCategAsString(categ.id),
-							    value: categ.name,
+                    value: getAccountTypeAsString(categ.typeId),
+                    // value: categ.typeId,
 
-							    onChanged: (valueSelectedByUser) {
-							    	setState(() {
-							    	  debugPrint('User selected $valueSelectedByUser');
-							    	  // updateCategAsInt(valueSelectedByUser);
-							    	});
-							    }
-					    ),
-				    ), */
+                    onChanged: (valueSelectedByUser) {
+                      setState(() {
+                        debugPrint('User selected $valueSelectedByUser');
+                        updateAccountTypeAsInt(valueSelectedByUser);
+                      });
+                    }
+                ),
+              ),
 
-				    // Second Element
-				    Padding(
-					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					    child: TextField(
-						    controller: nameController,
-						    style: textStyle,
-						    onChanged: (value) {
-						    	debugPrint('Something changed in Title Text Field');
-						    	updateName();
-						    },
-						    decoration: InputDecoration(
-							    labelText: 'Name',
-							    labelStyle: textStyle,
-							    border: OutlineInputBorder(
-								    borderRadius: BorderRadius.circular(5.0)
-							    )
-						    ),
-					    ),
-				    ),
+              // Second Element
+              Padding(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                child: TextField(
+                  controller: nameController,
+                  style: textStyle,
+                  onChanged: (value) {
+                    debugPrint('Something changed in Title Text Field');
+                    updateName();
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    labelStyle: textStyle,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0)
+                    )
+                  ),
+                ),
+              ),
 
-				    // Third Element
-				    // Padding(
-					  //   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					  //   child: TextField(
-						//     controller: descriptionController,
-						//     style: textStyle,
-						//     onChanged: (value) {
-						// 	    debugPrint('Something changed in Description Text Field');
-						// 	    updateDescription();
-						//     },
-						//     decoration: InputDecoration(
-						// 		    labelText: 'Description',
-						// 		    labelStyle: textStyle,
-						// 		    border: OutlineInputBorder(
-						// 				    borderRadius: BorderRadius.circular(5.0)
-						// 		    )
-						//     ),
-					  //   ),
-				    // ),
+              // Third Element
+              // Padding(
+              //   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+              //   child: TextField(
+              //     controller: descriptionController,
+              //     style: textStyle,
+              //     onChanged: (value) {
+              // 	    debugPrint('Something changed in Description Text Field');
+              // 	    updateDescription();
+              //     },
+              //     decoration: InputDecoration(
+              // 		    labelText: 'Description',
+              // 		    labelStyle: textStyle,
+              // 		    border: OutlineInputBorder(
+              // 				    borderRadius: BorderRadius.circular(5.0)
+              // 		    )
+              //     ),
+              //   ),
+              // ),
 
-				    // Fourth Element
-				    Padding(
-					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					    child: Row(
-						    children: <Widget>[
-						    	Expanded(
-								    child: RaisedButton(
-									    color: Theme.of(context).primaryColorDark,
-									    textColor: Theme.of(context).primaryColorLight,
-									    child: Text(
-										    'Save',
-										    textScaleFactor: 1.5,
-									    ),
-									    onPressed: () {
-									    	setState(() {
-									    	  debugPrint("Save button clicked");
-									    	  _save();
-									    	});
-									    },
-								    ),
-							    ),
+              // Fourth Element
+              Padding(
+                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Theme.of(context).primaryColorLight,
+                        child: Text(
+                          'Save',
+                          textScaleFactor: 1.5,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            debugPrint("Save button clicked");
+                            _save();
+                          });
+                        },
+                      ),
+                    ),
 
-							    Container(width: 5.0,),
+                    Container(width: 5.0,),
 
-							    Expanded(
-								    child: RaisedButton(
-									    color: Theme.of(context).primaryColorDark,
-									    textColor: Theme.of(context).primaryColorLight,
-									    child: Text(
-										    'Delete',
-										    textScaleFactor: 1.5,
-									    ),
-									    onPressed: () {
-										    setState(() {
-											    debugPrint("Delete button clicked");
-											    _delete();
-										    });
-									    },
-								    ),
-							    ),
+                    Expanded(
+                      child: RaisedButton(
+                        color: Theme.of(context).primaryColorDark,
+                        textColor: Theme.of(context).primaryColorLight,
+                        child: Text(
+                          'Delete',
+                          textScaleFactor: 1.5,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            debugPrint("Delete button clicked");
+                            _delete();
+                          });
+                        },
+                      ),
+                    ),
 
-						    ],
-					    ),
-				    ),
+                  ],
+                ),
+              ),
 
-			    ],
-		    ),
-	    ),
+            ],
+          ),
+        ),
 
-    ));
+      )
+    );
   }
 
   void moveToLastScreen() {
-		Navigator.pop(context, true);
+		Navigator.pop(context, true);  //Second parameter "true" for updating list view 
   }
 
 	// Convert the String priority in the form of integer before saving it to Database
-	// void updateCategAsInt(String value) {
-	// 	switch (value) {
-	// 		case 'Income':
-	// 			categ.id = 1;
-	// 			break;
-	// 		case 'Expense':
-	// 			categ.id = 2;
-	// 			break;
-	// 	}
-	// }
+	void updateAccountTypeAsInt(String value) {
+    acm2olist.forEach((item){
+      if(item[1] == value){
+        categ.typeId = item[0];
+      }
+    });
+	}
 
 	// Convert int priority to String priority and display it to user in DropDown
-	// String getCategAsString(int value) {
-	// 	String priority;
-	// 	switch (value) {
-	// 		case 1:
-	// 			priority = _priorities[0];  // 'High'
-	// 			break;
-	// 		case 2:
-	// 			priority = _priorities[1];  // 'Low'
-	// 			break;
-	// 	}
-	// 	return priority;
-	// }
+	String getAccountTypeAsString(int value) {
+		String priority;
+		acm2olist.forEach((item){
+      if(item[0] == value){
+        return item[1];
+      }
+    });
+		return priority;
+	}
 
 	// Update the title of Note object
   void updateName(){
     categ.name = nameController.text;
+  }
+  void updateTypeId(){
+    categ.typeId = int.parse(typeController.text);
   }
 
 	// Update the description of Note object
@@ -263,32 +271,61 @@ class CategDetailState extends State<CategDetail> {
 
 
   Future<void> _showAlertDialog(String title, String message) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false, // user must tap button!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        // title: Text(title),
-        content: ListTile(
-          title: Text(title),
-          subtitle: Text(message),
-          leading: IconButton(
-            icon: Icon(Icons.info),
-            color: Colors.green,
-            onPressed: (){},
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title: Text(title),
+          content: ListTile(
+            title: Text(title),
+            subtitle: Text(message),
+            leading: IconButton(
+              icon: Icon(Icons.info),
+              color: Colors.green,
+              onPressed: (){},
+            ),
           ),
-        ),
-        actions: <Widget>[
-          /* FlatButton(
-            child: Text('Okay'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ), */
-        ],
-      );
-    },
-  );
-}
+          actions: <Widget>[
+            /* FlatButton(
+              child: Text('Okay'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ), */
+          ],
+        );
+      },
+    );
+  }
+
+  getM2O(){
+    final Future<Database> dbFuture = helper.initializeDatabase();
+		dbFuture.then((database) async {
+
+			var mapList = await helper.getMapList(actype.accountTypeTable, actype.colId + " ASC");
+      int count = mapList.length;
+      print(mapList);
+      print(count);
+      var m2oList = [];
+      var acList =[];
+      mapList.forEach((item){
+        m2oList.add({'id': item['id'], 'name': item['name']});
+        // m2oList.add();
+      });
+      mapList.forEach((item){
+        // m2oList.add({item['id']: item['name']});
+        acList.add([item['id'],item['name']]);
+      });
+			// for (int i = 0; i < count; i++) {
+      //   actype.ModelAccountType.fromMap(mapList[i]);
+      // }
+      setState(() {
+        this.accountList = m2oList;
+        this.acm2olist = acList;
+        this.acTypecount = count;
+      });
+		});
+  }
 
 }

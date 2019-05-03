@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pat_flutter/pages/views/accounttypelist.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import 'dashboard.dart';
@@ -16,7 +17,6 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
   final List<Tab> myTabs = <Tab>[
     Tab(text: "Dashboard"),
     Tab(text: "Accounts"),
-    Tab(text: "Category"),
   ];
 
   TabController _tabController;
@@ -38,7 +38,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
 
     return MaterialApp(
         home: DefaultTabController(
-            length: 3,
+            length: 2,
             child: Scaffold(
                 appBar: AppBar(
                     title: Text(conf.appName, textAlign: TextAlign.center,),
@@ -58,7 +58,6 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   children: [
                     DashboardPage(),
                     AccountsPage(),
-                    CategList(),
                   ],
                 ),
                 drawer: Drawer(
@@ -87,6 +86,13 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                         trailing: Icon(Icons.view_compact),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => CategList()));
+                        },
+                      ),
+                      ListTile(
+                        title: Text("Account Type"),
+                        trailing: Icon(Icons.view_compact),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeList()));
                         },
                       ),
                     ],
