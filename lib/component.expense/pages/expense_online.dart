@@ -3,6 +3,7 @@ import '../forms/expense_online_form.dart';
 import '../../main.utils/pat_db_helper.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../main.utils/common.utils.dart' as com;
+enum ConfirmAction { CANCEL, ACCEPT }
 
 class ExpOnline extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class ExpenseOnline extends State<ExpOnline> {
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),
 							onTap: () {
-								_delete(context, this.exponlineList[position]['id']);
+								_asyncConfirmDialog(context, this.exponlineList[position]['id']);
 							},
 						),
 
@@ -101,7 +102,6 @@ class ExpenseOnline extends State<ExpOnline> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteExpOnline(id);
 		if (result != 0) {
-			com.CommanUtils().showSnackBars(context, "Deleted Successfully");
 			updateListView();
 		}
 	}
@@ -111,4 +111,33 @@ class ExpenseOnline extends State<ExpOnline> {
 		final snackBar = SnackBar(content: Text(message));
 		Scaffold.of(context).showSnackBar(snackBar);
 	}
+
+  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, id) async {
+    return showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Dialog'),
+          content: const Text(
+              'Do you want to delete ?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+              },
+            ),
+            FlatButton(
+              child: const Text('ACCEPT'),
+              onPressed: () {
+                _delete(context, id);
+                Navigator.of(context).pop(ConfirmAction.ACCEPT);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 }

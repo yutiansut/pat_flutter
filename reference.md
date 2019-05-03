@@ -21,4 +21,8 @@
         https://github.com/jonasbark/flutter_stripe_payment
         
         https://pub.dartlang.org/packages/color
+
+        https://kodestat.gitbook.io/flutter/34-flutter-alertdialog
+
+        https://material.io/tools/color/
     

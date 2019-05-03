@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import '../../main.utils/pat_db_helper.dart';
 import '../../main.utils/common.utils.dart' as com;
 
+enum ConfirmAction { CANCEL, ACCEPT }
 
 class Lends extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class LenderPage extends State<Lends> {
 						trailing: GestureDetector(
 							child: Icon(Icons.delete, color: Colors.grey,),
 							onTap: () {
-								_delete(context, this.lendssList[position]['id']);
+								_asyncConfirmDialog(context, this.lendssList[position]['id']);
 							},
 						),
 					),
@@ -92,10 +93,38 @@ class LenderPage extends State<Lends> {
   void _delete(BuildContext context, int id) async {
 		int result = await databaseHelper.deleteLends(id);
 		if (result != 0) {
-			com.CommanUtils().showSnackBars(context, "Deleted Successfully");
 			updateListView();
 		}
 	}
+
+  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, id) async {
+    return showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Dialog'),
+          content: const Text(
+              'Do you want to delete ?'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop(ConfirmAction.CANCEL);
+              },
+            ),
+            FlatButton(
+              child: const Text('ACCEPT'),
+              onPressed: () {
+                _delete(context, id);
+                Navigator.of(context).pop(ConfirmAction.ACCEPT);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
 
 
 }
