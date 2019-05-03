@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import '../forms/expense_purchase.dart';
 import '../../main.utils/pat_db_helper.dart';
-import '../../main.utils/common.utils.dart' as com;
+
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
@@ -14,6 +14,8 @@ class ExpensePur extends StatefulWidget {
 }
 
 class ExpensePurchase extends State<ExpensePur> {
+
+TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 
    @override
   void initState(){
@@ -34,6 +36,7 @@ class ExpensePurchase extends State<ExpensePur> {
     
   return new Scaffold(
    body: ListView.builder(
+     padding: EdgeInsets.all(12),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
@@ -42,19 +45,40 @@ class ExpensePurchase extends State<ExpensePur> {
 					child: ListTile(
 
 						leading: CircleAvatar(
+              child: Text(this.exppurList[position]['storename'][0].toUpperCase() , textAlign: TextAlign.center),
 							backgroundColor: Colors.black,
 						),
 
-						title: Text(this.exppurList[position]['storename']),
+						title: Text(this.exppurList[position]['storename'], ),
 
-						subtitle: Text(this.exppurList[position]['product']),
+						subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+    
+              children: <Widget>[
+                Text(this.exppurList[position]['description'], style: descStyle,),
+                
+                  
+                  // Text(this.exppurList[position]['description'], style: descStyle,)
+                
+              ],
+            ),
 
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_asyncConfirmDialog(context, this.exppurList[position]['id']);
-							},
-						),
+						trailing: Column(
+              children: <Widget>[
+                Chip(
+                  label: Text(this.exppurList[position]['amount'].toString(),style: TextStyle(color: Colors.white)),
+                  avatar:  Image(
+                      width: 50,
+                      image: AssetImage("assets/rupees.png"),
+                    ),
+                  backgroundColor: Colors.red,
+                ),
+
+              ],
+            ),
+            onLongPress: () async {
+              await _asyncConfirmDialog(context, this.exppurList[position]['id']);
+            },
 
 
 						// onTap: () {
@@ -80,7 +104,8 @@ class ExpensePurchase extends State<ExpensePur> {
             updateListView();
           }
         }
-	    )
+	    ),
+      backgroundColor: Colors.black,
   );
   }
 

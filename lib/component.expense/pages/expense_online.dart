@@ -13,6 +13,7 @@ class ExpOnline extends StatefulWidget {
 }
 
 class ExpenseOnline extends State<ExpOnline> {
+  TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 	List<Map<String, dynamic>> exponlineList;
@@ -82,7 +83,8 @@ class ExpenseOnline extends State<ExpOnline> {
            updateListView();
          }
 	      }
-	    )
+	    ),
+      backgroundColor: Colors.black,
   );
   }
 

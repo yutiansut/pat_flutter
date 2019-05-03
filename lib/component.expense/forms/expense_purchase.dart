@@ -13,7 +13,7 @@ class EXPForm extends StatefulWidget {
 
 class Expense_purchaseForm extends State<EXPForm> {
   DatabaseHelper databaseHelper = DatabaseHelper();
-  ExpensePurchase exppur_d = ExpensePurchase('', '',0, DateTime.now());
+  ExpensePurchase exppur_d = ExpensePurchase('',0, DateTime.now());
   List<ExpensePurchase> expensePurchaselist;
   int count = 0;
 
@@ -32,7 +32,7 @@ class Expense_purchaseForm extends State<EXPForm> {
   var displayResult = '';
 
   TextEditingController onlinestroecontoller = TextEditingController();
-  TextEditingController productcontroller = TextEditingController();
+  // TextEditingController productcontroller = TextEditingController();
   TextEditingController expenseamountcontroller = TextEditingController();
   TextEditingController timecontoller = TextEditingController();
   TextEditingController descontroller = TextEditingController();
@@ -93,29 +93,29 @@ class Expense_purchaseForm extends State<EXPForm> {
   
                     ),
                   ),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: _minimumPadding, bottom: _minimumPadding),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      style: textStyle,
-                      controller: productcontroller,
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Please enter the productname';
-                        }
-                      },
-                      decoration: InputDecoration(
-                          labelText: 'Product Name',
-                          hintText: 'Eg: Sampoo',
-                          labelStyle: textStyle,
-                          errorStyle: TextStyle(
-                            color: Colors.yellowAccent,
-                            fontSize: 15.0
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0))),
-                    )),
+                // Padding(
+                //     padding: EdgeInsets.only(
+                //         top: _minimumPadding, bottom: _minimumPadding),
+                //     child: TextFormField(
+                //       keyboardType: TextInputType.text,
+                //       style: textStyle,
+                //       controller: productcontroller,
+                //       validator: (String value) {
+                //         if (value.isEmpty) {
+                //           return 'Please enter the productname';
+                //         }
+                //       },
+                //       decoration: InputDecoration(
+                //           labelText: 'Product Name',
+                //           hintText: 'Eg: Sampoo',
+                //           labelStyle: textStyle,
+                //           errorStyle: TextStyle(
+                //             color: Colors.yellowAccent,
+                //             fontSize: 15.0
+                //           ),
+                //           border: OutlineInputBorder(
+                //               borderRadius: BorderRadius.circular(5.0))),
+                //     )),
                     Padding(
                     padding: EdgeInsets.only(
                         top: _minimumPadding, bottom: _minimumPadding),
@@ -231,7 +231,7 @@ class Expense_purchaseForm extends State<EXPForm> {
 
   void _reset() async{
     onlinestroecontoller.text = '';
-    productcontroller.text = '';
+    // productcontroller.text = '';
     expenseamountcontroller.text = '';
     timecontoller.text = '';
     descontroller.text = '';
@@ -242,7 +242,7 @@ class Expense_purchaseForm extends State<EXPForm> {
   void getSalaryFormValues() async{
     double expon = num.tryParse(expenseamountcontroller.text).toDouble();
     exppur_d.storename = onlinestroecontoller.text;
-    exppur_d.product = productcontroller.text;
+    // exppur_d.product = productcontroller.text;
     exppur_d.amount = expon;
     exppur_d.date = date;
     exppur_d.desc = descontroller.text;
