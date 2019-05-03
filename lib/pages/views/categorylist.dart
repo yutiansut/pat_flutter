@@ -38,6 +38,8 @@ class CategListState extends State<CategList> {
 	    body: getCategListView(),
 
 	    floatingActionButton: FloatingActionButton(
+        elevation: 0.0,
+        
 		    onPressed: () {
 		      debugPrint('FAB clicked');
 		      navigateToDetail(ModelCategory(''), 'Add Category');
@@ -45,7 +47,12 @@ class CategListState extends State<CategList> {
 
 		    tooltip: 'Add Category',
 
-		    child: Icon(Icons.add),
+		    child: Image(
+          width: 50,
+          image: AssetImage("assets/inc_pen.png"),
+        ),
+
+        backgroundColor: Colors.transparent,
 
 	    ),
     );

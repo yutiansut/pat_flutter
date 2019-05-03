@@ -248,7 +248,7 @@ class CategDetailState extends State<CategDetail> {
 		// Case 1: If user is trying to delete the NEW NOTE i.e. he has come to
 		// the detail page by pressing the FAB of NoteList page.
 		if (categ.id == null) {
-			_showAlertDialog('Status', 'No Note was deleted');
+			_showAlertDialog('Warning', 'No Note was deleted');
 			return;
 		}
 
@@ -257,21 +257,38 @@ class CategDetailState extends State<CategDetail> {
 		if (result != 0) {
 			_showAlertDialog('Status', 'Category Deleted Successfully');
 		} else {
-			_showAlertDialog('Status', 'Error Occured while Deleting Category');
+			_showAlertDialog('Warning', 'Error Occured while Deleting Category');
 		}
 	}
 
-	void _showAlertDialog(String title, String message) {
 
-		// AlertDialog alertDialog = AlertDialog(
-		// 	title: Text(title),
-		// 	content: Text(message),
-		// );
-		/* showDialog(
-				context: context,
-				builder: (_) => alertDialog
-		); */
-    print(message);
-	}
+  Future<void> _showAlertDialog(String title, String message) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap button!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        // title: Text(title),
+        content: ListTile(
+          title: Text(title),
+          subtitle: Text(message),
+          leading: IconButton(
+            icon: Icon(Icons.info),
+            color: Colors.green,
+            onPressed: (){},
+          ),
+        ),
+        actions: <Widget>[
+          /* FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ), */
+        ],
+      );
+    },
+  );
+}
 
 }
