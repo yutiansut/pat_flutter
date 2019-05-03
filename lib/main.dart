@@ -153,8 +153,9 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ),
               ),
               child: new FloatingActionButton(
+                elevation: 0.0,  // for removing background shadow in float button
                 heroTag: null,
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
                 mini: true,
                 child: icons[index],
                 onPressed: () {
@@ -166,8 +167,9 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           return child;
         }).toList()..add(
           new FloatingActionButton(
+            elevation: 0.0,
             heroTag: null,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
             foregroundColor: Colors.teal,
             child: new AnimatedBuilder(
               animation: _controller,

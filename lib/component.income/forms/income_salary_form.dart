@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import '../models/salary_model.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import '../../main.utils/pat_db_helper.dart';
+import '../models/reward_model.dart';
 
 class INForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return Income_salaryFrom();
+    return Income_RewardFrom();
   }
 }
 
-class Income_salaryFrom extends State<INForm> {
+class Income_RewardFrom extends State<INForm> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  Salary salary_d = Salary('', 0, DateTime.now());
-  List<Salary> salarylist;
+  Reward reward_d = Reward('', 0, DateTime.now());
+  List<Reward> rewardlist;
   int count = 0;
 
-  static var _priorities = ['Salary', 'Reward'];
-
+ 
 
 
   final formats = {
@@ -42,7 +41,7 @@ class Income_salaryFrom extends State<INForm> {
 
 
   TextEditingController contactcontoller = TextEditingController();
-  TextEditingController salarycontroller = TextEditingController();
+  TextEditingController rewardcontroller = TextEditingController();
   TextEditingController timecontoller = TextEditingController();
   TextEditingController descontroller = TextEditingController();
 
@@ -50,8 +49,8 @@ class Income_salaryFrom extends State<INForm> {
 
    @override
   Widget build(BuildContext context){
-    if(salarylist == null){
-      salarylist = List<Salary>();
+    if(rewardlist == null){
+      rewardlist = List<Reward>();
     }
 
 
@@ -59,7 +58,7 @@ class Income_salaryFrom extends State<INForm> {
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Salary'),
+          title: Text('Reward'),
           backgroundColor: Colors.black,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
@@ -67,184 +66,175 @@ class Income_salaryFrom extends State<INForm> {
             actions: <Widget>[
               Image(
 	            width: 50,
-	            image: AssetImage("assets/salary.png"),
+	            image: AssetImage("assets/reward.png"),
 	          )
             ],
           
        ),
-        body: Padding(
-		    padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
-		    child: ListView(
-			    children: <Widget>[
-
-			    	// First element
-				    ListTile(
-					    title: DropdownButton(
-							    items: _priorities.map((String dropDownStringItem) {
-							    	return DropdownMenuItem<String> (
-									    value: dropDownStringItem,
-									    child: Text(dropDownStringItem),
-								    );
-							    }).toList(),
-
-							    style: textStyle,
-
-							    // value: getPriorityAsString(),
-
-							    onChanged: (valueSelectedByUser) {
-							    	setState(() {
-							    	  debugPrint('User selected $valueSelectedByUser');
-							    	  updatePriorityAsInt(valueSelectedByUser);
-							    	});
-							    }
-					    ),
-				    ),
-
-				    // Second Element
-				    Padding(
-					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					    child: TextField(
-						    controller: contactcontoller,
-						    style: textStyle,
-						    onChanged: (value) {
-						    	debugPrint('Something changed in Title Text Field');
-						    	
-						    },
-						    decoration: InputDecoration(
-							    labelText: 'Title',
-							    labelStyle: textStyle,
-							    border: OutlineInputBorder(
-								    borderRadius: BorderRadius.circular(5.0)
-							    )
-						    ),
-					    ),
-				    ),
-
-				    // Third Element
-				    Padding(
-					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					    child: TextField(
-                keyboardType: TextInputType.number,
-						    controller: salarycontroller,
-						    style: textStyle,
-						    onChanged: (value) {
-							    debugPrint('Something changed in Description Text Field');
-						    },
-						    decoration: InputDecoration(
-								    labelText: 'Amount',
-								    labelStyle: textStyle,
-								    border: OutlineInputBorder(
-										    borderRadius: BorderRadius.circular(5.0)
-								    )
-						    ),
-					    ),
-				    ),
-
-				    // Fourth Element
-				    Padding(
-					    padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-					    child: Row(
-						    children: <Widget>[
-						    	Expanded(
-								    child: RaisedButton(
-									    color: Theme.of(context).primaryColorDark,
-									    textColor: Theme.of(context).primaryColorLight,
-									    child: Text(
-										    'Save',
-										    textScaleFactor: 1.5,
-									    ),
-									    onPressed: () {
-									    	setState(() {
-									    	  debugPrint("Save button clicked");
-									    	  getSalaryFormValues();
-									    	});
-									    },
-								    ),
-							    ),
-
-							    Container(width: 5.0,),
-
-							    Expanded(
-								    child: RaisedButton(
-									    color: Theme.of(context).primaryColorDark,
-									    textColor: Theme.of(context).primaryColorLight,
-									    child: Text(
-										    'Delete',
-										    textScaleFactor: 1.5,
-									    ),
-									    onPressed: () {
-										    setState(() {
-											    debugPrint("Delete button clicked");
-											    _reset();
-										    });
-									    },
-								    ),
-							    ),
-
-						    ],
-					    ),
-				    ),
-
-			    ],
-		    ),
-	    ),
-
-
+        body: Form(
+        key: _formKey,
+        child: Padding(
+            padding: EdgeInsets.all(_minimumPadding * 2),
+            child: ListView(
+              children: <Widget>[
+                // getImageAsset(),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      // keyboardType: TextInputType.text,
+                      style: textStyle,
+                      controller: contactcontoller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the contact name';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Contact & Company' ,
+                          hintText: 'Name eg:Bala or Dostrix',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+  
+                    ),
+                  ),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: rewardcontroller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the Salary amount';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Salary Amount',
+                          hintText: 'Rupees',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )),
+                    Padding(
+                    padding: EdgeInsets.only(
+                        top: _minimumPadding, bottom: _minimumPadding),
+                    child: TextFormField(
+                      // keyboardType: TextInputType.number,
+                      style: textStyle,
+                      controller: descontroller,
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Please enter the description';
+                        }
+                      },
+                      decoration: InputDecoration(
+                          labelText: 'Description',
+                          hintText: 'optional',
+                          labelStyle: textStyle,
+                          errorStyle: TextStyle(
+                            color: Colors.yellowAccent,
+                            fontSize: 15.0
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0))),
+                    )),
+                DateTimePickerFormField(
+              inputType: inputType,
+              format: formats[inputType],
+              editable: editable,
+              controller: timecontoller,
+              decoration: InputDecoration(
+                  labelText: 'Date/Time', hasFloatingPlaceholder: false),
+              onChanged: (dt) => setState((){ 
+                print(dt);
+                date = dt;
+                print(date);
+                }),
+            ),
+                
+                Padding(
+                    padding: EdgeInsets.only(
+                        bottom: _minimumPadding, top: _minimumPadding),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: RaisedButton(
+                            color: Theme.of(context).accentColor,
+                            textColor: Theme.of(context).primaryColorDark,
+                            child: Text(
+                              'Save',
+                              textScaleFactor: 1.5,
+                            ),
+                            onPressed: () {
+                              getRewardFormValues();
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: RaisedButton(
+                            color: Theme.of(context).primaryColorDark,
+                            textColor: Theme.of(context).primaryColorLight,
+                            child: Text(
+                              'Reset',
+                              textScaleFactor: 1.5,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _reset();
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    )),
+                Padding(
+                  padding: EdgeInsets.all(_minimumPadding * 2),
+                  child: Text(
+                    this.displayResult,
+                    style: textStyle,
+                  ),
+                )
+          
+              ],
+            )),
+      )
     );
   }
 
-  String getPriorityAsString(int value) {
-		String priority;
-		switch (value) {
-			case 1:
-				priority = _priorities[0];  // 'High'
-				break;
-			case 2:
-				priority = _priorities[1];  // 'Low'
-				break;
-		}
-		return priority;
-	}
+ 
 
   void _reset() async{
-    salarycontroller.text = '';
+    rewardcontroller.text = '';
     contactcontoller.text = '';
     timecontoller.text = '';
     descontroller.text = '';
   }
 
-  void updatePriorityAsInt(String value) {
-		switch (value) {
-			case 'Salary':
-				
-				break;
-			case 'Reward':
-				
-				break;
-		}
-	}
-
-
-  void backtoScreen() async{
-    await Navigator.pop(context);
-    setState(() {});
-  }
-
-  void getSalaryFormValues() async{
-    double sal = num.tryParse(salarycontroller.text).toDouble();
-    salary_d.contact = contactcontoller.text;
-    salary_d.amount = sal;
-    salary_d.date = date;
-    salary_d.desc = descontroller.text;
-    dynamic result = await databaseHelper.insertSalary(salary_d);
+  void getRewardFormValues() async{
+    double sal = num.tryParse(rewardcontroller.text).toDouble();
+    reward_d.contact = contactcontoller.text;
+    reward_d.amount = sal;
+    reward_d.date = date;
+    reward_d.desc = descontroller.text;
+    dynamic result = await databaseHelper.insertReward(reward_d);
     print(result);
     if(result != 0){
-      print('Saved Successfully');
-      await backtoScreen();
-      // com.showSnackBar(context, 'Saved Successfully');
+      print('Salary Saved Successfully');
+      Navigator.pop(context, false);
+      
     }else{
       print('Not Saved.');
-      // com.showSnackBar(context, 'Not Saved.');
     }
   }
 }
