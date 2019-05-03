@@ -13,6 +13,7 @@ class IncomeReward extends StatefulWidget {
 }
 
 class IncomeRewardList extends State<IncomeReward> {
+  TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 
   DatabaseHelper databaseHelper = DatabaseHelper();
 	List<Map<String, dynamic>> rewardList;
@@ -34,49 +35,29 @@ class IncomeRewardList extends State<IncomeReward> {
     return new Scaffold(
       
    body: ListView.builder(
-       padding: EdgeInsets.all(2),
+       padding: EdgeInsets.all(12),
+       
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
 					color: Colors.white,
 					elevation: 2.0,
-          // margin: EdgeInsets.all(10.0),
 					child: ListTile(
-
+          
 						leading: CircleAvatar(
               child: Text(this.rewardList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),),
+              style: TextStyle(fontSize: 30,color: Colors.pinkAccent),),
 							backgroundColor: Colors.black,
 						),
 
-						title: Text(this.rewardList[position]['contact']),
+						title: Text(this.rewardList[position]['contact'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
           
 
 						subtitle: Column(
-              // mainAxisSize: MainAxisSize.min,
-              // crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+    
               children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Column(
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        // mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Column(
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        // mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(this.rewardList[position]['description'].toString())
-                        ],
-                      )
-                    ],
-                  )
+                Text(this.rewardList[position]['description'], style: descStyle,)
               ],
             ),
             
@@ -90,7 +71,7 @@ class IncomeRewardList extends State<IncomeReward> {
                       width: 50,
                       image: AssetImage("assets/rupees.png"),
                     ),
-                  backgroundColor: Colors.greenAccent,
+                  backgroundColor: Colors.yellowAccent,
                 ),
 
               ],
@@ -124,7 +105,8 @@ class IncomeRewardList extends State<IncomeReward> {
            updateListView();
          }
 	      }
-	    )
+	    ),
+      backgroundColor: Colors.black,
   );
   }
 

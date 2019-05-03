@@ -32,9 +32,11 @@ class IncomeSalary extends State<IncomeSale> {
       updateListView(); 
 		}
 
+    TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
+
     return new Scaffold(
      body: ListView.builder(
-       padding: EdgeInsets.all(2),
+       padding: EdgeInsets.all(12),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
@@ -45,40 +47,21 @@ class IncomeSalary extends State<IncomeSale> {
 
 						leading: CircleAvatar(
               child: Text(this.salaryList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),),
+              style: TextStyle(fontSize: 30, color: Colors.pinkAccent),),
 							backgroundColor: Colors.black,
 						),
 
-						title: Text(this.salaryList[position]['contact']),
+						title: Text(this.salaryList[position]['contact'].toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold),),
           
 
 						subtitle: Column(
-              // mainAxisSize: MainAxisSize.min,
-              // crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+    
               children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Column(
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        // mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          ],
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Column(
-                        // crossAxisAlignment: CrossAxisAlignment.end,
-                        // mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          Text(this.salaryList[position]['description'].toString())
-                        ],
-                      )
-                    ],
-                  )
+                Text(this.salaryList[position]['description'], style: descStyle,)
               ],
             ),
+            
             
             
 
@@ -123,7 +106,8 @@ class IncomeSalary extends State<IncomeSale> {
              updateListView();
            }
 	      }
-	    )
+	    ),
+      backgroundColor: Colors.black,
   );
   }
 

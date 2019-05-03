@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../forms/lender_form.dart';
 import 'package:sqflite/sqflite.dart';
 import '../../main.utils/pat_db_helper.dart';
-import '../../main.utils/common.utils.dart' as com;
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
