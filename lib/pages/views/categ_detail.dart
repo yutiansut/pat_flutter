@@ -38,16 +38,22 @@ class CategDetailState extends State<CategDetail> {
 
 	CategDetailState(this.categ, this.appBarTitle);
 
+  @override
+  void initState() {
+    super.initState();
+    getM2O();
+  }
+
 	@override
   Widget build(BuildContext context) {
 
 		TextStyle textStyle = Theme.of(context).textTheme.title;
 
 		nameController.text = categ.name;
-		typeController.text = categ.typeId.toString();
+		typeController.text = getAccountTypeAsString(categ.typeId);
 		// descriptionController.text = categ.name;
 
-    getM2O();
+    // getM2O();
 
     return WillPopScope(
 
@@ -77,12 +83,12 @@ class CategDetailState extends State<CategDetail> {
               // First element
               ListTile(
                 title: DropdownButton(
-                    items: accountList.map((item){
+                    items: accountList != null ? accountList.map((item){
                       return DropdownMenuItem<String> (
                         value: item['id'].toString(),
                         child: Text(item['name']),
                       );
-                    }).toList(),
+                    }).toList() : [],
 
                     style: textStyle,
 
@@ -197,21 +203,25 @@ class CategDetailState extends State<CategDetail> {
 
 	// Convert the String priority in the form of integer before saving it to Database
 	void updateAccountTypeAsInt(String value) {
-    acm2olist.forEach((item){
-      if(item[1] == value){
-        categ.typeId = item[0];
-      }
-    });
+    if(acm2olist != null){
+      acm2olist.forEach((item){
+        if(item[0] == value){
+          categ.typeId = item[0];
+        }
+      });
+    }
 	}
 
 	// Convert int priority to String priority and display it to user in DropDown
 	String getAccountTypeAsString(int value) {
 		String priority;
-		acm2olist.forEach((item){
-      if(item[0] == value){
-        return item[1];
-      }
-    });
+    if(acm2olist != null){
+      acm2olist.forEach((item){
+        if(item[0] == value){
+          priority = item[1];
+        }
+      });
+    }
 		return priority;
 	}
 
@@ -305,8 +315,6 @@ class CategDetailState extends State<CategDetail> {
 
 			var mapList = await helper.getMapList(actype.accountTypeTable, actype.colId + " ASC");
       int count = mapList.length;
-      print(mapList);
-      print(count);
       var m2oList = [];
       var acList =[];
       mapList.forEach((item){
