@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'main.utils/circular_percent_indicator.dart';
 import 'component.barrowlends/lend.dart';
 import 'component.expense/expense.dart';
-// import 'component.income/income.dart';
-import 'component.income/pages/income_salary.dart';
+import 'component.income/income.dart';
+// import 'component.income/pages/income_salary.dart';
 
 void main() {
   runApp(new MyApp());
@@ -44,7 +44,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   pages(i){
-    var page = [new IncomeSale(), new Expenses(), new Lenders()];
+    var page = [new Incomes(), new Expenses(), new Lenders()];
     Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> page[i]));
   }
 

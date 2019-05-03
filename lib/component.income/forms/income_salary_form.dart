@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import '../../main.utils/pat_db_helper.dart';
-import '../models/reward_model.dart';
+import '../models/salary_model.dart';
 
 class INForm extends StatefulWidget {
   @override
@@ -14,8 +14,8 @@ class INForm extends StatefulWidget {
 class Income_RewardFrom extends State<INForm> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
-  Reward reward_d = Reward('', 0, DateTime.now());
-  List<Reward> rewardlist;
+  Salary salary_d = Salary('', 0, DateTime.now());
+  List<Salary> rewardlist;
   int count = 0;
 
  
@@ -41,7 +41,7 @@ class Income_RewardFrom extends State<INForm> {
 
 
   TextEditingController contactcontoller = TextEditingController();
-  TextEditingController rewardcontroller = TextEditingController();
+  TextEditingController salarycontroller = TextEditingController();
   TextEditingController timecontoller = TextEditingController();
   TextEditingController descontroller = TextEditingController();
 
@@ -50,7 +50,7 @@ class Income_RewardFrom extends State<INForm> {
    @override
   Widget build(BuildContext context){
     if(rewardlist == null){
-      rewardlist = List<Reward>();
+      rewardlist = List<Salary>();
     }
 
 
@@ -58,7 +58,7 @@ class Income_RewardFrom extends State<INForm> {
 
      return new Scaffold(
        appBar: AppBar(
-          title: Text('Reward'),
+          title: Text('Salary'),
           backgroundColor: Colors.black,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
@@ -66,7 +66,7 @@ class Income_RewardFrom extends State<INForm> {
             actions: <Widget>[
               Image(
 	            width: 50,
-	            image: AssetImage("assets/reward.png"),
+	            image: AssetImage("assets/salary.png"),
 	          )
             ],
           
@@ -109,7 +109,7 @@ class Income_RewardFrom extends State<INForm> {
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       style: textStyle,
-                      controller: rewardcontroller,
+                      controller: salarycontroller,
                       validator: (String value) {
                         if (value.isEmpty) {
                           return 'Please enter the Salary amount';
@@ -215,23 +215,23 @@ class Income_RewardFrom extends State<INForm> {
  
 
   void _reset() async{
-    rewardcontroller.text = '';
+    salarycontroller.text = '';
     contactcontoller.text = '';
     timecontoller.text = '';
     descontroller.text = '';
   }
 
   void getRewardFormValues() async{
-    double sal = num.tryParse(rewardcontroller.text).toDouble();
-    reward_d.contact = contactcontoller.text;
-    reward_d.amount = sal;
-    reward_d.date = date;
-    reward_d.desc = descontroller.text;
-    dynamic result = await databaseHelper.insertReward(reward_d);
+    double sal = num.tryParse(salarycontroller.text).toDouble();
+    salary_d.contact = contactcontoller.text;
+    salary_d.amount = sal;
+    salary_d.date = date;
+    salary_d.desc = descontroller.text;
+    dynamic result = await databaseHelper.insertSalary(salary_d);
     print(result);
     if(result != 0){
       print('Salary Saved Successfully');
-      Navigator.pop(context, false);
+      Navigator.pop(context, true);
       
     }else{
       print('Not Saved.');
