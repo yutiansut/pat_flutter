@@ -83,7 +83,7 @@ class CategDetailState extends State<CategDetail> {
 
               // First element
               /* ListTile(
-                title: DropdownButton(
+                title: DropdownButtonFormField(
                     items: accountList != null ? accountList.map((item){
                       return DropdownMenuItem<String> (
                         value: item['id'].toString(),
@@ -128,6 +128,15 @@ class CategDetailState extends State<CategDetail> {
                     },
                   ),
                 ],
+              ),
+              DropdownButtonFormField(
+                items: ['1','2','3'].map((item){
+                      return DropdownMenuItem<String> (
+                        value: item,
+                        child: Text(getAccountTypeAsString(int.parse(item))),
+                      );
+                }).toList(),
+                value: this.typeIdText,
               ),
 
               // Second Element
@@ -242,7 +251,7 @@ class CategDetailState extends State<CategDetail> {
 
 	// Convert int priority to String priority and display it to user in DropDown
 	String getAccountTypeAsString(int value) {
-		String priority;
+		String priority = 'No Item';
     if(acm2olist != null){
       acm2olist.forEach((item){
         if(item[0] == value){

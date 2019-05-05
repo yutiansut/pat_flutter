@@ -9,6 +9,24 @@
    - http://androidkt.com/flutter-alertdialog-example/
 
    - https://flutteropen.gitbook.io/ebook/widgets-13-or-dropdownbutton
+   
+  SQFlite Account URL :
+
+	- https://medium.com/@greg.perry/flutter-and-sqlite-f72878bc5859
+
+	- https://gist.github.com/Andrious/feb05d140fbed5f98945ea706edab137#file-main-dart-L65
+
+  Dropdownlist sqllite:
+
+	- https://inducesmile.com/google-flutter/how-to-populate-dropdownbutton-using-sqlite-database-in-flutter/
+
+  Query:
+
+	-http://www.sqlitetutorial.net/sqlite-foreign-key/
+
+  Datetime:
+
+	- http://www.sqlitetutorial.net/sqlite-date/
 
 
 Git Clone by branch:
