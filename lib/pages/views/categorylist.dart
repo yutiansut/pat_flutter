@@ -71,7 +71,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
                           backgroundColor: Colors.purple,
                           child: Text(snapshot.data[index]['name'][0], style:  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
                         ),
-                        title: Text(snapshot.data[index]['name'], style: titleStyle),
+                        title: Text(snapshot.data[index]['name'].toString(), style: titleStyle),
                         trailing: GestureDetector(
                           child: Icon(Icons.delete, color: Colors.red),
                           onTap: () {

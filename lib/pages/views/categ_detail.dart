@@ -1,12 +1,17 @@
 import 'dart:async' show Future;
 
-import 'package:flutter/material.dart' show AppBar, BuildContext, Colors, Column, Container, EdgeInsets, FlutterError, FlutterErrorDetails, Form, FormState, GlobalKey, Icon, IconButton, Icons, InputDecoration, Key, MaterialApp, MaterialPageRoute, Navigator, Padding, RaisedButton, Scaffold, ScaffoldState, SnackBar, State, StatefulWidget, StatelessWidget, Text, TextFormField, TextInputType, ThemeData, Widget, runApp, TextEditingController;
 import 'package:flutter/material.dart';
 
 import './../models/category.dart' show Category;
 
-import './categorylist.dart' show MyCategoryList;
+// import './../../Xwidgets/Xcommon.dart' show getM2o;
 
+Category categDb = Category();
+
+//Future<List<Map<String, dynamic>>>
+Future<List<Map>> fetchCategoriesFromDatabase() async {
+  return categDb.getCategories();
+}
 
 void main(){
   /// The default is to dump the error to the console.
@@ -44,6 +49,9 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   var nameController = TextEditingController();
   var createDateController = TextEditingController();
   var parentIdController = TextEditingController();
+  Future categoryListFeature = fetchCategoriesFromDatabase();
+  var categoryDropDownList = List();
+  String _selectedItem = '0';
   
 
   @override
@@ -61,13 +69,45 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
+    buildAndGetDropDownMenuItems(categoryListFeature);
     int recId = listData['id'];
     if(recId != null) {
-      print(listData);
       nameController.text = listData['name'];
       createDateController.text = listData['createDate'].toString();
       parentIdController.text = listData['parentId'].toString();
+    } else {
+      parentIdController.text = '0';
     }
+  }
+
+  updateDropDown(m2oList){
+    List<DropdownMenuItem<String>> items = new List();
+    items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
+    print(m2oList);
+    if(m2oList != null){
+      for (Map item in m2oList) {
+        items.add(DropdownMenuItem(value: item['id'].toString(), child: new Text(item['name'])));
+      }
+    }
+    setState(() {
+      this.categoryDropDownList = items;
+    });
+  }
+
+  buildAndGetDropDownMenuItems(Future listItems) {
+    List m2oList = getM2o(listItems);
+    updateDropDown(m2oList);
+  }
+
+  getM2o(listFeature) {
+    List<Map<dynamic, dynamic>> items = List();
+    listFeature.then((lists){
+      for (var i = 0; i < lists.length; i++) {
+        items.add({'id': lists[i]['id'], 'name': lists[i]['name']});
+      }
+      updateDropDown(items); 
+      return items;  
+    });
   }
 
 
@@ -75,6 +115,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   Widget build(BuildContext context) {
     
     db.values['Category']['id'] = this.listData['id'];
+    db.values['Category']['parentId'] = this.listData['parentId'];
 
     return Scaffold(
       key: categoryScaffoldKey,
@@ -125,13 +166,28 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                   db.values['Category']['parentId'] =  parentIdController.text;
                 },
               ),
-              // TextFormField(
-              //   keyboardType: TextInputType.emailAddress,
-              //   decoration: InputDecoration(labelText: 'Email Id'),
-              //   validator: (val) =>
-              //   val.length ==0 ? 'Enter Email Id' : null,
-              //   onSaved: (val) =>db.values['Employee']['emailId'] = val,
+              // Container(
+              //   child: Xmany2one(fetchCategoriesFromDatabase()),
               // ),
+              (this.categoryDropDownList != null) ?
+              FutureBuilder(
+                future: categoryListFeature,
+                builder: (context, snapshot) {
+                  return this.categoryDropDownList.length > 1 ? DropdownButton(
+                    value: parentIdController.text,
+                    items: this.categoryDropDownList,
+                    // items: [DropdownMenuItem(value: 1.toString(), child: new Text('hh'))],
+                    onChanged: (val){
+                      print(val);
+                      setState(() {
+                        parentIdController.text = val;
+                        db.values['Category']['parentId'] =  parentIdController.text;
+                      });
+                    },
+                  ) : DropdownButton(items: [DropdownMenuItem(value: 0.toString(), child: new Text('hh'))], onChanged: (val){},);
+                },
+              ): Divider(),
+              
               Container(
                 margin: const EdgeInsets.only(top: 10.0),
                 child: RaisedButton(
