@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pat_dart/main.utils/models_models/model.login.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'component.root/pages/root.dart';
+import 'main.utils/pat_db_helper.dart';
+import 'package:sqflite/sqflite.dart';
 
 
 void main() {
@@ -24,6 +27,24 @@ class MyHomePage extends StatefulWidget {
 
 class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
+  DatabaseHelper databaseHelper = DatabaseHelper();
+	List<Map<String, dynamic>> SettingsList;
+  int count = 0;
+  bool is_confrim = false;
+  bool is_first_set = false;
+  String is_set_temp1 = '';
+  String is_set_temp2 = '';
+  bool is_set_password = false;
+
+  Settings setting_d =Settings('',0 ,0,0);
+  List<Settings> settingslist;
+
+  @override
+  void initState() {
+    super.initState();
+    updateListView();
+  }
+
   TextEditingController controller = TextEditingController();
   String thisText = "";
   int pinLength = 4;
@@ -31,11 +52,29 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   bool hasError = false;
   String errorMessage;
 
+  
+
    @override
   Widget build(BuildContext context){
+    if (SettingsList == null) {
+			SettingsList = List<Map<String, dynamic>>();
+      updateListView(); 
+		}
+
+    
+    if(SettingsList.isNotEmpty){
+      setState(() {
+        if(this.SettingsList[0]['password'] != null){
+        this.is_confrim = true;
+      }
+      });
+    }
+
+   
     
 
-     
+   
+
      return Scaffold(
       appBar: AppBar(
         title: Text("Personal Account Tracker"),
@@ -47,8 +86,17 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Column(
+                children: <Widget>[
+                   Image(
+	                width: 90,
+                  height: 170,
+	                image: AssetImage("assets/icon.png"),
+	              )
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 170.0),
+                padding: const EdgeInsets.only(bottom: 30.0),
                 // child: Text(thisText, style: Theme.of(context).textTheme.title),
               ),
               PinCodeTextField(
@@ -85,6 +133,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ),
                 visible: hasError,
               ),
+              this.is_confrim ?
               Padding(
                 padding: const EdgeInsets.only(top: 32.0),
                 child: Row(
@@ -93,20 +142,50 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     MaterialButton(
                       color: Colors.blue,
                       textColor: Colors.white,
-                      child: Text("SUBMIT"),
+                      child: Text("Login"),
                       onPressed: () {
-                        // setState(() {
-                        //   this.thisText = controller.text;
-                        // });
-
-                        if(controller.text == '5445'){
+                        if(controller.text == this.SettingsList[0]['password']){
                           Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new RootPage()));
                         }
                       },
                     ),
                   ],
                 ),
-              )
+              ) :
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    MaterialButton(
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      child: this.is_set_password ? Text('Confirm Password'): Text("Set Password"),
+                      onPressed: () {
+                         if(this.is_set_password == false){
+                         this.is_set_temp1 = controller.text;
+                         controller.text = '';
+                         this.is_set_password = true;
+                         }else{
+                           print('hello');
+                             this.is_set_temp2 = controller.text;
+                              
+                         }
+                         
+                          if(this.is_set_temp1 == this.is_set_temp2){
+                            setState(() {
+                            this.is_confrim = true;
+                            controller.text = '';
+                            });
+                            setPass(this.is_set_temp1);
+                          }
+                       
+                         
+                      },
+                    ),
+                  ],
+                ),
+              ) ,
             ],
           ),
         ),
@@ -114,6 +193,30 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       
       
     );
+  }
+
+  Future<List<Map<String, dynamic>>> updateListView() async {
+      final Future<Database> dbFuture = databaseHelper.initializeDatabase();
+      dbFuture.then((database) {
+        Future<List<Map<String, dynamic>>> noteListFuture = databaseHelper.getSettingsList();
+          noteListFuture.then((noteList) {
+              setState(() {
+                 this.SettingsList = noteList;
+                this.count = SettingsList.length;
+              });
+        });
+      });
+  }
+
+  void setPass(String pass) async{
+    
+    setting_d.password = pass;
+     dynamic result = await databaseHelper.insetSettings(setting_d);
+
+     if(result != 0){
+       print('Password Successfully upated');
+     }
+
   }
 }
   

@@ -48,7 +48,13 @@ class Settings{
       map['id'] = _id;
     }
    
-  }  
+   map['password'] = _password;
+   map['expenselimit'] = _expenselimit;
+   map['barrowlimit'] = _barrowlimit;
+   map['lendlimit'] = _lendlimit;
+
+   return map;
+}  
 
      
 }

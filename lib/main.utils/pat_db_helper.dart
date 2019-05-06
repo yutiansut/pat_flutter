@@ -4,6 +4,7 @@ import '../component.expense/models/expense_online_model.dart';
 import '../component.expense/models/expense_purchase_model.dart';
 import '../component.barrowlends/models/barrows_model.dart';
 import '../component.barrowlends/models/lender_model.dart';
+import '../main.utils/models_models/model.login.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
@@ -64,6 +65,15 @@ class DatabaseHelper{
   String lendcolDate = 'date';
   String lendcolDesc = 'description';
 
+  //Settings Properties
+  String settingstable = 'settings_table';
+  String settingspassword = 'password';
+  String settingsId = 'id';
+  String settingsexpenselimit = 'expenselimit';
+  String settingsbarrowlimit = 'barrowlimit';
+  String settingslendlimit = 'lendlimit';
+
+
   //Named Constructor
   DatabaseHelper._createInstance(); //Create a instance of DatabaseHelper
 
@@ -85,7 +95,7 @@ class DatabaseHelper{
   //get the database path
   Future<Database> initializeDatabase() async{
     Directory dir = await getApplicationDocumentsDirectory();
-    String path = dir.path + 'pat.db';
+    String path = dir.path + 'rat.db';
 
     //open or create the database with given path
     var salarydb = await openDatabase(path,version:1,onCreate:_createdb);
@@ -109,6 +119,9 @@ class DatabaseHelper{
 
     //create lens table
     await db.execute('CREATE TABLE $lendestable($lendcolId INTEGER PRIMARY KEY AUTOINCREMENT, $lendcolBarrowername TEXT, $lendcolAmount DOUBLE, $lendcolDate DATETIME, $lendcolDesc TEXT)');
+  
+    //Create settings table
+    await db.execute('CREATE TABLE $settingstable($settingsId INTEGER PRIMARY KEY AUTOINCREMENT, $settingspassword TEXT, $settingsexpenselimit DOUBLE, $settingsbarrowlimit DOUBLE, $settingslendlimit DOUBLE)');
   }
 
   //CRUD OPERATIONS
@@ -332,5 +345,33 @@ class DatabaseHelper{
 		var lendsMapList = await getLendsMapList(); // Get 'Map List' from database
 		return lendsMapList;
 	}
-  
+
+  //CURD OPERATION FOR SETTINGS
+
+  Future<List<Map<String, dynamic>>> getSettingsMapList() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT * FROM $settingstable');
+    return result;
+  }
+
+  //insert the data into barrows table
+  Future<dynamic> insetSettings(Settings settings) async{
+    Database db = await this.database;
+    var result = await db.insert(settingstable, settings.toMap());
+    return result;
+  }
+
+   //update the data into barrows table
+  Future<dynamic> updateSettings(Settings settings) async{
+    Database db = await this.database;
+    var result = await db.update(settingstable, settings.toMap(), where: '$settingspassword = ?', whereArgs: [settings.id] );
+    return result;
+  }
+
+  //Get LendsList 
+  Future<List<Map<String, dynamic>>> getSettingsList() async {
+		var lendsMapList = await getSettingsMapList(); // Get 'Map List' from database
+		return lendsMapList;
+	}
+
 }

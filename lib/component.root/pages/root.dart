@@ -3,6 +3,8 @@ import '../../component.barrowlends/lend.dart';
 import '../../component.expense/expense.dart';
 import '../../component.income/income.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import '../../main.dart';
+import 'package:flutter/services.dart';
 
 
 class RootPage extends StatefulWidget {
@@ -38,7 +40,10 @@ bool _dialVisible = true;
   }
 
   Widget build(BuildContext context) {
-    return new Scaffold(
+
+    return WillPopScope(
+      onWillPop: () async => Future.value(false),
+      child: new Scaffold(
       appBar: new AppBar(title: new Text('Personal Account Tracker'),
       backgroundColor: Colors.purpleAccent,
       // automaticallyImplyLeading: false,
@@ -51,10 +56,17 @@ bool _dialVisible = true;
                 accountEmail: new Text("crystelpheonix@gmail.com"),
                 currentAccountPicture: new CircleAvatar(backgroundColor: Colors.black26,child: new Text("B"),),
                 decoration: new BoxDecoration(color: Colors.lightGreen),
+                onDetailsPressed: (){
+                  
+                },
               ),
               new ListTile(title: new Text("Settings"),trailing: new Icon(Icons.access_alarm),),
-              new ListTile(title: new Text("About"),trailing: new Icon(Icons.airline_seat_flat_angled),),
-              new ListTile(title: new Text("Logout"),trailing: new Icon(Icons.close),onTap: (){Navigator.pop(context);},)
+              new ListTile(title: new Text("About"),trailing: new Icon(Icons.airline_seat_flat_angled), onTap:(){
+                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              },),
+              new ListTile(title: new Text("Logout"),trailing: new Icon(Icons.close),onTap: (){
+                Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new MyApp()));
+              },)
             ],
           ),
         ),
@@ -105,8 +117,11 @@ bool _dialVisible = true;
             ),
           ],
         ),
+    ),
     );
+
   }
+
  
 }
 
