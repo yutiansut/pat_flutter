@@ -30,6 +30,7 @@ dependencies:
   path_provider: any
   async_loader: ^0.1.2
   flutter_speed_dial: ^1.1.1
+  pin_code_text_field: ^1.3.5
 
 dev_dependencies:
   flutter_test:

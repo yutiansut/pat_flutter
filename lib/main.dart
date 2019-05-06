@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-import 'main.utils/circular_percent_indicator.dart';
-import 'component.barrowlends/lend.dart';
-import 'component.expense/expense.dart';
-import 'component.income/income.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
+import 'package:pin_code_text_field/pin_code_text_field.dart';
+import 'component.root/pages/root.dart';
 
 
 void main() {
@@ -28,80 +23,98 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  AnimationController _controller;
 
-  static const List<Image> icons = const [ 
-    Image(width: 50, image: AssetImage("assets/income.png")),
-    Image(width: 50, image: AssetImage("assets/profit.png")),
-    Image(width: 50, image: AssetImage("assets/borrow_lend.png"))
-  ];
+  TextEditingController controller = TextEditingController();
+  String thisText = "";
+  int pinLength = 4;
 
-bool _dialVisible = true;
+  bool hasError = false;
+  String errorMessage;
 
-  @override
-  void initState() {
-    _controller = new AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 10),
-    );
-  }
+   @override
+  Widget build(BuildContext context){
+    
 
-  pages(i){
-    var page = [new Incomes(), new Expenses(), new Lenders()];
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> page[i]));
-  }
+     
+     return Scaffold(
+      appBar: AppBar(
+        title: Text("Personal Account Tracker"),
+        backgroundColor: Colors.purpleAccent,
+      ),
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 170.0),
+                // child: Text(thisText, style: Theme.of(context).textTheme.title),
+              ),
+              PinCodeTextField(
+                autofocus: false,
+                controller: controller,
+                hideCharacter: true,
+                highlight: true,
+                highlightColor: Colors.blue,
+                defaultBorderColor: Colors.black,
+                hasTextBorderColor: Colors.green,
+                maxLength: pinLength,
+                hasError: hasError,
+                maskCharacter: "*",
 
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(title: new Text('Personal Account Tracker'),
-      backgroundColor: Colors.pinkAccent,),
-      floatingActionButton: SpeedDial(
-          // both default to 16
-          marginRight: 18,
-          marginBottom: 20,
-          animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(size: 22.0),
-          // this is ignored if animatedIcon is non null
-          // child: Icon(Icons.add),
-          visible: _dialVisible,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-          onOpen: () => print('OPENING DIAL'),
-          onClose: () => print('DIAL CLOSED'),
-          tooltip: 'Speed Dial',
-          heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Colors.pinkAccent,
-          foregroundColor: Colors.black,
-          elevation: 8.0,
-          shape: StadiumBorder(),
-          children: [
-            SpeedDialChild(
-              elevation: 0.0,
-              child: icons[0],
-              backgroundColor: Colors.transparent,
-              label: 'Income',
-        
-              onTap: () => pages(0)
-            ),
-            SpeedDialChild(
-              elevation: 0.0,
-              child: icons[1],
-              backgroundColor: Colors.transparent,
-              label: 'Expense',
-              
-              onTap: () => pages(1),
-            ),
-            SpeedDialChild(
-              elevation: 0.0,
-              child: icons[2],
-              backgroundColor: Colors.transparent,
-              label: 'BarrowLend',
-              
-              onTap: () => pages(2),
-            ),
-          ],
+                onTextChanged: (text) {
+                  setState(() {
+                    hasError = false;
+                  });
+                },
+                onDone: (text){
+                  print("DONE $text");
+                },
+                pinCodeTextFieldLayoutType: PinCodeTextFieldLayoutType.AUTO_ADJUST_WIDTH,
+                wrapAlignment: WrapAlignment.start,
+                pinBoxDecoration: ProvidedPinBoxDecoration.underlinedPinBoxDecoration,
+                pinTextStyle: TextStyle(fontSize: 30.0),
+                pinTextAnimatedSwitcherTransition: ProvidedPinBoxTextAnimation.scalingTransition,
+                pinTextAnimatedSwitcherDuration: Duration(milliseconds: 300),
+              ),
+              Visibility(
+                child: Text(
+                  "Wrong PIN!",
+                  style: TextStyle(color: Colors.red),
+                ),
+                visible: hasError,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 32.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    MaterialButton(
+                      color: Colors.blue,
+                      textColor: Colors.white,
+                      child: Text("SUBMIT"),
+                      onPressed: () {
+                        // setState(() {
+                        //   this.thisText = controller.text;
+                        // });
+
+                        if(controller.text == '5445'){
+                          Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new RootPage()));
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
+      ),
+      
+      
     );
   }
 }
+  
+

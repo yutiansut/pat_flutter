@@ -35,6 +35,7 @@ class ExpenseOnline extends State<ExpOnline> {
     print(exponlineList);
     return new Scaffold(
    body: ListView.builder(
+     padding: EdgeInsets.all(12),
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
@@ -43,19 +44,41 @@ class ExpenseOnline extends State<ExpOnline> {
 					child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: Colors.black,
+							backgroundColor: Colors.deepPurpleAccent,
+              child: Text(this.exponlineList[position]['storename'][0].toUpperCase() , textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28,color: Colors.white),),
 						),
 
-						title: Text(this.exponlineList[position]['storename']),
+						title: Text(this.exponlineList[position]['storename'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
 
-						subtitle: Text(this.exponlineList[position]['product']),
+						subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+    
+              children: <Widget>[
+                Text(this.exponlineList[position]['description'], style: descStyle,),
+                
+                  
+                  // Text(this.exppurList[position]['description'], style: descStyle,)
+                
+              ],
+            ),
 
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_asyncConfirmDialog(context, this.exponlineList[position]['id']);
-							},
-						),
+						trailing:Column(
+              children: <Widget>[
+                Chip(
+                  label: Text(this.exponlineList[position]['amount'].toString(),style: TextStyle(color: Colors.black)),
+                  avatar:  Image(
+                      width: 50,
+                      image: AssetImage("assets/rupees.png"),
+                    ),
+                  backgroundColor: Colors.orangeAccent,
+                ),
+
+              ],
+            ),
+            onLongPress: () async {
+              await _asyncConfirmDialog(context, this.exponlineList[position]['id']);
+            },
 
 
 						// onTap: () {

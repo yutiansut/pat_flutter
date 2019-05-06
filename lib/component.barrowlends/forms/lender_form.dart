@@ -50,7 +50,7 @@ class LenderForm extends State<LENDForm> {
      return new Scaffold(
        appBar: AppBar(
           title: Text('Lends'),
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.pinkAccent,
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

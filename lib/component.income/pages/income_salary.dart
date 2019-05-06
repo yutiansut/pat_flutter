@@ -47,8 +47,8 @@ class IncomeSalary extends State<IncomeSale> {
 
 						leading: CircleAvatar(
               child: Text(this.salaryList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30, color: Colors.pinkAccent),),
-							backgroundColor: Colors.black,
+              style: TextStyle(fontSize: 25, color: Colors.white),),
+							backgroundColor: Colors.blue,
 						),
 
 						title: Text(this.salaryList[position]['contact'].toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold),),
