@@ -8,3 +8,4 @@ String appEmail = "bala.hariprasath@gmail.com";
 
 // Currency Icon Path
 String currencyIcon = "assets/rupee-32.png";
+

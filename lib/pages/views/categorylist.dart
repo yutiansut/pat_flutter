@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import './../../Xwidgets/XDialog.dart' as Dialog;
 
-import '../models/category.dart' show Category;
+import '../models/category.dart' show Category, categColor;
 import './categ_detail.dart' show CategoryDetailPage;
 
 
@@ -68,14 +68,15 @@ class MyCategoryListPageState extends State<MyCategoryList> {
                       elevation: 2.0,
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Colors.purple,
-                          child: Text(snapshot.data[index]['name'][0], style:  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                          backgroundColor: categColor[snapshot.data[index]['categoryType']],
+                          child: Text(snapshot.data[index]['name'][0].toUpperCase(), style:  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
                         ),
                         title: Text(snapshot.data[index]['name'].toString(), style: titleStyle),
                         subtitle: Row(
                           children: <Widget>[
-                            Text(snapshot.data[index]['createDate']),
-                            Text(snapshot.data[index]['parentId'].toString()),
+                            Text(snapshot.data[index]['categoryType']),
+                            // Text(snapshot.data[index]['createDate'],),
+                            // Text(snapshot.data[index]['parentId'].toString()),
                           ],
                         ),
                         trailing: GestureDetector(

@@ -3,15 +3,16 @@ import 'dart:async' show Future;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import './../models/category.dart' show Category, categoryTypes;
+import './../models/accounts.dart' show Accounts;
+import './../models/category.dart' show categoryTypes, transactionTypes;
 
 // import './../../Xwidgets/Xcommon.dart' show getM2o;
 
-Category categDb = Category();
+Accounts categDb = Accounts();
 
 //Future<List<Map<String, dynamic>>>
-Future<List<Map>> fetchCategoriesFromDatabase() async {
-  return categDb.getCategories();
+Future<List<Map>> fetchAccountsFromDatabase() async {
+  return categDb.getAccounts();
 }
 
 void main(){
@@ -23,36 +24,35 @@ void main(){
 }
 
 
-class CategoryDetailPage extends StatefulWidget {
+class AccountDetailPage extends StatefulWidget {
   final String title;
   Map listData;
 
-  CategoryDetailPage(this.title, this.listData);
+  AccountDetailPage(this.title, this.listData);
 
   @override
   State<StatefulWidget> createState() {
 
-    return CategoryDetailPageState(this.title, this.listData);
+    return AccountDetailPageState(this.title, this.listData);
   }
 }
 
-class CategoryDetailPageState extends State<CategoryDetailPage> {
+class AccountDetailPageState extends State<AccountDetailPage> {
 
   String title;
   Map listData ;
-  CategoryDetailPageState(this.title, this.listData);
+  AccountDetailPageState(this.title, this.listData);
 
-  Category db = Category();
+  Accounts db = Accounts();
 
-  final categoryScaffoldKey = GlobalKey<ScaffoldState>();
-  final categoryFormKey = GlobalKey<FormState>();
+  final accountScaffoldKey = GlobalKey<ScaffoldState>();
+  final accountFormKey = GlobalKey<FormState>();
 
   var nameController = TextEditingController();
+  var amountController = TextEditingController();
   var categoryTypeController = TextEditingController();
-  var parentIdController = TextEditingController();
-  Future categoryListFeature = fetchCategoriesFromDatabase();
-  List<Map> categoryDropDownList = List();
-  // String _currentParentId = '0';
+  var transTypeController = TextEditingController();
+  Future accountsListFeature = fetchAccountsFromDatabase();
   
 
   @override
@@ -70,18 +70,18 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
-    buildAndGetDropDownMenuItems(categoryListFeature);
+    buildAndGetDropDownMenuItems(accountsListFeature);
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
+      amountController.text = listData['amount'];
       categoryTypeController.text = listData['categoryType'];
-      parentIdController.text = listData['parentId'].toString();
+      transTypeController.text = listData['transType'].toString();
     } else {
-      parentIdController.text = '0';
+      transTypeController.text = '-';
       categoryTypeController.text = '-';
     }
     setState(() {
-      // this._currentParentId = parentIdController.text;
     });
   }
 
@@ -97,7 +97,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
         items.add({'id': lists[i]['id'], 'name':  lists[i]['name']});
       }
       setState(() {
-        this.categoryDropDownList = items;
+        // this.accountsDropDownList = items;
       }); 
       return items;  
     });
@@ -107,17 +107,16 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   @override
   Widget build(BuildContext context) {
     
-    db.values['Category']['id'] = this.listData['id'];
-    // db.values['Category']['categoryId'] = this.listData['categoryId'];
+    db.values['Accounts']['id'] = this.listData['id'];
 
     return Scaffold(
-      key: categoryScaffoldKey,
+      key: accountScaffoldKey,
       appBar: AppBar(
           title: Text(this.title),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.view_list, color: Colors.indigo,),
-              tooltip: 'Category List',
+              tooltip: 'Accounts List',
               onPressed: () {
                 moveToLastScreen();
               },
@@ -127,32 +126,50 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: categoryFormKey,
+          key: accountFormKey,
           child: Column(
             children: [
               TextFormField(
                 controller: nameController,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: 'Category'),
+                decoration: InputDecoration(labelText: 'Description'),
                 validator: (val){
                   if(val.length == 0) {
-                    return "Enter Category";
+                    return "Enter Description";
                   } else {
-                    db.values['Category']['name'] = nameController.text;
+                    db.values['Accounts']['name'] = nameController.text;
                   }
                 },
                 // onSaved: (val) => db.values['Category']['name'] = val,
               ),
-              // TextFormField(
-              //   controller: categoryTypeController,
-              //   keyboardType: TextInputType.text,
-              //   decoration: InputDecoration(labelText: 'Type'),
-              //   validator: (val){
-              //     db.values['Category']['categoryType'] =  categoryTypeController.text;
-              //   },
-              // ),
+              TextFormField(
+                controller: amountController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(labelText: 'Amount'),
+                validator: (val){
+                  db.values['Accounts']['amount'] =  amountController.text;
+                },
+              ),
               DropdownButtonFormField(
-                decoration: InputDecoration(labelText: 'Type'),
+                decoration: InputDecoration(labelText: 'Transaction Type'),
+                value: (transTypeController.text != null) ? transTypeController.text : '-',
+                items: transactionTypes.map((item){
+                  return DropdownMenuItem(
+                    value: item,
+                    child:Text(item)
+                  );
+                }).toList()
+                ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
+                onChanged: (val){
+                  print(val);
+                  setState(() {
+                    categoryTypeController.text = val;
+                    db.values['Accounts']['transType'] =  transTypeController.text;
+                  });
+                },
+              ),
+              DropdownButtonFormField(
+                decoration: InputDecoration(labelText: 'Category Type'),
                 value: (categoryTypeController.text != null) ? categoryTypeController.text : '-',
                 items: categoryTypes.map((item){
                   return DropdownMenuItem(
@@ -165,7 +182,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                   print(val);
                   setState(() {
                     categoryTypeController.text = val;
-                    db.values['Category']['categoryType'] =  categoryTypeController.text;
+                    db.values['Accounts']['categoryType'] =  categoryTypeController.text;
                   });
                 },
               ),
@@ -223,21 +240,21 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   }
 
   void _submit() {
-    db.values['Category']['createDate'] = DateFormat.yMMMd().format(DateTime.now());
-    if (this.categoryFormKey.currentState.validate()) {
-      categoryFormKey.currentState.save();
+    db.values['Accounts']['createDate'] = DateFormat.yMMMd().format(DateTime.now());
+    if (this.accountFormKey.currentState.validate()) {
+      accountFormKey.currentState.save();
     }else{
       return null;
     }
 
-    db.save('Category');
+    db.save('Accounts');
     _showSnackBar("Data saved successfully");
 
     moveToLastScreen();
   }
 
   void _showSnackBar(String text) {
-    categoryScaffoldKey.currentState
+    accountScaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text(text)));
   }
   
@@ -245,21 +262,6 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   void moveToLastScreen(){
     Navigator.pop(context, true);
   }
-
-  // String validateValue(validateId){
-  //   db.rawQuery("select id from Category where id = " + validateId).then((val){
-  //     print(val);
-  //     String result = '0';
-  //     if(val.length > 0){
-  //       result = validateId;
-  //     }
-  //     setState(() {
-  //       parentIdController.text = result;
-  //       db.values['Category']['parentId'] =  result;
-  //     });
-  //     return result;
-  //   });
-  // }
   
 }
 

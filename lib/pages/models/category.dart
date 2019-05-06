@@ -9,17 +9,21 @@ import './../../dbutils/sqllitedb.dart' show DBInterface;
 import './../../config/config.dart' as conf;
 // Categ Badge Colors
 const Map<String, dynamic> categColor = <String, dynamic>{
-  "income": Colors.green,
-  "expense": Colors.red,
-  "borrow": Colors.orange,
-  "lend": Colors.teal,
+  "Income": Colors.green,
+  "Expense": Colors.red,
+  "Borrow": Colors.orange,
+  "Lend": Colors.teal,
 };
 
+List categoryTypes = ['Income', 'Expense', 'Borrow', 'Lend'];
+
+List transactionTypes = ['Card', 'Cash'];
 // DB Fields
 String categoryTable = 'Category';
 String colId = 'id';
 String colName = 'name';
 String colCreateDate = 'createDate';
+String colCategoryType = 'categoryType';
 String colParentId = "parentId";
 
 String defaultOrderBy = '$colName ASC';  // rec_name
@@ -50,6 +54,7 @@ class Category extends DBInterface{
         $colId INTEGER PRIMARY KEY,
         $colName TEXT,
         $colCreateDate TEXT,
+        $colCategoryType TEXT,
         $colParentId INTEGER,
         FOREIGN KEY($colParentId) REFERENCES $categoryTable($colId))
      """);
