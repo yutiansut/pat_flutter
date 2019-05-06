@@ -50,8 +50,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   var createDateController = TextEditingController();
   var parentIdController = TextEditingController();
   Future categoryListFeature = fetchCategoriesFromDatabase();
-  var categoryDropDownList = List();
-  String _selectedItem = '0';
+  List<DropdownMenuItem<String>> categoryDropDownList = List();
   
 
   @override
@@ -80,32 +79,17 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
     }
   }
 
-  updateDropDown(m2oList){
-    List<DropdownMenuItem<String>> items = new List();
-    items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
-    print(m2oList);
-    if(m2oList != null){
-      for (Map item in m2oList) {
-        items.add(DropdownMenuItem(value: item['id'].toString(), child: new Text(item['name'])));
-      }
-    }
-    setState(() {
-      this.categoryDropDownList = items;
-    });
-  }
 
   buildAndGetDropDownMenuItems(Future listItems) {
-    List m2oList = getM2o(listItems);
-    updateDropDown(m2oList);
-  }
-
-  getM2o(listFeature) {
-    List<Map<dynamic, dynamic>> items = List();
-    listFeature.then((lists){
+    List<DropdownMenuItem<String>> items = List();
+    items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
+    listItems.then((lists){
       for (var i = 0; i < lists.length; i++) {
-        items.add({'id': lists[i]['id'], 'name': lists[i]['name']});
+        items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
       }
-      updateDropDown(items); 
+      setState(() {
+        this.categoryDropDownList = items;
+      }); 
       return items;  
     });
   }
@@ -158,25 +142,21 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                   db.values['Category']['createDate'] =  createDateController.text;
                 },
               ),
-              TextFormField(
-                controller: parentIdController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(labelText: 'Parent Category'),
-                validator: (val){
-                  db.values['Category']['parentId'] =  parentIdController.text;
-                },
-              ),
-              // Container(
-              //   child: Xmany2one(fetchCategoriesFromDatabase()),
+              // TextFormField(
+              //   controller: parentIdController,
+              //   keyboardType: TextInputType.phone,
+              //   decoration: InputDecoration(labelText: 'Parent Category'),
+              //   validator: (val){
+              //     db.values['Category']['parentId'] =  parentIdController.text;
+              //   },
               // ),
-              (this.categoryDropDownList != null) ?
+              
               FutureBuilder(
                 future: categoryListFeature,
                 builder: (context, snapshot) {
-                  return this.categoryDropDownList.length > 1 ? DropdownButton(
+                  return DropdownButton(
                     value: parentIdController.text,
                     items: this.categoryDropDownList,
-                    // items: [DropdownMenuItem(value: 1.toString(), child: new Text('hh'))],
                     onChanged: (val){
                       print(val);
                       setState(() {
@@ -184,9 +164,9 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                         db.values['Category']['parentId'] =  parentIdController.text;
                       });
                     },
-                  ) : DropdownButton(items: [DropdownMenuItem(value: 0.toString(), child: new Text('hh'))], onChanged: (val){},);
+                  );
                 },
-              ): Divider(),
+              ),
               
               Container(
                 margin: const EdgeInsets.only(top: 10.0),
