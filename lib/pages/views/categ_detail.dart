@@ -1,6 +1,7 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart' show AppBar, BuildContext, Colors, Column, Container, EdgeInsets, FlutterError, FlutterErrorDetails, Form, FormState, GlobalKey, Icon, IconButton, Icons, InputDecoration, Key, MaterialApp, MaterialPageRoute, Navigator, Padding, RaisedButton, Scaffold, ScaffoldState, SnackBar, State, StatefulWidget, StatelessWidget, Text, TextFormField, TextInputType, ThemeData, Widget, runApp, TextEditingController;
+import 'package:flutter/material.dart';
 
 import './../models/category.dart' show Category;
 
@@ -40,13 +41,16 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   final categoryScaffoldKey = GlobalKey<ScaffoldState>();
   final categoryFormKey = GlobalKey<FormState>();
 
-  TextEditingController nameController = TextEditingController();
+  var nameController = TextEditingController();
+  var createDateController = TextEditingController();
+  var parentIdController = TextEditingController();
   
 
   @override
   initState(){
     super.initState();
     db.init();
+    initFormDefaultValues(this.listData);
   }
 
   @override
@@ -55,20 +59,33 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
     super.dispose();
   }
 
+  // Initiate Form view values
+  initFormDefaultValues(Map listData){
+    int recId = listData['id'];
+    if(recId != null) {
+      print(listData);
+      nameController.text = listData['name'];
+      createDateController.text = listData['createDate'].toString();
+      parentIdController.text = listData['parentId'].toString();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    int recId = this.listData['id'];
-    nameController.text = this.listData['name'];
+    
+    db.values['Category']['id'] = this.listData['id'];
+
     return Scaffold(
       key: categoryScaffoldKey,
       appBar: AppBar(
           title: Text(this.title),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.view_list),
+              icon: const Icon(Icons.view_list, color: Colors.indigo,),
               tooltip: 'Category List',
               onPressed: () {
-                navigateToCategoryList();
+                moveToLastScreen();
               },
             ),
           ]
@@ -83,23 +100,30 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                 controller: nameController,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(labelText: 'Category'),
-                validator: (val) =>
-                val.length == 0 ?"Enter Category" : null,
-                onSaved: (val) => db.values['Category']['name'] = val,
+                validator: (val){
+                  if(val.length == 0) {
+                    return "Enter Category";
+                  } else {
+                    db.values['Category']['name'] = nameController.text;
+                  }
+                },
+                // onSaved: (val) => db.values['Category']['name'] = val,
               ),
               TextFormField(
+                controller: createDateController,
                 keyboardType: TextInputType.datetime,
                 decoration: InputDecoration(labelText: 'createDate'),
-                validator: (val) =>
-                val.length ==0 ? 'Enter createDate' : null,
-                onSaved: (val) => db.values['Category']['createDate'] = val,
+                validator: (val){
+                  db.values['Category']['createDate'] =  createDateController.text;
+                },
               ),
               TextFormField(
+                controller: parentIdController,
                 keyboardType: TextInputType.phone,
                 decoration: InputDecoration(labelText: 'Parent Category'),
-                validator: (val) =>
-                val.length ==0 ? 'Enter Parent Category' : null,
-                onSaved: (val) => db.values['Category']['parentId'] = val,
+                validator: (val){
+                  db.values['Category']['parentId'] =  parentIdController.text;
+                },
               ),
               // TextFormField(
               //   keyboardType: TextInputType.emailAddress,
@@ -130,21 +154,21 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
     }
 
     db.save('Category');
-    Navigator.pop(context);
     _showSnackBar("Data saved successfully");
+
+    moveToLastScreen();
   }
 
   void _showSnackBar(String text) {
     categoryScaffoldKey.currentState
         .showSnackBar(SnackBar(content: Text(text)));
   }
+  
 
-  void navigateToCategoryList(){
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyCategoryList()),
-    );
+  void moveToLastScreen(){
+    Navigator.pop(context, true);
   }
+  
 }
 
 

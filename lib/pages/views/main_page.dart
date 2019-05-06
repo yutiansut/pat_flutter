@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pat_flutter/pages/views/accounttypelist.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
@@ -93,6 +94,13 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                         trailing: Icon(Icons.view_compact),
                         onTap: () {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeList()));
+                        },
+                      ),
+                      ListTile(
+                        title: Text("Logout"),
+                        trailing: Icon(Icons.verified_user, color: Colors.red,),
+                        onTap: () {
+                          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                         },
                       ),
                     ],

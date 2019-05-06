@@ -1,12 +1,16 @@
 import 'dart:async' show Future;
-
-import 'package:flutter/material.dart' show AlignmentDirectional, AppBar, BuildContext, CircularProgressIndicator, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, FontWeight, FutureBuilder, ListView, Scaffold, State, StatefulWidget, Text, TextStyle, Widget;
 import 'package:flutter/material.dart';
+
+import './../../Xwidgets/XDialog.dart' as Dialog;
 
 import '../models/category.dart' show Category;
 import './categ_detail.dart' show CategoryDetailPage;
 
+
 Category categDb = Category();
+
+Dialog.Dialog dialog = Dialog.Dialog();
+
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchCategoriesFromDatabase() async {
   return categDb.getCategories();
@@ -18,6 +22,8 @@ class MyCategoryList extends StatefulWidget {
 }
 
 class MyCategoryListPageState extends State<MyCategoryList> {
+  Future listViewFeature = fetchCategoriesFromDatabase();
+  
   @override
   Widget build(BuildContext context) {
     TextStyle titleStyle = Theme.of(context).textTheme.subhead;
@@ -37,7 +43,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
       body: new Container(
         padding: new EdgeInsets.all(0.0),
         child: new FutureBuilder<List<Map>>(
-          future: fetchCategoriesFromDatabase(),
+          future: listViewFeature,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return new ListView.builder(
@@ -69,18 +75,19 @@ class MyCategoryListPageState extends State<MyCategoryList> {
                         trailing: GestureDetector(
                           child: Icon(Icons.delete, color: Colors.red),
                           onTap: () {
-                            // _delete(context, snapshot.data[index]['id']);
-                            print(snapshot.data[index]);
-                            _delete(snapshot.data[index]['id']);
+                            dialog.asyncConfirm(context).then((choice){
+                              if(choice == true){
+                                _delete(snapshot.data[index]['id']);
+                              }
+                            });
                           },
                         ),
 
-
                         onTap: () {
                           // navigateToDetail(this.accountList[position],'Edit AccountType');
-                          navigateToCategoryDetail("Edit Category", snapshot.data[index]);
+                          navigateToCategoryDetail("Edit Category(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
                         },
-                      ),                      
+                      ),
                     );
                   });
             } else if (snapshot.hasError) {
@@ -109,16 +116,22 @@ class MyCategoryListPageState extends State<MyCategoryList> {
 		}
     
     categDb.delete("Category", id);
-    MyCategoryList();
-
+    updateListView();
   }
 
-  
+  void updateListView(){
+    setState(() {
+      listViewFeature = fetchCategoriesFromDatabase();
+    });
+  }  
 
-  void navigateToCategoryDetail(String title, Map listData){
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => CategoryDetailPage(title, listData)),
-    );
+  void navigateToCategoryDetail(String title, Map listData) async {
+    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+		  return CategoryDetailPage(title, listData);
+	  }));
+
+	  if (result == true) {
+	  	updateListView();
+	  }
   }
 }

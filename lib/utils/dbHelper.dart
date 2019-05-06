@@ -2,7 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import './../pages/models/category.dart' as categ;
+// import './../pages/models/category.dart' as categ;
 import './../pages/models/account_type.dart' as accountType;
 
 class DatabaseHelper {

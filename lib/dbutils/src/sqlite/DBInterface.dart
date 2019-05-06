@@ -626,7 +626,8 @@ class _DBInterface {
             fieldValues[col['name']] = col['dflt_value'];
           } else {
             if (col['notnull'] == 1) {
-              //TODO Determine the default by datatype.
+              /* Todo Determine the default by datatype  */
+              print(col);
             } else {
               fieldValues[col['name']] = null;
             }
