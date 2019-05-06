@@ -1,378 +1,156 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import '../../utils/dbHelper.dart';
-import 'package:intl/intl.dart';
-import '../models/category.dart';
-import '../models/account_type.dart' as actype;
+import 'dart:async' show Future;
 
-class CategDetail extends StatefulWidget {
+import 'package:flutter/material.dart' show AppBar, BuildContext, Colors, Column, Container, EdgeInsets, FlutterError, FlutterErrorDetails, Form, FormState, GlobalKey, Icon, IconButton, Icons, InputDecoration, Key, MaterialApp, MaterialPageRoute, Navigator, Padding, RaisedButton, Scaffold, ScaffoldState, SnackBar, State, StatefulWidget, StatelessWidget, Text, TextFormField, TextInputType, ThemeData, Widget, runApp, TextEditingController;
 
-	final String appBarTitle;
-	ModelCategory categ;
+import './../models/category.dart' show Category;
 
-	CategDetail(this.categ, this.appBarTitle);
+import './categorylist.dart' show MyCategoryList;
 
-	@override
+
+void main(){
+  /// The default is to dump the error to the console.
+  /// Instead, a custom function is called.
+  FlutterError.onError = (FlutterErrorDetails details) async {
+    await _reportError(details);
+  };
+}
+
+
+class CategoryDetailPage extends StatefulWidget {
+  final String title;
+  Map listData;
+
+  CategoryDetailPage(this.title, this.listData);
+
+  @override
   State<StatefulWidget> createState() {
 
-    return CategDetailState(this.categ, this.appBarTitle);
+    return CategoryDetailPageState(this.title, this.listData);
   }
 }
 
-class CategDetailState extends State<CategDetail> {
+class CategoryDetailPageState extends State<CategoryDetailPage> {
 
+  String title;
+  Map listData ;
+  CategoryDetailPageState(this.title, this.listData);
 
-	DatabaseHelper helper = DatabaseHelper();
+  Category db = Category();
 
-	String appBarTitle;
-	ModelCategory categ;
+  final categoryScaffoldKey = GlobalKey<ScaffoldState>();
+  final categoryFormKey = GlobalKey<FormState>();
 
-	TextEditingController nameController = TextEditingController();
-	TextEditingController typeController = TextEditingController();
-	// TextEditingController descriptionController = TextEditingController();
-	
-  List accountList = [];
-  List acm2olist;
-	int acTypecount = 0;
-  String typeIdText;
-
-	CategDetailState(this.categ, this.appBarTitle);
+  TextEditingController nameController = TextEditingController();
+  
 
   @override
-  void initState() {
+  initState(){
     super.initState();
-    getM2O();  //Initiate many2one field data
+    db.init();
   }
 
-	@override
+  @override
+  void dispose() {
+    db.disposed();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-
-		TextStyle textStyle = Theme.of(context).textTheme.title;
-
-		nameController.text = categ.name;
-		typeController.text = getAccountTypeAsString(categ.typeId);
-		// descriptionController.text = categ.name;
-
-    // getM2O();
-
-    return WillPopScope(
-
-	    onWillPop: () {
-	    	// Write some code to control things, when user press Back navigation button in device navigationBar
-		    moveToLastScreen();
-	    },
-
-	    child: Scaffold(
-        appBar: AppBar(
-          title: Text(appBarTitle),
-          leading: IconButton(icon: Icon(
-              Icons.arrow_back),
+    int recId = this.listData['id'];
+    nameController.text = this.listData['name'];
+    return Scaffold(
+      key: categoryScaffoldKey,
+      appBar: AppBar(
+          title: Text(this.title),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.view_list),
+              tooltip: 'Category List',
               onPressed: () {
-                // Write some code to control things, when user press back button in AppBar
-                moveToLastScreen();
-              }
-          ),
-        ),
-
-        body: Padding(
-          // padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
-          padding: EdgeInsets.all(5),
-          child: ListView(
-            children: <Widget>[
-
-              // First element
-              /* ListTile(
-                title: DropdownButtonFormField(
-                    items: accountList != null ? accountList.map((item){
-                      return DropdownMenuItem<String> (
-                        value: item['id'].toString(),
-                        child: Text(item['name']),
-                      );
-                    }).toList() : ['New'].map((String item){
-                      return DropdownMenuItem<String> (
-                        value: '0',
-                        child: Text('New'),
-                      );
-                    }),
-
-                    style: textStyle,
-
-                    value: getAccountTypeAsString(categ.typeId),
-                    // value: categ.typeId,
-
-                    onChanged: (valueSelectedByUser) {
-                      setState(() {
-                        debugPrint('User selected $valueSelectedByUser');
-                        updateAccountTypeAsInt(valueSelectedByUser);
-                      });
-                    }
-                ),
-              ), */
-
-              Row(
-                children: <Widget>[
-                  DropdownButton(
-                    items: ['1','2','3'].map((item){
-                      return DropdownMenuItem<String> (
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                    value: this.typeIdText,
-                    onChanged: (value){
-                      setState(() {
-                        this.typeIdText = value;
-                        categ.typeId = int.parse(value);
-                      });
-                    },
-                  ),
-                ],
+                navigateToCategoryList();
+              },
+            ),
+          ]
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: categoryFormKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: nameController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(labelText: 'Category'),
+                validator: (val) =>
+                val.length == 0 ?"Enter Category" : null,
+                onSaved: (val) => db.values['Category']['name'] = val,
               ),
-              DropdownButtonFormField(
-                items: ['1','2','3'].map((item){
-                      return DropdownMenuItem<String> (
-                        value: item,
-                        child: Text(getAccountTypeAsString(int.parse(item))),
-                      );
-                }).toList(),
-                value: this.typeIdText,
+              TextFormField(
+                keyboardType: TextInputType.datetime,
+                decoration: InputDecoration(labelText: 'createDate'),
+                validator: (val) =>
+                val.length ==0 ? 'Enter createDate' : null,
+                onSaved: (val) => db.values['Category']['createDate'] = val,
               ),
-
-              // Second Element
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                child: TextField(
-                  controller: nameController,
-                  style: textStyle,
-                  onChanged: (value) {
-                    debugPrint('Something changed in Title Text Field');
-                    updateName();
-                  },
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    labelStyle: textStyle,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0)
-                    )
-                  ),
-                ),
+              TextFormField(
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: 'Parent Category'),
+                validator: (val) =>
+                val.length ==0 ? 'Enter Parent Category' : null,
+                onSaved: (val) => db.values['Category']['parentId'] = val,
               ),
-
-              // Third Element
-              // Padding(
-              //   padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-              //   child: TextField(
-              //     controller: descriptionController,
-              //     style: textStyle,
-              //     onChanged: (value) {
-              // 	    debugPrint('Something changed in Description Text Field');
-              // 	    updateDescription();
-              //     },
-              //     decoration: InputDecoration(
-              // 		    labelText: 'Description',
-              // 		    labelStyle: textStyle,
-              // 		    border: OutlineInputBorder(
-              // 				    borderRadius: BorderRadius.circular(5.0)
-              // 		    )
-              //     ),
-              //   ),
+              // TextFormField(
+              //   keyboardType: TextInputType.emailAddress,
+              //   decoration: InputDecoration(labelText: 'Email Id'),
+              //   validator: (val) =>
+              //   val.length ==0 ? 'Enter Email Id' : null,
+              //   onSaved: (val) =>db.values['Employee']['emailId'] = val,
               // ),
-
-              // Fourth Element
-              Padding(
-                padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColorDark,
-                        textColor: Theme.of(context).primaryColorLight,
-                        child: Text(
-                          'Save',
-                          textScaleFactor: 1.5,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            debugPrint("Save button clicked");
-                            _save();
-                          });
-                        },
-                      ),
-                    ),
-
-                    Container(width: 5.0,),
-
-                    Expanded(
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColorDark,
-                        textColor: Theme.of(context).primaryColorLight,
-                        child: Text(
-                          'Delete',
-                          textScaleFactor: 1.5,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            debugPrint("Delete button clicked");
-                            _delete();
-                          });
-                        },
-                      ),
-                    ),
-
-                  ],
+              Container(
+                margin: const EdgeInsets.only(top: 10.0),
+                child: RaisedButton(
+                  onPressed: _submit,
+                  child: Text('Submit'),
                 ),
               ),
-
             ],
           ),
         ),
-
-      )
+      ),
     );
   }
 
-  void moveToLastScreen() {
-		Navigator.pop(context, true);  //Second parameter "true" for updating list view 
-  }
-
-	// Convert the String priority in the form of integer before saving it to Database
-	void updateAccountTypeAsInt(String value) {
-    if(acm2olist != null){
-      acm2olist.forEach((item){
-        print(item);
-        print(item[1] + '--------------------'+ value);
-        if(item[0] == value){
-          categ.typeId = item[0];
-        }
-      });
+  void _submit() {
+    if (this.categoryFormKey.currentState.validate()) {
+      categoryFormKey.currentState.save();
+    }else{
+      return null;
     }
-	}
 
-	// Convert int priority to String priority and display it to user in DropDown
-	String getAccountTypeAsString(int value) {
-		String priority = 'No Item';
-    if(acm2olist != null){
-      acm2olist.forEach((item){
-        if(item[0] == value){
-          priority = item[1];
-        }
-      });
-    }
-		return priority;
-	}
-
-	// Update the title of Note object
-  void updateName(){
-    categ.name = nameController.text;
-  }
-  void updateTypeId(){
-    categ.typeId = int.parse(typeController.text);
+    db.save('Category');
+    Navigator.pop(context);
+    _showSnackBar("Data saved successfully");
   }
 
-	// Update the description of Note object
-	// void updateDescription() {
-	// 	categ.createDate = descriptionController.text;
-	// }
+  void _showSnackBar(String text) {
+    categoryScaffoldKey.currentState
+        .showSnackBar(SnackBar(content: Text(text)));
+  }
 
-	// Save data to database
-	void _save() async {
-
-		moveToLastScreen();
-
-		categ.createDate = DateFormat.yMMMd().format(DateTime.now());
-		int result;
-    print(categ.toString()+ "---------hari--------");
-		if (categ.id != null) {  // Case 1: Update operation
-			result = await helper.update(categoryTable, categ, colId);
-		} else { // Case 2: Insert Operation
-			result = await helper.insert(categoryTable, categ);
-		}
-
-		if (result != 0) {  // Success
-			_showAlertDialog('Status', 'Category Saved Successfully');
-		} else {  // Failure
-			_showAlertDialog('Status', 'Problem Saving Category');
-		}
-
-	}
-
-	void _delete() async {
-
-		moveToLastScreen();
-
-		// Case 1: If user is trying to delete the NEW NOTE i.e. he has come to
-		// the detail page by pressing the FAB of NoteList page.
-		if (categ.id == null) {
-			_showAlertDialog('Warning', 'No Note was deleted');
-			return;
-		}
-
-		// Case 2: User is trying to delete the old note that already has a valid ID.
-		int result = await helper.delete(categoryTable, colId, categ.id);
-		if (result != 0) {
-			_showAlertDialog('Status', 'Category Deleted Successfully');
-		} else {
-			_showAlertDialog('Warning', 'Error Occured while Deleting Category');
-		}
-	}
-
-
-  Future<void> _showAlertDialog(String title, String message) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: true, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          // title: Text(title),
-          content: ListTile(
-            title: Text(title),
-            subtitle: Text(message),
-            leading: IconButton(
-              icon: Icon(Icons.info),
-              color: Colors.green,
-              onPressed: (){},
-            ),
-          ),
-          actions: <Widget>[
-            /* FlatButton(
-              child: Text('Okay'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ), */
-          ],
-        );
-      },
+  void navigateToCategoryList(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyCategoryList()),
     );
   }
+}
 
-  getM2O(){
-    final Future<Database> dbFuture = helper.initializeDatabase();
-		dbFuture.then((database) async {
 
-			var mapList = await helper.getMapList(actype.accountTypeTable, actype.colId + " ASC");
-      int count = mapList.length;
-      var m2oList = [];
-      var acList =[];
-      mapList.forEach((item){
-        m2oList.add({'id': item['id'], 'name': item['name']});
-        // m2oList.add();
-      });
-      mapList.forEach((item){
-        // m2oList.add({item['id']: item['name']});
-        acList.add([item['id'],item['name']]);
-      });
-			// for (int i = 0; i < count; i++) {
-      //   actype.ModelAccountType.fromMap(mapList[i]);
-      // }
-      setState(() {
-        this.accountList = m2oList;
-        this.acm2olist = acList;
-        this.acTypecount = count;
-        this.typeIdText = categ.typeId.toString();
-      });
-		});
-  }
+/// Reports [error] along with its [stackTrace]
+Future<Null> _reportError(FlutterErrorDetails details) async {
+  // details.exception, details.stack
 
+  FlutterError.dumpErrorToConsole(details);
 }

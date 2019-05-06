@@ -2,6 +2,7 @@
 
 // Configurations
 String appName = "PAT";
+String dbName = appName + 'Db';
 String appAuthor = "Hariprasath.B";
 String appEmail = "bala.hariprasath@gmail.com";
 

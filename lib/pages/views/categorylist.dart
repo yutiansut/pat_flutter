@@ -1,173 +1,124 @@
-import 'dart:async';
+import 'dart:async' show Future;
+
+import 'package:flutter/material.dart' show AlignmentDirectional, AppBar, BuildContext, CircularProgressIndicator, Column, Container, CrossAxisAlignment, Divider, EdgeInsets, FontWeight, FutureBuilder, ListView, Scaffold, State, StatefulWidget, Text, TextStyle, Widget;
 import 'package:flutter/material.dart';
-import '../models/category.dart';
-import '../../utils/dbHelper.dart';
-import 'categ_detail.dart';
-import 'package:sqflite/sqflite.dart';
 
+import '../models/category.dart' show Category;
+import './categ_detail.dart' show CategoryDetailPage;
 
-class CategList extends StatefulWidget {
-
-	@override
-  State<StatefulWidget> createState() {
-
-    return CategListState();
-  }
+Category categDb = Category();
+//Future<List<Map<String, dynamic>>>
+Future<List<Map>> fetchCategoriesFromDatabase() async {
+  return categDb.getCategories();
 }
 
-class CategListState extends State<CategList> {
+class MyCategoryList extends StatefulWidget {
+  @override
+  MyCategoryListPageState createState() => new MyCategoryListPageState();
+}
 
-	DatabaseHelper databaseHelper = DatabaseHelper();
-	List<ModelCategory> categList;
-	int count = 0;
-
-	@override
+class MyCategoryListPageState extends State<MyCategoryList> {
+  @override
   Widget build(BuildContext context) {
+    TextStyle titleStyle = Theme.of(context).textTheme.subhead;
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Category List'),
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: 'Add New Category',
+              onPressed: () {
+                navigateToCategoryDetail("Add Category", {});
+              },
+            )
+        ],
+      ),
+      body: new Container(
+        padding: new EdgeInsets.all(16.0),
+        child: new FutureBuilder<List<Map>>(
+          future: fetchCategoriesFromDatabase(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    // return new Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: <Widget>[
+                    //       new Text(snapshot.data[index]['name'],
+                    //           style: new TextStyle(
+                    //               fontWeight: FontWeight.bold, fontSize: 18.0)),
+                    //       new Text(snapshot.data[index]['createDate'],
+                    //           style: new TextStyle(
+                    //               fontWeight: FontWeight.bold, fontSize: 14.0)),
+                    //      /*  new Text(snapshot.data[index]['parentId'],
+                    //           style: new TextStyle(
+                    //               fontWeight: FontWeight.bold, fontSize: 14.0)), */
+                    //       new Divider()
+                    //     ],
+                    // );
+                    return Card(
+                      elevation: 2.0,
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.purple,
+                          child: Text(snapshot.data[index]['name'][0], style:  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
+                        ),
+                        title: Text(snapshot.data[index]['name'], style: titleStyle),
+                        trailing: GestureDetector(
+                          child: Icon(Icons.delete, color: Colors.red),
+                          onTap: () {
+                            // _delete(context, snapshot.data[index]['id']);
+                            print(snapshot.data[index]);
+                            _delete(snapshot.data[index]['id']);
+                          },
+                        ),
 
-		if (categList == null) {
-			categList = List<ModelCategory>();
-			updateListView();
-		}
 
-    return Scaffold(
-
-	    appBar: AppBar(
-		    title: Text('Category'),
-	    ),
-
-	    body: getCategListView(),
-
-	    floatingActionButton: FloatingActionButton(
-        elevation: 0.0,
-        
-		    onPressed: () {
-		      debugPrint('FAB clicked');
-		      navigateToDetail(ModelCategory('', 0), 'Add Category');
-		    },
-
-		    tooltip: 'Add Category',
-
-		    child: Image(
-          width: 50,
-          image: AssetImage("assets/inc_pen.png"),
+                        onTap: () {
+                          // navigateToDetail(this.accountList[position],'Edit AccountType');
+                          navigateToCategoryDetail("Edit Category", snapshot.data[index]);
+                        },
+                      ),                      
+                    );
+                  });
+            } else if (snapshot.hasError) {
+              return new Text("${snapshot.error}");
+            }
+            return new Container(alignment: AlignmentDirectional.center,child: new CircularProgressIndicator(),);
+          },
         ),
-
-        backgroundColor: Colors.transparent,
-
-	    ),
+      ),
     );
   }
 
-  ListView getCategListView() {
+  void moveToLastScreen(){
+    Navigator.pop(context);
+  }
+  
+  void _delete(int id) async {
 
-		TextStyle titleStyle = Theme.of(context).textTheme.subhead;
+		// moveToLastScreen();
 
-		return ListView.builder(
-			itemCount: count,
-			itemBuilder: (BuildContext context, int position) {
-				return Card(
-					color: Colors.white,
-					elevation: 2.0,
-					child: ListTile(
+		// Case 1: If user is trying to delete the NEW NOTE i.e. he has come to
+		// the detail page by pressing the FAB of NoteList page.
+		if (id == null) {
+			print('Warning : No Type was deleted');
+			return;
+		}
+    
+    categDb.delete("Category", id);
+    MyCategoryList();
 
-						leading: CircleAvatar(
-							backgroundColor: getCategColor(this.categList[position].name),
-							child: getCategIcon(this.categList[position].name),
-						),
-
-						title: Text(this.categList[position].name, style: titleStyle,),
-
-						subtitle: Row(
-              children: <Widget>[
-                Text(this.categList[position].createDate),
-                Text(this.categList[position].typeId.toString()),
-              ],
-            ),
-
-						trailing: GestureDetector(
-							child: Icon(Icons.delete, color: Colors.grey,),
-							onTap: () {
-								_delete(context, this.categList[position]);
-							},
-						),
-
-
-						onTap: () {
-							debugPrint("ListTile Tapped");
-							navigateToDetail(this.categList[position],'Edit Category');
-						},
-
-					),
-				);
-			},
-		);
   }
 
-  // Returns the priority color
-	Color getCategColor(String cName) {
-		switch (cName) {
-			case "income":
-				return Colors.green;
-				break;
-			case "expense":
-				return Colors.red;
-				break;
-      case "borrow":
-				return Colors.orange;
-				break;
-      case "lend":
-				return Colors.teal;
-				break;
-			default:
-				return Colors.amber;
-		}
-	}
+  
 
-	// Returns the priority icon
-	Widget getCategIcon(String cName) {
-		return CircleAvatar(
-      backgroundColor: getCategColor(cName.toLowerCase()),
-      child: Text(cName[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white)),
-      );
-	}
-
-	void _delete(BuildContext context, ModelCategory categ) async {
-
-		int result = await databaseHelper.delete(categoryTable, colId, categ.id);
-		if (result != 0) {
-			_showSnackBar(context, 'Category Deleted Successfully');
-			updateListView();
-		}
-	}
-
-	void _showSnackBar(BuildContext context, String message) {
-
-		final snackBar = SnackBar(content: Text(message));
-		Scaffold.of(context).showSnackBar(snackBar);
-	}
-
-  void navigateToDetail(ModelCategory categ, String title) async {
-	  bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-		  return CategDetail(categ, title);
-	  }));
-
-	  if (result == true) {
-	  	updateListView();
-	  }
-  }
-
-  void updateListView() {
-
-		final Future<Database> dbFuture = databaseHelper.initializeDatabase();
-		dbFuture.then((database) {
-
-			Future<List<dynamic>> categListFuture = databaseHelper.getObjList(categoryTable, "$colId ASC");
-			categListFuture.then((catList) {
-				setState(() {
-				  this.categList = catList;
-				  this.count = catList.length;
-				});
-			});
-		});
+  void navigateToCategoryDetail(String title, Map listData){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CategoryDetailPage(title, listData)),
+    );
   }
 }

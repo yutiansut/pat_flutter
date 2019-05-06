@@ -42,7 +42,7 @@ class DatabaseHelper {
 
 	void _createDb(Database db, int newVersion) async {
 
-		await db.execute(categ.createQry);
+		// await db.execute(categ.createQry);
 		await db.execute(accountType.createQry);
 	}
 
@@ -99,15 +99,15 @@ class DatabaseHelper {
 		var mapList = await getMapList(table, order); // Get 'Map List' from database
 		int count = mapList.length; // Count the number of map entries in db table
 
-    if (table == categ.categoryTable){
-      List<categ.ModelCategory> objList = List<categ.ModelCategory>();
-      // For loop to create a 'Note List' from a 'Map List'
-      for (int i = 0; i < count; i++) {
-        objList.add(categ.ModelCategory.fromMap(mapList[i]));
-      }
-		  return objList;
-    }
-    else if (table == accountType.accountTypeTable) {
+    // if (table == categ.categoryTable){
+    //   List<categ.Category> objList = List<categ.Category>();
+    //   // For loop to create a 'Note List' from a 'Map List'
+    //   for (int i = 0; i < count; i++) {
+    //     objList.add(categ.Category.fromMap(mapList[i]));
+    //   }
+		//   return objList;
+    // }
+    if (table == accountType.accountTypeTable) {
       List<accountType.ModelAccountType> objList = List<accountType.ModelAccountType>();
       // For loop to create a 'Note List' from a 'Map List'
       for (int i = 0; i < count; i++) {

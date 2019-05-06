@@ -4,7 +4,7 @@ import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import 'dashboard.dart';
 import 'accounts.dart';
-import './categorylist.dart';
+import './categorylist.dart' as categList;
 
 
 class MainPage extends StatefulWidget {
@@ -85,7 +85,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                         title: Text("Category"),
                         trailing: Icon(Icons.view_compact),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CategList()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => categList.MyCategoryList()));
                         },
                       ),
                       ListTile(

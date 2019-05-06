@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
-import './../models/account_type.dart' as accountType;
-// import 'package:sqflite/sqflite.dart';
+import 'package:flutter/material.dart' show Colors;
 
+import 'dart:async' show Future;
 
+import 'package:sqflite/sqflite.dart' show Database;
+
+import './../../dbutils/sqllitedb.dart' show DBInterface;
+
+import './../../config/config.dart' as conf;
 // Categ Badge Colors
 const Map<String, dynamic> categColor = <String, dynamic>{
   "income": Colors.green,
@@ -12,78 +16,50 @@ const Map<String, dynamic> categColor = <String, dynamic>{
 };
 
 // DB Fields
-String categoryTable = 'category_table';
+String categoryTable = 'Category';
 String colId = 'id';
 String colName = 'name';
 String colCreateDate = 'createDate';
-String colTypeId = "typeId";
+String colParentId = "parentId";
 
-// DB CreateQry
-String createQry = 'CREATE TABLE $categoryTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, $colCreateDate TEXT, $colTypeId INTEGER, FOREIGN KEY($colTypeId) REFERENCES ' + accountType.accountTypeTable + '('+ accountType.colId +'))';
-String defaultOrderBy = '$colName ASC';
+String defaultOrderBy = '$colName ASC';  // rec_name
 
+class Category extends DBInterface{
 
-class ModelCategory {
-    int _id;
-    String _name;
-    String _createDate;
-    int _typeId;
+  factory Category(){
+    if(_this == null) _this = Category._getInstance();
+    return _this;
+  }
 
-    //default constructor
-    ModelCategory(this._name,this._typeId, [this._createDate]);
+  /// Make only one instance of this class.
+  static Category _this;
 
-    //Named constructor
-    ModelCategory.withId(this._id,this._name, this._typeId, [this._createDate]);
+  Category._getInstance(): super();
 
-    //Getters
-    int get id => _id;
-    String get name => _name;
-    String get createDate => _createDate;
-    int get typeId => _typeId;
+  @override
+  get name => conf.dbName + '.db';  // 'testingDb.db'
 
-    // Setters
-    set name(String name){
-      if(name.length <= 25){
-        this._name = name;
-      }
-    }
-    set typeId(int typeId){
-        this._typeId = typeId;
-    }
-    set createDate(String createDate){
-        this._createDate = createDate;
-    }
+  @override
+  get version => 1;
 
-    //Convert the input data to Map objects
-    Map<String,dynamic> toMap(){
-      var map = Map<String,dynamic>();
-      if(_id != null){
-        map['id'] = _id;
-      }
+  @override
+  Future onCreate(Database db, int version) async {
 
-      map['name'] = _name;
-      map['typeId'] = _typeId;
-      map['createDate'] = _createDate;
+    await db.execute("""
+      CREATE TABLE $categoryTable(
+        $colId INTEGER PRIMARY KEY,
+        $colName TEXT,
+        $colCreateDate TEXT,
+        $colParentId INTEGER,
+        FOREIGN KEY($colParentId) REFERENCES $categoryTable($colId))
+     """);
+  }
 
-      return map;
-    }
+  void save(String table){
+    saveRec(table);
+  }
 
-    // Extract a Note object from a Map object
-    // ModelCategory.fromMapObject(Map<String, dynamic> map) {
-    //   this._id = map['id'];
-    //   this._name = map['name'];
-    //   this._createDate = map['createDate'];
-    // }
-
-    factory ModelCategory.fromMap(Map<String, dynamic> map){
-      return ModelCategory.withId(map['id'], map['name'], map['typeId'], map['createDate']);
-    }
-
+  Future<List<Map>> getCategories() async {
+    return await this.rawQuery('SELECT * FROM $categoryTable');
+  }
 }
-
-// List<ModelCategory> defaultCateg = <ModelCategory>[
-//   ModelCategory("Income",DateTime.now().toString()),
-//   ModelCategory("Expense"),
-//   ModelCategory("Borrow"),
-//   ModelCategory("Lend"),
-// ];
