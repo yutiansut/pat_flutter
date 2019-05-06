@@ -35,7 +35,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
         ],
       ),
       body: new Container(
-        padding: new EdgeInsets.all(16.0),
+        padding: new EdgeInsets.all(0.0),
         child: new FutureBuilder<List<Map>>(
           future: fetchCategoriesFromDatabase(),
           builder: (context, snapshot) {

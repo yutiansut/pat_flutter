@@ -60,6 +60,6 @@ class Category extends DBInterface{
   }
 
   Future<List<Map>> getCategories() async {
-    return await this.rawQuery('SELECT * FROM $categoryTable');
+    return await this.rawQuery('SELECT * FROM $categoryTable order by $defaultOrderBy');
   }
 }
