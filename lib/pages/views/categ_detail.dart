@@ -1,6 +1,7 @@
 import 'dart:async' show Future;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import './../models/category.dart' show Category;
 
@@ -50,7 +51,8 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   var createDateController = TextEditingController();
   var parentIdController = TextEditingController();
   Future categoryListFeature = fetchCategoriesFromDatabase();
-  List<DropdownMenuItem<String>> categoryDropDownList = List();
+  List<Map> categoryDropDownList = List();
+  String _currentParentId = '0';
   
 
   @override
@@ -77,15 +79,21 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
     } else {
       parentIdController.text = '0';
     }
+    setState(() {
+      this._currentParentId = parentIdController.text;
+    });
   }
 
 
   buildAndGetDropDownMenuItems(Future listItems) {
-    List<DropdownMenuItem<String>> items = List();
-    items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
+    List<Map> items = List();
+    // List<DropdownMenuItem<String>> items = List();
+    // items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
     listItems.then((lists){
       for (var i = 0; i < lists.length; i++) {
-        items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
+        // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
+        // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
+        items.add({'id': lists[i]['id'], 'name':  lists[i]['name']});
       }
       setState(() {
         this.categoryDropDownList = items;
@@ -99,7 +107,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   Widget build(BuildContext context) {
     
     db.values['Category']['id'] = this.listData['id'];
-    db.values['Category']['parentId'] = this.listData['parentId'];
+    // db.values['Category']['parentId'] = this.listData['parentId'];
 
     return Scaffold(
       key: categoryScaffoldKey,
@@ -134,14 +142,14 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                 },
                 // onSaved: (val) => db.values['Category']['name'] = val,
               ),
-              TextFormField(
-                controller: createDateController,
-                keyboardType: TextInputType.datetime,
-                decoration: InputDecoration(labelText: 'createDate'),
-                validator: (val){
-                  db.values['Category']['createDate'] =  createDateController.text;
-                },
-              ),
+              // TextFormField(
+              //   controller: createDateController,
+              //   keyboardType: TextInputType.datetime,
+              //   decoration: InputDecoration(labelText: 'createDate'),
+              //   validator: (val){
+              //     db.values['Category']['createDate'] =  createDateController.text;
+              //   },
+              // ),
               // TextFormField(
               //   controller: parentIdController,
               //   keyboardType: TextInputType.phone,
@@ -151,21 +159,35 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
               //   },
               // ),
               
-              FutureBuilder(
-                future: categoryListFeature,
-                builder: (context, snapshot) {
-                  return DropdownButton(
-                    value: parentIdController.text,
-                    items: this.categoryDropDownList,
-                    onChanged: (val){
-                      print(val);
-                      setState(() {
-                        parentIdController.text = val;
-                        db.values['Category']['parentId'] =  parentIdController.text;
-                      });
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  FutureBuilder(
+                    future: categoryListFeature,
+                    builder: (context, snapshot) {
+                      return DropdownButton(
+                        isExpanded: true,
+                        value: parentIdController.text,
+                        items: this.categoryDropDownList.map((Map item){
+                          return DropdownMenuItem<String>(
+                            value: item['id'].toString(),
+                            child: new Text(item['name']),
+                          );
+                        }).toList()
+                        ..add(DropdownMenuItem<String>(value: '0', child: Text('Default'),))
+                        ..add(DropdownMenuItem<String>(value: parentIdController.text, child: Text(parentIdController.text),)),
+                        onChanged: (val){
+                          parentIdController.text = val;
+                          print(parentIdController.text);
+                          db.values['Category']['parentId'] =  parentIdController.text;
+                          setState(() {
+                            this._currentParentId = parentIdController.text;
+                          });
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                ],
               ),
               
               Container(
@@ -183,6 +205,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   }
 
   void _submit() {
+    db.values['Category']['createDate'] = DateFormat.yMMMd().format(DateTime.now());
     if (this.categoryFormKey.currentState.validate()) {
       categoryFormKey.currentState.save();
     }else{
@@ -204,6 +227,21 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   void moveToLastScreen(){
     Navigator.pop(context, true);
   }
+
+  // String validateValue(validateId){
+  //   db.rawQuery("select id from Category where id = " + validateId).then((val){
+  //     print(val);
+  //     String result = '0';
+  //     if(val.length > 0){
+  //       result = validateId;
+  //     }
+  //     setState(() {
+  //       parentIdController.text = result;
+  //       db.values['Category']['parentId'] =  result;
+  //     });
+  //     return result;
+  //   });
+  // }
   
 }
 
