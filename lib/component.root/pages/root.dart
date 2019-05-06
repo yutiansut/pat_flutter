@@ -60,11 +60,20 @@ bool _dialVisible = true;
                   
                 },
               ),
-              new ListTile(title: new Text("Settings"),trailing: new Icon(Icons.access_alarm),),
-              new ListTile(title: new Text("About"),trailing: new Icon(Icons.airline_seat_flat_angled), onTap:(){
+              new ListTile(title: new Text("Settings"),trailing: Image(
+                width: 20,
+                image: AssetImage("assets/setting.png"),
+              ),),
+              new ListTile(title: new Text("About"),trailing: Image(
+                width: 25,
+                image: AssetImage("assets/about.png"),
+              ), onTap:(){
                  SystemChannels.platform.invokeMethod('SystemNavigator.pop');
               },),
-              new ListTile(title: new Text("Logout"),trailing: new Icon(Icons.close),onTap: (){
+              new ListTile(title: new Text("Logout"),trailing: Image(
+                width: 25,
+                image: AssetImage("assets/logout.png"),
+              ),onTap: (){
                 Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new MyApp()));
               },)
             ],
