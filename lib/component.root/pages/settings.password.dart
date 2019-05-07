@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../main.utils/pat_db_helper.dart';
 import '../../main.utils/models_models/model.login.dart';
 
+enum ConfirmAction { CANCEL, ACCEPT }
+
 class SettingsPassword extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -126,7 +128,7 @@ class SettingPass extends State<SettingsPassword> {
                               textScaleFactor: 1.5,
                             ),
                             onPressed: () {
-                              getRewardFormValues();
+                              getRewardFormValues(context);
                             },
                           ),
                         ),
@@ -168,19 +170,50 @@ class SettingPass extends State<SettingsPassword> {
     currentpasswordcontoller.text = '';
   }
 
-  void getRewardFormValues() async{
+  void getRewardFormValues(context) async{
     var curpass = currentpasswordcontoller.text;
     var newpass = newpasswordcontroller.text;
     setting_d.password = newpass;
+    var db_pass = await databaseHelper.getPassword();
 
-    if(curpass == newpass){
+    if(db_pass[0]['password'] == curpass){
+      print('correct');
       var result = await databaseHelper.updateSettingsPassword(setting_d);
       if(result != 0 ){
         print('Password Updated Successfully');
+        _asyncConfirmDialog(context, 'Password Updated Successfully');
       }else{
         print('Password updation failed');
+        _asyncConfirmDialog(context, 'DB Error');
       }
     }
+      
   }
+
+  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context,String message) async {
+    return showDialog<ConfirmAction>(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Meassage'),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                // _delete(context, id);
+                Navigator.of(context).pop(ConfirmAction.ACCEPT);
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  
+
 }
 

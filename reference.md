@@ -29,4 +29,7 @@
         https://inducesmile.com/google-flutter/how-to-hide-or-show-text-field-input-in-flutter/
 
         https://www.developerlibs.com/2018/08/flutter-capture-image-from-camera-or.html
+
+    Text(context,style: TextStyle(color: Colors.white)),
+
     

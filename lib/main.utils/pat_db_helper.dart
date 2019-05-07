@@ -354,6 +354,13 @@ class DatabaseHelper{
     return result;
   }
 
+  // GET THE PASSWORD FROM DB
+  Future<List<Map<String,dynamic>>> getPassword() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT password FROM $settingstable');
+    return result;
+  }
+
   //insert the data into barrows table
   Future<dynamic> insetSettings(Settings settings) async{
     Database db = await this.database;
@@ -361,12 +368,63 @@ class DatabaseHelper{
     return result;
   }
 
-   //update the data into barrows table
+   //update the password into settings  table
   Future<dynamic> updateSettingsPassword(Settings settings) async{
     Database db = await this.database;
-    var result = await db.update(settingstable, settings.toMap(), where: '$settingspassword = ?', whereArgs: [settings.id] );
+    var pass = settings.password;
+    var result = await db.rawQuery('UPDATE $settingstable set $settingspassword = $pass');
     return result;
   }
+
+  //update the data into expenselimit table
+  Future<dynamic> updateSettingsExpenseLimit(Settings settings) async{
+    Database db = await this.database;
+    var explimit = settings.expenselimit;
+    var result = await db.rawQuery('UPDATE $settingstable set $settingsexpenselimit = $explimit');
+    return result;
+  }
+
+
+  //Get the expenselimit 
+  Future<List<Map<String,dynamic>>> getExpenseLimit() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT expenselimit FROM $settingstable');
+    return result;
+  }
+
+  //update the data into barrowlimit table
+  Future<dynamic> updateSettingsBarrowLimit(Settings settings) async{
+    Database db = await this.database;
+    var barrowlimit = settings.barrowlimit;
+    var result = await db.rawQuery('UPDATE $settingstable set $settingsbarrowlimit = $barrowlimit');
+    return result;
+  }
+
+   //update the data into barrowlimit table
+  Future<dynamic> updateSettingsBarrowLimit(Settings settings) async{
+    Database db = await this.database;
+    var barrowlimit = settings.barrowlimit;
+    var result = await db.rawQuery('UPDATE $settingstable set $settingsbarrowlimit = $barrowlimit');
+    return result;
+  }
+
+
+
+
+  //Get the Barrowslimit
+  Future<List<Map<String,dynamic>>> getBarrowLimit() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT barrowlimit FROM $settingstable');
+    return result;
+  }
+
+  //Get the Lendslimit
+  Future<List<Map<String,dynamic>>> getLendsLimit() async{
+    Database db = await this.database;
+    var result = db.rawQuery('SELECT lendlimit FROM $settingstable');
+    return result;
+  }
+
 
   //Get LendsList 
   Future<List<Map<String, dynamic>>> getSettingsList() async {

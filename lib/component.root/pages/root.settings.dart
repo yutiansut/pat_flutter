@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import '../pages/settings.password.dart';
+import 'package:pat_dart/main.utils/pat_db_helper.dart';
+import '../pages/settings.expenselmit.dart';
 
-
-enum ConfirmAction { CANCEL, ACCEPT }
 
 class SettingsRoot extends StatefulWidget {
   @override
@@ -14,22 +13,28 @@ class SettingsRoot extends StatefulWidget {
 class SettingRoot extends State<SettingsRoot> {
 
   static const List<Image> icons = const [ 
-    Image(width: 50, image: AssetImage("assets/password.png")),
-    Image(width: 50, image: AssetImage("assets/income.png")),
     Image(width: 50, image: AssetImage("assets/profit.png")),
-    Image(width: 50, image: AssetImage("assets/borrow_lend.png"))
+    Image(width: 50, image: AssetImage("assets/borrow.png")),
+    Image(width: 50, image: AssetImage("assets/lend.png"))
   ];
 
   TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 
 
 	List<Map<String, dynamic>> settingList;
+  double expenselimit = 0;
   int count = 0;
+   DatabaseHelper databaseHelper = DatabaseHelper();
+
+   var limts = [];
+
+   
 
   @override
   void initState(){
     super.initState();
     updateListView(); 
+    getExpenseLimit();
   }
    @override
   Widget build(BuildContext context) { 
@@ -38,6 +43,11 @@ class SettingRoot extends State<SettingsRoot> {
 			settingList = List<Map<String, dynamic>>();
       updateListView(); 
 		}
+
+    if(this.limts == []){
+      print('hello');
+      getExpenseLimit();
+    }
     
     return new Scaffold(
       appBar: AppBar(
@@ -46,85 +56,59 @@ class SettingRoot extends State<SettingsRoot> {
       ),
       
         body: ListView.builder(
-       padding: EdgeInsets.all(12),
+       padding: EdgeInsets.all(18),
        
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
+          shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60.0),
+              ),
 					color: Colors.white,
-					elevation: 2.0,
 					child: ListTile(
           
 						leading: CircleAvatar(
               child: icons[position],
-              // style: TextStyle(fontSize: 25,color: Colors.white),),
-							// backgroundColor: Colors.blueGrey,
 						),
 
 						title: Text(this.settingList[position]['key'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
-          
-
-						// subtitle: Column(
-            //   crossAxisAlignment: CrossAxisAlignment.start,
-    
-            //   children: <Widget>[
-            //     Text(this.rewardList[position]['description'], style: descStyle,)
-            //   ],
-            // ),
-            
-            
-
-						// trailing: Column(
-            //   children: <Widget>[
-            //     Chip(
-            //       label: Text(this.rewardList[position]['amount'].toString()),
-            //       avatar:  Image(
-            //           width: 50,
-            //           image: AssetImage("assets/rupees.png"),
-            //         ),
-            //       backgroundColor: Colors.yellowAccent,
-            //     ),
-
-            //   ],
-            // ),
-            // onLongPress: () async {
-            //   await _asyncConfirmDialog(context, this.rewardList[position]['id']);
-            // },
-            
-
-
 						onTap: () async{
 							debugPrint("ListTile Tapped");
-							await Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new SettingsPassword()));
+              pageRoute(position);
 						},
+            trailing: Column(
+              children: <Widget>[
+                  Chip(
+                label: Text(this.limts[position].toString()),
+              avatar:  Image(
+                  width: 50,
+                  image: AssetImage("assets/rupees.png"),
+        ),
+      backgroundColor: Colors.purpleAccent,
+    )
+
+              ],
+            ),
 
 					),
 				);	
 			},
 		),
-    // floatingActionButton: new FloatingActionButton(
-	  //     elevation: 0.0,
-	  //     child: Image(
-	  //       width: 50,
-	  //       image: AssetImage("assets/inc_pen.png"),
-	  //     ),
-	  //     backgroundColor: Colors.transparent,
-	  //     onPressed: () async{
-	  //      var result = await Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new INForm()));
-
-    //      if(result == true){
-    //        updateListView();
-    //      }
-	  //     }
-	  //   ),
       backgroundColor: Colors.black,
   );
+  }
+
+
+  void pageRoute(index) async{
+    var pages = [new SettingsExpenseLimit()];
+    print(index);
+    await Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> pages[index]));
   }
 
  
  void updateListView(){
    settingList = [];
-   var sett = ['Password','Expenselimit','BarrowsLimit','Lendlimit'];
+   var sett = ['Expenselimit','BarrowsLimit','Lendlimit'];
 
    for(var i=0;i<sett.length;i++){
      settingList.add({'key':sett[i]});
@@ -133,40 +117,16 @@ class SettingRoot extends State<SettingsRoot> {
    this.count = sett.length;
  }
 
- 
+ void getExpenseLimit() async{
+    var explim = await databaseHelper.getExpenseLimit();
+    var barlim = await databaseHelper.getBarrowLimit();
+    var lenlin = await databaseHelper.getLendsLimit();
+    
+    setState(() {
+      this.limts.insert(0, explim[0]['expenselimit']);
+      this.limts.insert(1, barlim[0]['barrowlimit']);
+      this.limts.insert(2, lenlin[0]['lendlimit']);
+    });  
+ }
 
-  void _showSnackBar(BuildContext context, String message) {
-
-		final snackBar = SnackBar(content: Text(message));
-		Scaffold.of(context).showSnackBar(snackBar);
-	}
-
-  Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, id) async {
-    return showDialog<ConfirmAction>(
-      context: context,
-      barrierDismissible: false, // user must tap button for close dialog!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Confirm Dialog'),
-          content: const Text(
-              'Do you want to delete ?'),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('CANCEL'),
-              onPressed: () {
-                Navigator.of(context).pop(ConfirmAction.CANCEL);
-              },
-            ),
-            FlatButton(
-              child: const Text('ACCEPT'),
-              onPressed: () {
-                // _delete(context, id);
-                Navigator.of(context).pop(ConfirmAction.ACCEPT);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
 }
