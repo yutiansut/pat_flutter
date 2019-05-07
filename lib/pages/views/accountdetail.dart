@@ -1,5 +1,6 @@
 import 'dart:async' show Future;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -11,8 +12,8 @@ import './../models/category.dart' show categoryTypes, transactionTypes;
 Models models = Models();
 
 //Future<List<Map<String, dynamic>>>
-Future<List<Map>> fetchAccountsFromDatabase() async {
-  return models.getTableData("Accounts");
+Future<List<Map>> fetchCategoryFromDatabase() async {
+  return models.getTableData("Category");
 }
 
 void main(){
@@ -52,7 +53,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   var amountController = TextEditingController();
   var categoryTypeController = TextEditingController();
   var transTypeController = TextEditingController();
-  Future accountsListFeature = fetchAccountsFromDatabase();
+  List<DropdownMenuItem> categoryDropDownList;
   
 
   @override
@@ -70,7 +71,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
-    buildAndGetDropDownMenuItems(accountsListFeature);
+    // buildAndGetDropDownMenuItems();
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
@@ -86,19 +87,21 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   }
 
 
-  buildAndGetDropDownMenuItems(Future listItems) {
-    List<Map> items = List();
+  buildAndGetDropDownMenuItems() async {
+    List<DropdownMenuItem> items;
     // List<DropdownMenuItem<String>> items = List();
     // items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
-    listItems.then((lists){
+    await fetchCategoryFromDatabase().then((lists){
+      items.add(DropdownMenuItem(value: '-', child: Text("No Data"),));
       for (var i = 0; i < lists.length; i++) {
         // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
-        // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
-        items.add({'id': lists[i]['id'], 'name':  lists[i]['name']});
+        items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
+        // items.add({'id': lists[i]['id'], 'name':  lists[i]['name']});
       }
-      setState(() {
-        // this.accountsDropDownList = items;
-      }); 
+      // setState(() {
+      //   this.categoryDropDownList = items;
+      // });
+      print(items);
       return items;  
     });
   }
@@ -113,9 +116,10 @@ class AccountDetailPageState extends State<AccountDetailPage> {
       key: accountScaffoldKey,
       appBar: AppBar(
           title: Text(this.title),
+          backgroundColor: Colors.amber,
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.view_list, color: Colors.indigo,),
+              icon: const Icon(Icons.view_list),
               tooltip: 'Accounts List',
               onPressed: () {
                 moveToLastScreen();
@@ -137,6 +141,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   if(val.length == 0) {
                     return "Enter Description";
                   } else {
+                    nameController.text = val.toString();
                     db.values['Accounts']['name'] = nameController.text;
                   }
                 },
@@ -147,6 +152,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Amount'),
                 validator: (val){
+                  amountController.text = val.toString();
                   db.values['Accounts']['amount'] =  int.parse(amountController.text);
                 },
               ),
@@ -186,6 +192,28 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   });
                 },
               ),
+              // FutureBuilder(
+              //   future: buildAndGetDropDownMenuItems(),
+              //   builder: (context, snapshot){
+              //     if(snapshot.hasData){
+              //       return DropdownButtonFormField(
+              //         decoration: InputDecoration(labelText: 'Category'),
+              //         value: '-',
+              //         items: [DropdownMenuItem(value: '-', child: Text("No Data"),)],
+              //         // ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
+              //         onChanged: (val){
+              //           // print(val);
+              //           setState(() {
+              //             categoryTypeController.text = val;
+              //             db.values['Accounts']['category'] =  categoryTypeController.text;
+              //           });
+              //         },
+              //       );
+              //     }
+              //   },
+              // ),
+              
+              
               // TextFormField(
               //   controller: parentIdController,
               //   keyboardType: TextInputType.phone,

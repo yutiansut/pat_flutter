@@ -31,6 +31,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Category List'),
+        backgroundColor: Colors.amber,
         actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.add),

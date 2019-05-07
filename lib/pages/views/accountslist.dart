@@ -49,38 +49,42 @@ class _AccountsPageState  extends State<AccountsPage>{
           future: listViewFeature,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return new ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    // return XListTile(desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType'], transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount']);
-                    return Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: Text(snapshot.data[index]['name']),
-                          subtitle: Row(
-                            children: <Widget>[
-                              Text(snapshot.data[index]['transType'], style: TextStyle(color: Colors.green, fontSize: 10)),
-                            ],
-                          ),
-                          leading: CircleAvatar(backgroundColor: categColor[snapshot.data[index]['categoryType']], child: Text(snapshot.data[index]['categoryType'][0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
-                          trailing: Chip(
-                            label: Text(snapshot.data[index]['amount'].toString(), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                            avatar: CircleAvatar(
-                              child: Image(image: AssetImage(conf.currencyIcon), width: 16,),
-                              backgroundColor: Colors.white,
-                              // foregroundColor: Colors.white,
-                            ),
-                            backgroundColor: categColor[snapshot.data[index]['categoryType']],
-                          ),
-                          onTap: (){
-                            navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
-                          },
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  // return XListTile(desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType'], transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount']);
+                  return Card(
+                    color: Colors.white,
+                    child: ListTile(
+                        title: Text(snapshot.data[index]['name']),
+                        subtitle: Row(
+                          children: <Widget>[
+                            Text(snapshot.data[index]['transType'], style: TextStyle(color: Colors.green, fontSize: 10)),
+                          ],
                         ),
-                        Divider(),
-                        
-                      ],
-                    );
-                  });
+                        leading: CircleAvatar(backgroundColor: categColor[snapshot.data[index]['categoryType']], child: Text(snapshot.data[index]['categoryType'][0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
+                        trailing: Chip(
+                          label: Text(snapshot.data[index]['amount'].toString(), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                          avatar: CircleAvatar(
+                            child: Image(image: AssetImage(conf.currencyIcon), width: 16,),
+                            backgroundColor: Colors.white,
+                            // foregroundColor: Colors.white,
+                          ),
+                          backgroundColor: categColor[snapshot.data[index]['categoryType']],
+                        ),
+                        onTap: (){
+                          navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
+                        },
+                        onLongPress: (){
+                          dialog.asyncConfirm(context).then((choice){
+                            if(choice == true){
+                              _delete(snapshot.data[index]['id']);
+                            }
+                          });
+                        },
+                      )
+                  );
+                });
             } else if (snapshot.hasError) {
               return new Text("${snapshot.error}");
             }

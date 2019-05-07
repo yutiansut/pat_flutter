@@ -115,9 +115,10 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
       key: categoryScaffoldKey,
       appBar: AppBar(
           title: Text(this.title),
+          backgroundColor: Colors.amber,
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.view_list, color: Colors.indigo,),
+              icon: const Icon(Icons.view_list),
               tooltip: 'Category List',
               onPressed: () {
                 moveToLastScreen();

@@ -130,6 +130,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   backgroundColor: Colors.transparent,
 
                 ),
+                backgroundColor: Colors.black12,
             ),
         ),
     );

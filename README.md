@@ -7,8 +7,8 @@
 
 # Tutorial Pages
 
-   - https://github.com/flutter/samples/blob/master/INDEX.md
-   
+   - [https://github.com/flutter/samples/blob/master/INDEX.md] A curated list of samples
+
    - https://kodestat.gitbook.io/flutter/
 
    - https://www.flaticon.com/free-icon/
