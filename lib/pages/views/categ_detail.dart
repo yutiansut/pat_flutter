@@ -3,15 +3,16 @@ import 'dart:async' show Future;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import './../models/category.dart' show Category, categoryTypes;
+import './../../dbutils/DBhelper.dart' show Models;
+import './../models/category.dart' show categoryTypes;
 
 // import './../../Xwidgets/Xcommon.dart' show getM2o;
 
-Category categDb = Category();
+Models models = Models();
 
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchCategoriesFromDatabase() async {
-  return categDb.getCategories();
+  return models.getTableData("Category");
 }
 
 void main(){
@@ -42,7 +43,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   Map listData ;
   CategoryDetailPageState(this.title, this.listData);
 
-  Category db = Category();
+  Models db = models;
 
   final categoryScaffoldKey = GlobalKey<ScaffoldState>();
   final categoryFormKey = GlobalKey<FormState>();
@@ -162,7 +163,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                 }).toList()
                 ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
                 onChanged: (val){
-                  print(val);
+                  // print(val);
                   setState(() {
                     categoryTypeController.text = val;
                     db.values['Category']['categoryType'] =  categoryTypeController.text;

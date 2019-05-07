@@ -39,7 +39,7 @@ class _XListTileState  extends State<XListTile>{
             backgroundColor: categ.categColor[widget.category],
           ),
           onTap: (){
-            print("Pressed1");
+            // print("Pressed1");
           },
         ),
         Divider()

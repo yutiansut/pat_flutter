@@ -26,7 +26,7 @@ class _XCardViewState  extends State<XCardView>{
               subtitle: Text(widget.subtitle),
               trailing: widget.leading,
               onTap: (){
-                print("Pressed");
+                // print("Pressed");
               },
             ),
             ButtonTheme.bar(

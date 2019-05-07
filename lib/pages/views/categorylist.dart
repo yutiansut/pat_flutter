@@ -3,17 +3,18 @@ import 'package:flutter/material.dart';
 
 import './../../Xwidgets/XDialog.dart' as Dialog;
 
-import '../models/category.dart' show Category, categColor;
+import './../../dbutils/DBhelper.dart' show Models;
+import '../models/category.dart' show categColor;
 import './categ_detail.dart' show CategoryDetailPage;
 
 
-Category categDb = Category();
+Models models = Models();
 
 Dialog.Dialog dialog = Dialog.Dialog();
 
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchCategoriesFromDatabase() async {
-  return categDb.getCategories();
+  return models.getTableData("Category");
 }
 
 class MyCategoryList extends StatefulWidget {
@@ -122,7 +123,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
 			return;
 		}
     
-    categDb.delete("Category", id);
+    models.delete("Category", id);
     updateListView();
   }
 

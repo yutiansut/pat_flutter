@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart' show Colors;
 
-import 'dart:async' show Future;
-
-import 'package:sqflite/sqflite.dart' show Database;
-
-import './../../dbutils/sqllitedb.dart' show DBInterface;
-
-import './../../config/config.dart' as conf;
 // Categ Badge Colors
 const Map<String, dynamic> categColor = <String, dynamic>{
   "Income": Colors.green,
@@ -18,6 +11,7 @@ const Map<String, dynamic> categColor = <String, dynamic>{
 List categoryTypes = ['Income', 'Expense', 'Borrow', 'Lend'];
 
 List transactionTypes = ['Card', 'Cash'];
+
 // DB Fields
 String categoryTable = 'Category';
 String colId = 'id';
@@ -26,30 +20,7 @@ String colCreateDate = 'createDate';
 String colCategoryType = 'categoryType';
 String colParentId = "parentId";
 
-String defaultOrderBy = '$colName ASC';  // rec_name
-
-class Category extends DBInterface{
-
-  factory Category(){
-    if(_this == null) _this = Category._getInstance();
-    return _this;
-  }
-
-  /// Make only one instance of this class.
-  static Category _this;
-
-  Category._getInstance(): super();
-
-  @override
-  get name => conf.dbName + '.db';  // 'testingDb.db'
-
-  @override
-  get version => 1;
-
-  @override
-  Future onCreate(Database db, int version) async {
-
-    await db.execute("""
+String createQry = """
       CREATE TABLE $categoryTable(
         $colId INTEGER PRIMARY KEY,
         $colName TEXT,
@@ -57,14 +28,5 @@ class Category extends DBInterface{
         $colCategoryType TEXT,
         $colParentId INTEGER,
         FOREIGN KEY($colParentId) REFERENCES $categoryTable($colId))
-     """);
-  }
-
-  void save(String table){
-    saveRec(table);
-  }
-
-  Future<List<Map>> getCategories() async {
-    return await this.rawQuery('SELECT * FROM $categoryTable order by $defaultOrderBy');
-  }
-}
+     """;  // rec_name
+String defaultOrderBy = '$colName ASC';  // rec_name

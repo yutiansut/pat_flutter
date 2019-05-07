@@ -22,7 +22,7 @@ getM2o(listFeature) {
       m['name'] = lists[i]['name'];
       items.add(m);
     }
-  print(items);
+  // print(items);
   return items;  
   });
 }

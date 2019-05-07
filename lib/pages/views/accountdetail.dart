@@ -3,16 +3,16 @@ import 'dart:async' show Future;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import './../models/accounts.dart' show Accounts;
+import './../../dbutils/DBhelper.dart' show Models;
 import './../models/category.dart' show categoryTypes, transactionTypes;
 
 // import './../../Xwidgets/Xcommon.dart' show getM2o;
 
-Accounts categDb = Accounts();
+Models models = Models();
 
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchAccountsFromDatabase() async {
-  return categDb.getAccounts();
+  return models.getTableData("Accounts");
 }
 
 void main(){
@@ -43,7 +43,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   Map listData ;
   AccountDetailPageState(this.title, this.listData);
 
-  Accounts db = Accounts();
+  Models db = models;
 
   final accountScaffoldKey = GlobalKey<ScaffoldState>();
   final accountFormKey = GlobalKey<FormState>();
@@ -74,7 +74,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
-      amountController.text = listData['amount'];
+      amountController.text = listData['amount'].toString();
       categoryTypeController.text = listData['categoryType'];
       transTypeController.text = listData['transType'].toString();
     } else {
@@ -144,10 +144,10 @@ class AccountDetailPageState extends State<AccountDetailPage> {
               ),
               TextFormField(
                 controller: amountController,
-                keyboardType: TextInputType.text,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Amount'),
                 validator: (val){
-                  db.values['Accounts']['amount'] =  amountController.text;
+                  db.values['Accounts']['amount'] =  int.parse(amountController.text);
                 },
               ),
               DropdownButtonFormField(
@@ -161,9 +161,9 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 }).toList()
                 ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
                 onChanged: (val){
-                  print(val);
+                  // print(val);
                   setState(() {
-                    categoryTypeController.text = val;
+                    transTypeController.text = val;
                     db.values['Accounts']['transType'] =  transTypeController.text;
                   });
                 },
@@ -179,7 +179,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 }).toList()
                 ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
                 onChanged: (val){
-                  print(val);
+                  // print(val);
                   setState(() {
                     categoryTypeController.text = val;
                     db.values['Accounts']['categoryType'] =  categoryTypeController.text;

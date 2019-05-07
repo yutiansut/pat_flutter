@@ -42,7 +42,7 @@ class AccountTypeListState extends State<AccountTypeList> {
         elevation: 0.0,
         
 		    onPressed: () {
-		      debugPrint('FAB clicked');
+		      // debugPrint('FAB clicked');
 		      navigateToDetail(ModelAccountType(''), 'Add Account Type');
 		    },
 
@@ -93,7 +93,7 @@ class AccountTypeListState extends State<AccountTypeList> {
 
 
 						onTap: () {
-							debugPrint("ListTile Tapped");
+							// debugPrint("ListTile Tapped");
 							navigateToDetail(this.accountList[position],'Edit AccountType');
 						},
 

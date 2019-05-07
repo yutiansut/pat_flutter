@@ -49,7 +49,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                       indicatorColor: Colors.white,
                       tabs: myTabs,
                       onTap: (int index){
-                        print(index);
+                        // print(index);
                       },
                     ),
                     backgroundColor: stylex.violet,

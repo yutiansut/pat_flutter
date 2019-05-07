@@ -9,15 +9,15 @@ import './accountdetail.dart' show AccountDetailPage;
 
 // import '../../Xwidgets/XlistTile.dart';
 // import '../models/category.dart' show categoryTypes, transactionTypes;
-import '../models/accounts.dart' show Accounts;
+import '../../dbutils/DBhelper.dart' show Models;
 
-Accounts accountsDb = Accounts();
+Models models = Models();
 
 Dialog.Dialog dialog = Dialog.Dialog();
 
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchAccountsFromDatabase() async {
-  return accountsDb.getAccounts();
+  return models.getTableData('Accounts');
 }
 
 class AccountsPage extends StatefulWidget {
@@ -70,7 +70,7 @@ class _AccountsPageState  extends State<AccountsPage>{
                               backgroundColor: Colors.white,
                               // foregroundColor: Colors.white,
                             ),
-                            backgroundColor: categColor[snapshot.data[index]['categorytype']],
+                            backgroundColor: categColor[snapshot.data[index]['categoryType']],
                           ),
                           onTap: (){
                             navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
@@ -105,7 +105,7 @@ class _AccountsPageState  extends State<AccountsPage>{
 			return;
 		}
     
-    accountsDb.delete("Accounts", id);
+    models.delete("Accounts", id);
     updateListView();
   }
 
@@ -119,7 +119,7 @@ class _AccountsPageState  extends State<AccountsPage>{
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
 		  return AccountDetailPage(title, listData);
 	  }));
-
+    // print(result);
 	  if (result == true) {
 	  	updateListView();
 	  }

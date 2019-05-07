@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 // import '../../Xwidgets/XcardView.dart';
-import '../models/category.dart' show Category;
-import '../models/accounts.dart' show Accounts;
+import '../../dbutils/DBhelper.dart' show Models;
+// import '../models/category.dart' show Category;
+// import '../models/accounts.dart' show Accounts;
 
-Accounts accountsDb = Accounts();
+Models models = Models();
 
 class DashboardPage extends StatefulWidget {
 
@@ -32,11 +33,11 @@ class _DashboardPageState  extends State<DashboardPage>{
           return XCardView(leading: Image(image: AssetImage("assets/inc_pen.png")),title: categ.defaultCateg[index].name, subtitle: categ.defaultCateg[index].toMap().toString(),);
         },
       ); */
-      List ItemsPage = List();
-      accountsDb.getAccounts().then((items){
+      List itemsPage = List();
+      models.getTableData("Accounts").then((items){
         for(var i = 0; i< items.length; i++){
-          print(items[i]);
-          ItemsPage.add(items[i]);
+          // print(items[i]);
+          itemsPage.add(items[i]);
         }
       });
       
