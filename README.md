@@ -2,8 +2,13 @@
 
 # Based on Awasome guide of https://github.com/AndriousSolutions
 
+# Flutter Plugin Details:
+   - https://github.com/flutter/plugins
+
 # Tutorial Pages
 
+   - https://github.com/flutter/samples/blob/master/INDEX.md
+   
    - https://kodestat.gitbook.io/flutter/
 
    - https://www.flaticon.com/free-icon/
