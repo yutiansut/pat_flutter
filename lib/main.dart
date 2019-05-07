@@ -6,6 +6,7 @@ import 'main.utils/pat_db_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 
+
 void main() {
   runApp(new MyApp());
 }
@@ -178,6 +179,9 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                             controller.text = '';
                             });
                             setPass(this.is_set_temp1);
+                            setState(() {
+                              updateListView();
+                            });
                           }
                        
                          

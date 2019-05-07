@@ -362,7 +362,7 @@ class DatabaseHelper{
   }
 
    //update the data into barrows table
-  Future<dynamic> updateSettings(Settings settings) async{
+  Future<dynamic> updateSettingsPassword(Settings settings) async{
     Database db = await this.database;
     var result = await db.update(settingstable, settings.toMap(), where: '$settingspassword = ?', whereArgs: [settings.id] );
     return result;

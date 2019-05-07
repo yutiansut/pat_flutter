@@ -5,6 +5,7 @@ import '../../component.income/income.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import '../../main.dart';
 import 'package:flutter/services.dart';
+import '../pages/root.settings.dart';
 
 
 class RootPage extends StatefulWidget {
@@ -63,7 +64,11 @@ bool _dialVisible = true;
               new ListTile(title: new Text("Settings"),trailing: Image(
                 width: 20,
                 image: AssetImage("assets/setting.png"),
-              ),),
+              ),
+                onTap: (){
+                  Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=> new SettingsRoot()));
+                },
+              ),
               new ListTile(title: new Text("About"),trailing: Image(
                 width: 25,
                 image: AssetImage("assets/about.png"),
