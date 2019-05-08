@@ -37,14 +37,23 @@ class IncomeSalary extends State<IncomeSale> {
     return new Scaffold(
      body: ListView.builder(
        padding: EdgeInsets.all(12),
+       
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60.0),
+              ),
 					color: Colors.white,
 					elevation: 2.0,
           // margin: EdgeInsets.all(10.0),
-					child: ListTile(
-
+          
+					child: Container(
+            decoration: BoxDecoration(color: Colors.teal[50],
+            borderRadius: BorderRadius.circular(60.0)),
+          
+            child :ListTile(
+            
 						leading: CircleAvatar(
               child: Text(this.salaryList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
               style: TextStyle(fontSize: 25, color: Colors.white),),
@@ -90,6 +99,7 @@ class IncomeSalary extends State<IncomeSale> {
 						// },
 
 					),
+          ),
 				);	
 			},
 		),
@@ -107,7 +117,7 @@ class IncomeSalary extends State<IncomeSale> {
            }
 	      }
 	    ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
   );
   }
 

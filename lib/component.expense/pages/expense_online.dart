@@ -39,9 +39,15 @@ class ExpenseOnline extends State<ExpOnline> {
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60.0),
+              ),
 					color: Colors.white,
 					elevation: 2.0,
-					child: ListTile(
+					child: Container(
+             decoration: BoxDecoration(color: Colors.teal[50],
+            borderRadius: BorderRadius.circular(60.0)),
+            child: ListTile(
 
 						leading: CircleAvatar(
 							backgroundColor: Colors.deepPurpleAccent,
@@ -87,6 +93,7 @@ class ExpenseOnline extends State<ExpOnline> {
 						// },
 
 					),
+          )
 				);	
 			},
 		),
@@ -107,7 +114,7 @@ class ExpenseOnline extends State<ExpOnline> {
          }
 	      }
 	    ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
   );
   }
 

@@ -38,9 +38,15 @@ class BorrowPage extends State<Barrows> {
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60.0),
+              ),
 					color: Colors.white,
 					elevation: 2.0,
-					child: ListTile(
+					child: Container(
+            decoration: BoxDecoration(color: Colors.teal[50],
+            borderRadius: BorderRadius.circular(60.0)),
+            child: ListTile(
 
 						leading: CircleAvatar(
               child: Text(this.barrowsList[position]['lendername'][0].toUpperCase() , textAlign: TextAlign.center,
@@ -86,6 +92,7 @@ class BorrowPage extends State<Barrows> {
 						// },
 
 					),
+          )
 				);	
 			},
 		),
@@ -104,7 +111,7 @@ class BorrowPage extends State<Barrows> {
             }
         }
 	    ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
   );
   }
 

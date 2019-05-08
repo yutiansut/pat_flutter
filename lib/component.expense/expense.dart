@@ -26,7 +26,7 @@ class Expenses extends StatelessWidget {
               ],
             ),
             title: Text('Expenses'),
-            backgroundColor: Colors.purpleAccent,
+            backgroundColor: Colors.lightGreen[900],
             leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

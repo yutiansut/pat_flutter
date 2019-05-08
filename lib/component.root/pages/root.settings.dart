@@ -52,7 +52,7 @@ class SettingRoot extends State<SettingsRoot> {
     return new Scaffold(
       appBar: AppBar(
         title: new Text('Settings'),
-      backgroundColor: Colors.purpleAccent,
+      backgroundColor: Colors.lightGreen[900],
       ),
       
         body: ListView.builder(
@@ -63,12 +63,19 @@ class SettingRoot extends State<SettingsRoot> {
           return Card(
           shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(60.0),
+                
               ),
 					color: Colors.white,
-					child: ListTile(
+					child: Container(
+            decoration: BoxDecoration(color: Colors.teal[50],
+            borderRadius: BorderRadius.circular(60.0)),
+
+            child:
+             ListTile(
           
 						leading: CircleAvatar(
               child: icons[position],
+              backgroundColor: Colors.transparent
 						),
 
 						title: Text(this.settingList[position]['key'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
@@ -91,10 +98,11 @@ class SettingRoot extends State<SettingsRoot> {
             ),
 
 					),
+          )
 				);	
 			},
 		),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
   );
   }
 

@@ -25,7 +25,7 @@ class Lenders extends StatelessWidget {
               ],
             ),
             title: Text('Lendes'),
-            backgroundColor: Colors.pinkAccent,
+            backgroundColor: Colors.lightGreen[900],
             leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

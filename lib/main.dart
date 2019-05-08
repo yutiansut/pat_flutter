@@ -79,7 +79,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
      return Scaffold(
       appBar: AppBar(
         title: Text("Personal Account Tracker"),
-        backgroundColor: Colors.purpleAccent,
+        backgroundColor: Colors.lightGreen[900],
       ),
       body: Container(
         child: SingleChildScrollView(

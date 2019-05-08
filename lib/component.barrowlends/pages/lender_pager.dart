@@ -39,9 +39,16 @@ class LenderPage extends State<Lends> {
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60.0),
+              ),
 					color: Colors.white,
 					elevation: 2.0,
-					child: ListTile(
+					child: Container(
+            decoration: BoxDecoration(color: Colors.teal[50],
+            borderRadius: BorderRadius.circular(60.0)),
+            
+            child: ListTile(
 						leading: CircleAvatar(
 							backgroundColor: Colors.greenAccent,
               child: Text(this.lendssList[position]['barrowername'][0].toUpperCase() , textAlign: TextAlign.center,
@@ -77,6 +84,7 @@ class LenderPage extends State<Lends> {
               await _asyncConfirmDialog(context, this.lendssList[position]['id']);
             },
 					),
+          )
 				);	
 			},
 		),
@@ -95,7 +103,7 @@ class LenderPage extends State<Lends> {
           }
 	      }
 	    ),
-      backgroundColor: Colors.black
+      backgroundColor: Colors.white
   );
   }
 

@@ -40,10 +40,16 @@ TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 			itemCount: count,
 			itemBuilder: (BuildContext context, int position) {
           return Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60.0),
+              ),
 					color: Colors.white,
 					elevation: 2.0,
-					child: ListTile(
-
+					child: Container(
+            decoration: BoxDecoration(color: Colors.teal[50],
+            borderRadius: BorderRadius.circular(60.0)),
+            child: ListTile(
+            
 						leading: CircleAvatar(
               child: Text(this.exppurList[position]['storename'][0].toUpperCase() , textAlign: TextAlign.center,
               style: TextStyle(fontSize: 28,color: Colors.white)),
@@ -89,6 +95,7 @@ TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
 						// },
 
 					),
+          )
 				);	
 			},
 		),
@@ -107,7 +114,7 @@ TextStyle descStyle =  TextStyle(fontWeight: FontWeight.w500);
           }
         }
 	    ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
   );
   }
 

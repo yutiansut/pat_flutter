@@ -59,7 +59,7 @@ class Income_RewardFrom extends State<INForm> {
      return new Scaffold(
        appBar: AppBar(
           title: Text('Salary'),
-          backgroundColor: Colors.purpleAccent,
+          backgroundColor: Colors.lightGreen[900],
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

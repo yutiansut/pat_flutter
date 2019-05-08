@@ -401,12 +401,12 @@ class DatabaseHelper{
   }
 
    //update the data into barrowlimit table
-  Future<dynamic> updateSettingsBarrowLimit(Settings settings) async{
-    Database db = await this.database;
-    var barrowlimit = settings.barrowlimit;
-    var result = await db.rawQuery('UPDATE $settingstable set $settingsbarrowlimit = $barrowlimit');
-    return result;
-  }
+  // Future<dynamic> updateSettingsBarrowLimit(Settings settings) async{
+  //   Database db = await this.database;
+  //   var barrowlimit = settings.barrowlimit;
+  //   var result = await db.rawQuery('UPDATE $settingstable set $settingsbarrowlimit = $barrowlimit');
+  //   return result;
+  // }
 
 
 
