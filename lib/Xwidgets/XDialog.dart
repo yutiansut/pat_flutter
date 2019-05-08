@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 // Custom Dialogs
 
 class Dialog{
+
+  TextEditingController _textFieldController = TextEditingController();
+
+
   Future<bool> asyncConfirm(BuildContext context) async {
     return showDialog<bool>(
       context: context,
@@ -30,4 +35,64 @@ class Dialog{
       },
     );
   }
+
+  Future inputDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('TextField in Dialog'),
+          content: TextField(
+            controller: _textFieldController,
+            decoration: InputDecoration(hintText: "TextField in Dialog"),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop('');
+              },
+            ),
+            FlatButton(
+              child: const Text('Set'),
+              onPressed: () {
+                Navigator.of(context).pop(_textFieldController.text);
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+
+  Future colorDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Color Dialog'),
+          content: TextField(
+            controller: _textFieldController,
+            decoration: InputDecoration(hintText: "Pick a color"),
+          ),
+          actions: <Widget>[
+            
+            new FlatButton(
+              child: new Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop('');
+              },
+            ),
+            FlatButton(
+              child: const Text('Set'),
+              onPressed: () {
+                Navigator.of(context).pop(_textFieldController.text);
+              },
+            )
+          ],
+        );
+      }
+    );
+  }
+
 }

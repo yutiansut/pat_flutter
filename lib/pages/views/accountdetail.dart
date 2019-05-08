@@ -71,7 +71,6 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
-    // buildAndGetDropDownMenuItems();
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
@@ -114,6 +113,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
     return Scaffold(
       key: accountScaffoldKey,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
           title: Text(this.title),
           backgroundColor: Colors.amber,
@@ -142,10 +142,9 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                     return "Enter Description";
                   } else {
                     nameController.text = val.toString();
-                    db.values['Accounts']['name'] = nameController.text;
                   }
                 },
-                // onSaved: (val) => db.values['Category']['name'] = val,
+                onSaved: (val) => db.values['Accounts']['name'] = nameController.text,
               ),
               TextFormField(
                 controller: amountController,
@@ -153,8 +152,8 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 decoration: InputDecoration(labelText: 'Amount'),
                 validator: (val){
                   amountController.text = val.toString();
-                  db.values['Accounts']['amount'] =  int.parse(amountController.text);
                 },
+                onSaved: (val) => db.values['Accounts']['amount'] =  double.parse(amountController.text),
               ),
               DropdownButtonFormField(
                 decoration: InputDecoration(labelText: 'Transaction Type'),
@@ -170,9 +169,9 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   // print(val);
                   setState(() {
                     transTypeController.text = val;
-                    db.values['Accounts']['transType'] =  transTypeController.text;
                   });
                 },
+                onSaved: (val) => db.values['Accounts']['transType'] =  transTypeController.text,
               ),
               DropdownButtonFormField(
                 decoration: InputDecoration(labelText: 'Category Type'),
@@ -188,9 +187,9 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   // print(val);
                   setState(() {
                     categoryTypeController.text = val;
-                    db.values['Accounts']['categoryType'] =  categoryTypeController.text;
                   });
                 },
+                onSaved: (val) => db.values['Accounts']['categoryType'] =  categoryTypeController.text,
               ),
               // FutureBuilder(
               //   future: buildAndGetDropDownMenuItems(),
@@ -260,6 +259,16 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   child: Text('Submit'),
                 ),
               ),
+              Container(
+                margin: const EdgeInsets.only(top: 10.0),
+                child: RaisedButton(
+                  onPressed: (){
+                    print(DateTime.now());
+                    print(DateFormat.QQQ().format(DateTime.now()));
+                  },
+                  child: Text('test'),
+                ),
+              ),
             ],
           ),
         ),
@@ -268,7 +277,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   }
 
   void _submit() {
-    db.values['Accounts']['createDate'] = DateFormat.yMMMd().format(DateTime.now());
+    db.values['Accounts']['createDate'] = DateTime.now().toString();
     if (this.accountFormKey.currentState.validate()) {
       accountFormKey.currentState.save();
     }else{

@@ -11,7 +11,13 @@ class MyApp extends StatelessWidget
     return MaterialApp
     (
       title: 'PAT',
-      theme: ThemeData(primarySwatch: Colors.green),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        primaryColor: Colors.black,
+        
+        // scaffoldBackgroundColor: Colors.green,
+        backgroundColor: Colors.cyan,
+      ),
       home: MainPage(),
     );
   }

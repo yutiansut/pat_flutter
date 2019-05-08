@@ -12,7 +12,7 @@ String createQry = """
       CREATE TABLE $accountsTable(
         $colId INTEGER PRIMARY KEY,
         $colName TEXT,
-        $colAmount REAL,
+        $colAmount REAL DEFAULT 0,
         $colAcDate DATETIME,
         $colCreateDate TEXT,
         $colCategoryType TEXT,

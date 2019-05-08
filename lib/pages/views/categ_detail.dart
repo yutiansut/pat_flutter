@@ -143,7 +143,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                     db.values['Category']['name'] = nameController.text;
                   }
                 },
-                // onSaved: (val) => db.values['Category']['name'] = val,
+                onSaved: (val) => db.values['Category']['name'] = val,
               ),
               // TextFormField(
               //   controller: categoryTypeController,
@@ -170,6 +170,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                     db.values['Category']['categoryType'] =  categoryTypeController.text;
                   });
                 },
+                onSaved: (val) => db.values['Category']['categoryType'] = categoryTypeController.text,
               ),
               // TextFormField(
               //   controller: parentIdController,

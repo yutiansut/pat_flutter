@@ -1,5 +1,7 @@
 import 'dart:async' show Future;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import './../../Xwidgets/XDialog.dart' as Dialog;
 import './../../config/config.dart' as conf;
@@ -28,11 +30,11 @@ class AccountsPage extends StatefulWidget {
 }
 
 class _AccountsPageState  extends State<AccountsPage>{
-  TextStyle titleStyle = TextStyle(color: Colors.black);
   Future listViewFeature = fetchAccountsFromDatabase();
 
   @override
   Widget build(BuildContext context) {
+    TextStyle titleStyle = TextStyle(color: Colors.black87, fontSize: 18);
     // return ListView(
     //   shrinkWrap: true,
     //   padding: EdgeInsets.all(0.8),
@@ -43,6 +45,7 @@ class _AccountsPageState  extends State<AccountsPage>{
     //     XListTile(desc: "BalaVignesh", category: categoryTypes[0], transactionType: transactionTypes[0], amount: 2500),
     //   ],
     // );
+    // double c_width = MediaQuery.of(context).size.width*0.2;
     return new Container(
         padding: new EdgeInsets.all(0.0),
         child: new FutureBuilder<List<Map>>(
@@ -53,36 +56,58 @@ class _AccountsPageState  extends State<AccountsPage>{
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   // return XListTile(desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType'], transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount']);
-                  return Card(
+                  return Container(
+                    // width: c_width,
                     color: Colors.white,
-                    child: ListTile(
-                        title: Text(snapshot.data[index]['name']),
-                        subtitle: Row(
-                          children: <Widget>[
-                            Text(snapshot.data[index]['transType'], style: TextStyle(color: Colors.green, fontSize: 10)),
-                          ],
-                        ),
-                        leading: CircleAvatar(backgroundColor: categColor[snapshot.data[index]['categoryType']], child: Text(snapshot.data[index]['categoryType'][0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
-                        trailing: Chip(
-                          label: Text(snapshot.data[index]['amount'].toString(), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-                          avatar: CircleAvatar(
-                            child: Image(image: AssetImage(conf.currencyIcon), width: 16,),
-                            backgroundColor: Colors.white,
-                            // foregroundColor: Colors.white,
+                    child: GestureDetector(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: <Widget>[
+                              CircleAvatar(radius: 13, backgroundColor: categColor[snapshot.data[index]['categoryType']], child: Text(snapshot.data[index]['categoryType'][0], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)))
+                            ],
                           ),
-                          backgroundColor: categColor[snapshot.data[index]['categoryType']],
-                        ),
-                        onTap: (){
-                          navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
-                        },
-                        onLongPress: (){
-                          dialog.asyncConfirm(context).then((choice){
-                            if(choice == true){
-                              _delete(snapshot.data[index]['id']);
-                            }
-                          });
-                        },
-                      )
+                          Column(
+                            children: <Widget>[
+                              Text(truncate(snapshot.data[index]['name'], 6), style: titleStyle,),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(snapshot.data[index]['transType'], style: titleStyle),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(snapshot.data[index].containsKey('createDate') ? DateFormat.yMMMd().format(DateTime.parse(snapshot.data[index]['createDate']))  : '' , style: titleStyle),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              CircleAvatar(
+                                radius: 10,
+                                child: Image(image: AssetImage(conf.currencyIcon), width: 12,),
+                                backgroundColor: Colors.white,
+                                // foregroundColor: Colors.white,
+                              ),
+                              Text(snapshot.data[index]['amount'].toString(), style: TextStyle(fontSize: 18, color: categColor[snapshot.data[index]['categoryType']])),
+                              
+                            ],
+                          ),
+                        ]
+                      ),
+                      onTap: (){
+                        navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
+                      },
+                      onLongPress: (){
+                        dialog.asyncConfirm(context).then((choice){
+                          if(choice == true){
+                            _delete(snapshot.data[index]['id']);
+                          }
+                        });
+                      },
+                    ),
                   );
                 });
             } else if (snapshot.hasError) {
@@ -128,4 +153,11 @@ class _AccountsPageState  extends State<AccountsPage>{
 	  	updateListView();
 	  }
   }
+}
+
+String truncate(String input,int maxLength)
+{
+   if(input.length > maxLength)
+      return input.substring(0,maxLength);
+   return input;
 }
