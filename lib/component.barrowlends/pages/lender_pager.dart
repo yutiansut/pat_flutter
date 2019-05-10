@@ -43,16 +43,16 @@ class LenderPage extends State<Lends> {
                 borderRadius: BorderRadius.circular(60.0),
               ),
 					color: Colors.white,
-					elevation: 2.0,
+					elevation: 3.0,
 					child: Container(
-            decoration: BoxDecoration(color: Colors.teal[50],
+            decoration: BoxDecoration(color: Colors.transparent,
             borderRadius: BorderRadius.circular(60.0)),
             
             child: ListTile(
 						leading: CircleAvatar(
 							backgroundColor: Colors.greenAccent,
               child: Text(this.lendssList[position]['barrowername'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 28,color: Colors.red)),
+              style: TextStyle(fontSize: 28,color: Colors.black)),
 						),
 
 						title: Text(this.lendssList[position]['barrowername'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
@@ -70,12 +70,12 @@ class LenderPage extends State<Lends> {
 						trailing: Column(
               children: <Widget>[
                 Chip(
-                  label: Text(this.lendssList[position]['lendamount'].toString(),style: TextStyle(color: Colors.white)),
+                  label: Text(this.lendssList[position]['lendamount'].toString(),style: TextStyle(color: Colors.black)),
                   avatar:  Image(
                       width: 50,
                       image: AssetImage("assets/rupees.png"),
                     ),
-                  backgroundColor: Colors.purpleAccent,
+                  backgroundColor: Colors.greenAccent,
                 ),
 
               ],
@@ -91,7 +91,7 @@ class LenderPage extends State<Lends> {
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
-	        width: 50,
+	        width: 81,
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,

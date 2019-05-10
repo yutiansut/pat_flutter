@@ -45,19 +45,20 @@ class IncomeSalary extends State<IncomeSale> {
                 borderRadius: BorderRadius.circular(60.0),
               ),
 					color: Colors.white,
-					elevation: 2.0,
+					elevation: 3.0,
           // margin: EdgeInsets.all(10.0),
           
 					child: Container(
-            decoration: BoxDecoration(color: Colors.teal[50],
+            
+            decoration: BoxDecoration(color: Colors.transparent,
             borderRadius: BorderRadius.circular(60.0)),
           
             child :ListTile(
             
 						leading: CircleAvatar(
               child: Text(this.salaryList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 25, color: Colors.white),),
-							backgroundColor: Colors.blue,
+              style: TextStyle(fontSize: 25, color: Colors.black),),
+							backgroundColor: Color.fromRGBO(255, 213, 0, 1),
 						),
 
 						title: Text(this.salaryList[position]['contact'].toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold),),
@@ -82,7 +83,7 @@ class IncomeSalary extends State<IncomeSale> {
                       width: 50,
                       image: AssetImage("assets/rupees.png"),
                     ),
-                  backgroundColor: Colors.greenAccent,
+                  backgroundColor: Color.fromRGBO(255, 213, 0, 1)
                 ),
 
               ],
@@ -90,14 +91,6 @@ class IncomeSalary extends State<IncomeSale> {
             onLongPress: () async {
               await _asyncConfirmDialog(context, this.salaryList[position]['id']);
             },
-            
-
-
-						// onTap: () {
-						// 	debugPrint("ListTile Tapped");
-						// 	navigateToDetail(this.noteList[position],'Edit Note');
-						// },
-
 					),
           ),
 				);	
@@ -106,7 +99,7 @@ class IncomeSalary extends State<IncomeSale> {
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
-	        width: 50,
+	        width: 81,
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,

@@ -14,19 +14,19 @@ class Expenses extends StatelessWidget {
             bottom: TabBar(
               tabs: [
                 Tab(icon: Image(
-	        width: 50,
-          height: 30,
+	        width: 74,
+          height: 41,
 	        image: AssetImage("assets/onlinexp.png"),
 	      )),
                 Tab(icon: Image(
-	        width: 50,
-          height: 30,
+	        width: 74,
+          height: 41,
 	        image: AssetImage("assets/purchase.png"),
 	      ))
               ],
             ),
             title: Text('Expenses'),
-            backgroundColor: Colors.lightGreen[900],
+            backgroundColor: Color.fromRGBO(107, 99, 255, 1),
             leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

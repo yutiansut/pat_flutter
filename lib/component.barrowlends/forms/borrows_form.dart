@@ -52,13 +52,13 @@ class BarrowsForm extends State<BarrowForm> {
      return new Scaffold(
        appBar: AppBar(
           title: Text('Barrows'),
-          backgroundColor: Colors.lightGreen[900],
+          backgroundColor: Color.fromRGBO(107, 99, 255, 1),
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
             actions: <Widget>[
               Image(
-	            width: 50,
+	            width: 38,
 	            image: AssetImage("assets/barrow.png"),
 	          )
             ],
@@ -142,20 +142,6 @@ class BarrowsForm extends State<BarrowForm> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
-                DateTimePickerFormField(
-              inputType: inputType,
-              format: formats[inputType],
-              editable: editable,
-              controller: timecontoller,
-              decoration: InputDecoration(
-                  labelText: 'Date/Time', hasFloatingPlaceholder: false),
-              onChanged: (dt) => setState((){ 
-                print(dt);
-                date = dt;
-                print(date);
-                }),
-            ),
-                
                 Padding(
                     padding: EdgeInsets.only(
                         bottom: _minimumPadding, top: _minimumPadding),
@@ -163,8 +149,8 @@ class BarrowsForm extends State<BarrowForm> {
                       children: <Widget>[
                         Expanded(
                           child: RaisedButton(
-                            color: Theme.of(context).accentColor,
-                            textColor: Theme.of(context).primaryColorDark,
+                            color:Color.fromRGBO(107, 99, 255, 1),
+                            textColor:Colors.white,
                             child: Text(
                               'Save',
                               textScaleFactor: 1.5,
@@ -176,8 +162,8 @@ class BarrowsForm extends State<BarrowForm> {
                         ),
                         Expanded(
                           child: RaisedButton(
-                            color: Theme.of(context).primaryColorDark,
-                            textColor: Theme.of(context).primaryColorLight,
+                            color:Color.fromRGBO(107, 99, 255, 1),
+                            textColor:Colors.white,
                             child: Text(
                               'Reset',
                               textScaleFactor: 1.5,

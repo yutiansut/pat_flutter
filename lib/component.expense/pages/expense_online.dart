@@ -43,16 +43,16 @@ class ExpenseOnline extends State<ExpOnline> {
                 borderRadius: BorderRadius.circular(60.0),
               ),
 					color: Colors.white,
-					elevation: 2.0,
+					elevation: 3.0,
 					child: Container(
-             decoration: BoxDecoration(color: Colors.teal[50],
+             decoration: BoxDecoration(color: Colors.transparent,
             borderRadius: BorderRadius.circular(60.0)),
             child: ListTile(
 
 						leading: CircleAvatar(
-							backgroundColor: Colors.deepPurpleAccent,
+							backgroundColor: Colors.orangeAccent,
               child: Text(this.exponlineList[position]['storename'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 28,color: Colors.white),),
+              style: TextStyle(fontSize: 28,color: Colors.black),),
 						),
 
 						title: Text(this.exponlineList[position]['storename'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
@@ -100,7 +100,7 @@ class ExpenseOnline extends State<ExpOnline> {
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
-	        width: 50,
+	        width: 81,
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,

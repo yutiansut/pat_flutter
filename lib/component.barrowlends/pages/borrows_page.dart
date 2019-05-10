@@ -42,16 +42,16 @@ class BorrowPage extends State<Barrows> {
                 borderRadius: BorderRadius.circular(60.0),
               ),
 					color: Colors.white,
-					elevation: 2.0,
+					elevation: 3.0,
 					child: Container(
-            decoration: BoxDecoration(color: Colors.teal[50],
+            decoration: BoxDecoration(color: Colors.transparent,
             borderRadius: BorderRadius.circular(60.0)),
             child: ListTile(
 
 						leading: CircleAvatar(
               child: Text(this.barrowsList[position]['lendername'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 28,color: Colors.redAccent)),
-							backgroundColor: Colors.amberAccent,
+              style: TextStyle(fontSize: 28,color: Colors.white)),
+							backgroundColor: Colors.deepPurpleAccent,
 						),
 
 						title: Text(this.barrowsList[position]['lendername'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
@@ -99,7 +99,7 @@ class BorrowPage extends State<Barrows> {
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
-	        width: 50,
+	        width: 81,
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,

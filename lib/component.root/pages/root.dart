@@ -46,7 +46,7 @@ bool _dialVisible = true;
       onWillPop: () async => Future.value(false),
       child: new Scaffold(
       appBar: new AppBar(title: new Text('Personal Account Tracker'),
-      backgroundColor: Colors.lightGreen[900],
+      backgroundColor: Color.fromRGBO(107, 99, 255, 1),
       // automaticallyImplyLeading: false,
       ),
       drawer: new Drawer(
@@ -58,7 +58,7 @@ bool _dialVisible = true;
                 accountName: new Text("Balavignesh"),
                 accountEmail: new Text("crystelpheonix@gmail.com"),
                 currentAccountPicture: new CircleAvatar(backgroundColor: Colors.white,child: new Text("B"),),
-                decoration: new BoxDecoration(color:  Colors.lightGreen[900]),
+                decoration: new BoxDecoration(color:  Color.fromRGBO(107, 99, 255, 1)),
                 onDetailsPressed: (){
                   
                 },
@@ -103,9 +103,10 @@ bool _dialVisible = true;
           onClose: () => print('DIAL CLOSED'),
           tooltip: 'Speed Dial',
           heroTag: 'speed-dial-hero-tag',
-          backgroundColor: Colors.lightGreen[900],
+          backgroundColor: Color.fromRGBO(107, 99, 255, 1),
+
           foregroundColor: Colors.white,
-          elevation: 8.0,
+          elevation: 3.0,
           shape: StadiumBorder(),
           children: [
             SpeedDialChild(

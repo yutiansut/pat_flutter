@@ -49,13 +49,13 @@ class Expense_purchaseForm extends State<EXPForm> {
      return new Scaffold(
        appBar: AppBar(
           title: Text('Offline Expense'),
-          backgroundColor: Colors.lightGreen[900],
+          backgroundColor:Color.fromRGBO(107, 99, 255, 1),
          leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),
             actions: <Widget>[
               Image(
-	            width: 50,
+	            width: 38,
 	            image: AssetImage("assets/purchase.png"),
 	          )
             ],
@@ -162,19 +162,6 @@ class Expense_purchaseForm extends State<EXPForm> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5.0))),
                     )),
-                DateTimePickerFormField(
-              inputType: inputType,
-              format: formats[inputType],
-              editable: editable,
-              controller: timecontoller,
-              decoration: InputDecoration(
-                  labelText: 'Date/Time', hasFloatingPlaceholder: false),
-              onChanged: (dt) => setState((){ 
-                print(dt);
-                date = dt;
-                print(date);
-                }),
-            ),
                 
                 Padding(
                     padding: EdgeInsets.only(
@@ -183,8 +170,8 @@ class Expense_purchaseForm extends State<EXPForm> {
                       children: <Widget>[
                         Expanded(
                           child: RaisedButton(
-                            color: Theme.of(context).accentColor,
-                            textColor: Theme.of(context).primaryColorDark,
+                          color:  Color.fromRGBO(107, 99, 255, 1),
+                            textColor: Colors.white,
                             child: Text(
                               'Save',
                               textScaleFactor: 1.5,
@@ -196,8 +183,8 @@ class Expense_purchaseForm extends State<EXPForm> {
                         ),
                         Expanded(
                           child: RaisedButton(
-                            color: Theme.of(context).primaryColorDark,
-                            textColor: Theme.of(context).primaryColorLight,
+                            color: Color.fromRGBO(107, 99, 255, 1),
+                            textColor: Colors.white,
                             child: Text(
                               'Reset',
                               textScaleFactor: 1.5,

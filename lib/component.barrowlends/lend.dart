@@ -13,19 +13,19 @@ class Lenders extends StatelessWidget {
             bottom: TabBar(
               tabs: [
                 Tab(icon: Image(
-	        width: 50,
-          height: 30,
+	        width: 74,
+          height: 41,
 	        image: AssetImage("assets/lend.png"),
 	      )),
                 Tab(icon: Image(
-	        width: 50,
-          height: 30,
+	        width: 74,
+          height: 35,
 	        image: AssetImage("assets/barrow.png"),
 	      ))
               ],
             ),
             title: Text('Lendes'),
-            backgroundColor: Colors.lightGreen[900],
+            backgroundColor: Color.fromRGBO(107, 99, 255, 1),
             leading: IconButton(icon:Icon(Icons.arrow_back),
             onPressed:() => Navigator.pop(context, false),
             ),

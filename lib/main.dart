@@ -79,7 +79,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
      return Scaffold(
       appBar: AppBar(
         title: Text("Personal Account Tracker"),
-        backgroundColor: Colors.lightGreen[900],
+        backgroundColor: Color.fromRGBO(107, 99, 255, 1),
       ),
       body: Container(
         child: SingleChildScrollView(
@@ -90,8 +90,8 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               Column(
                 children: <Widget>[
                    Image(
-	                width: 90,
-                  height: 170,
+	                width: 300,
+                  height: 200,
 	                image: AssetImage("assets/icon.png"),
 	              )
                 ],
@@ -107,7 +107,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 highlight: true,
                 highlightColor: Colors.blue,
                 defaultBorderColor: Colors.black,
-                hasTextBorderColor: Colors.green,
+                hasTextBorderColor: Colors.blue,
                 maxLength: pinLength,
                 hasError: hasError,
                 maskCharacter: "*",
@@ -141,7 +141,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     MaterialButton(
-                      color: Colors.blue,
+                      color: Color.fromRGBO(107, 99, 255, 1),
                       textColor: Colors.white,
                       child: Text("Login"),
                       onPressed: () {
@@ -159,7 +159,7 @@ class MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     MaterialButton(
-                      color: Colors.blue,
+                      color: Color.fromRGBO(107, 99, 255, 1),
                       textColor: Colors.white,
                       child: this.is_set_password ? Text('Confirm Password'): Text("Set Password"),
                       onPressed: () {

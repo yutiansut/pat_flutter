@@ -44,16 +44,16 @@ class IncomeRewardList extends State<IncomeReward> {
                 borderRadius: BorderRadius.circular(60.0),
               ),
 					color: Colors.white,
-					elevation: 2.0,
+					elevation: 3.0,
 					child: Container(
-            decoration: BoxDecoration(color: Colors.teal[50],
+            decoration: BoxDecoration(color: Colors.transparent,
             borderRadius: BorderRadius.circular(60.0)),
             child:ListTile(
           
 						leading: CircleAvatar(
               child: Text(this.rewardList[position]['contact'][0].toUpperCase() , textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 25,color: Colors.white),),
-							backgroundColor: Colors.blueGrey,
+              style: TextStyle(fontSize: 25,color: Colors.black),),
+                  backgroundColor: Color.fromRGBO(255, 183, 61, 1),
 						),
 
 						title: Text(this.rewardList[position]['contact'].toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold)),
@@ -72,12 +72,12 @@ class IncomeRewardList extends State<IncomeReward> {
 						trailing: Column(
               children: <Widget>[
                 Chip(
-                  label: Text(this.rewardList[position]['amount'].toString()),
+                  label: Text(this.rewardList[position]['amount'].toString(), style:TextStyle(color: Colors.black)),
                   avatar:  Image(
                       width: 50,
                       image: AssetImage("assets/rupees.png"),
                     ),
-                  backgroundColor: Colors.yellowAccent,
+                  backgroundColor: Color.fromRGBO(255, 183, 61, 1),
                 ),
 
               ],
@@ -101,7 +101,7 @@ class IncomeRewardList extends State<IncomeReward> {
     floatingActionButton: new FloatingActionButton(
 	      elevation: 0.0,
 	      child: Image(
-	        width: 50,
+	        width: 81,
 	        image: AssetImage("assets/inc_pen.png"),
 	      ),
 	      backgroundColor: Colors.transparent,
