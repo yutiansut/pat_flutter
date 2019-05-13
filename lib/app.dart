@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget
       title: 'PAT',
       theme: ThemeData(
         // primaryColor: Colors.teal
-        // primarySwatch: Colors.green,
-        primaryColor: Colors.black,
+        primarySwatch: Colors.teal,
+        // primaryColor: Colors.black,
         
         // scaffoldBackgroundColor: Colors.green,
         // backgroundColor: Colors.cyan,

@@ -9,7 +9,7 @@ import './../../config/config.dart' as conf;
 import '../models/category.dart' show categColor;
 import './accountdetail.dart' show AccountDetailPage;
 
-// import '../../Xwidgets/XlistTile.dart';
+import '../../Xwidgets/XlistTile.dart';
 // import '../models/category.dart' show categoryTypes, transactionTypes;
 import '../../dbutils/DBhelper.dart' show Models;
 
@@ -19,7 +19,7 @@ Dialog.Dialog dialog = Dialog.Dialog();
 
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchAccountsFromDatabase() async {
-  return models.getTableData('Accounts');
+  return models.getTableData('Accounts', orderBy: 'createDate ASC');
 }
 
 class AccountsPage extends StatefulWidget {
@@ -47,7 +47,7 @@ class _AccountsPageState  extends State<AccountsPage>{
     // );
     // double c_width = MediaQuery.of(context).size.width*0.2;
     return new Container(
-        padding: new EdgeInsets.all(0.0),
+        margin: EdgeInsets.all(10.0),
         child: new FutureBuilder<List<Map>>(
           future: listViewFeature,
           builder: (context, snapshot) {
@@ -55,59 +55,18 @@ class _AccountsPageState  extends State<AccountsPage>{
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
-                  // return XListTile(desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType'], transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount']);
-                  return Container(
-                    // width: c_width,
-                    color: Colors.white,
-                    child: GestureDetector(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: <Widget>[
-                              CircleAvatar(radius: 13, backgroundColor: categColor[snapshot.data[index]['categoryType']], child: Text(snapshot.data[index]['categoryType'][0], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)))
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Text(truncate(snapshot.data[index]['name'], 6), style: titleStyle,),
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Text(snapshot.data[index]['transType'], style: titleStyle),
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Text(snapshot.data[index].containsKey('createDate') ? DateFormat.yMMMd().format(DateTime.parse(snapshot.data[index]['createDate']))  : '' , style: titleStyle),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 10,
-                                child: Image(image: AssetImage(conf.currencyIcon), width: 12,),
-                                backgroundColor: Colors.white,
-                                // foregroundColor: Colors.white,
-                              ),
-                              Text(snapshot.data[index]['amount'].toString(), style: TextStyle(fontSize: 18, color: categColor[snapshot.data[index]['categoryType']])),
-                              
-                            ],
-                          ),
-                        ]
-                      ),
-                      onTap: (){
-                        navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
-                      },
-                      onLongPress: (){
-                        dialog.asyncConfirm(context).then((choice){
-                          if(choice == true){
-                            _delete(snapshot.data[index]['id']);
-                          }
-                        });
-                      },
-                    ),
+                  return GestureDetector(
+                    child: XListTile(index: index, desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType'], transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount'], createDate: snapshot.data[index]['createDate']),
+                    onTap: (){
+                      navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
+                    },
+                    onLongPress: (){
+                      dialog.asyncConfirm(context).then((choice){
+                        if(choice == true){
+                          _delete(snapshot.data[index]['id']);
+                        }
+                      });
+                    },
                   );
                 });
             } else if (snapshot.hasError) {

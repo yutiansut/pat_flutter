@@ -91,7 +91,37 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
         children: <Widget>[
           Card(
             child: IconButton(
+              icon: Icon(Icons.donut_small, color: stylex.violet, size: 33),
+              tooltip: 'Violet',
+              onPressed: (){
+                setState(() {
+                  themeColor = Color(stylex.violet.value);
+                });
+                updateTheme(colorValue: stylex.violet.value);
+              },
+            ),
+          ),
+          Card(
+            child: IconButton(
+              icon: Icon(Icons.donut_small, color: Colors.teal, size: 33),
+              tooltip: 'Teal',
+              onPressed: (){
+                setState(() {
+                  themeColor = Color(Colors.teal.value);
+                });
+                updateTheme(colorValue: Colors.teal.value);
+              },
+            ),
+          ),
+        ],
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Card(
+            child: IconButton(
               icon: Icon(Icons.donut_small, color: Colors.red, size: 33),
+              tooltip: 'Red',
               onPressed: (){
                 updateTheme(colorValue: Colors.pink.value);
                 setState(() {
@@ -104,6 +134,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
           Card(
             child: IconButton(
               icon: Icon(Icons.donut_small, color: Colors.green, size: 33),
+              tooltip: 'Green',
               onPressed: (){
                 setState(() {
                   themeColor = Color(Colors.green.value);
@@ -130,7 +161,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
         home: DefaultTabController(
             length: 2,
             child: Scaffold(
-              backgroundColor: themeColor,
+              // backgroundColor: themeColor,
               appBar: AppBar(
                   title: Text(conf.appName, textAlign: TextAlign.center,),
                   centerTitle: true,
@@ -179,7 +210,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                       ExpansionTile(
                         title: Text("Pages", style: titleStyle),
                         initiallyExpanded: false,
-                        trailing: Icon(Icons.pages, color: Colors.white,),
+                        trailing: Icon(Icons.pages, color: this.subIconColor),
                         children: <Widget>[
                           ListTile(
                             title: Text("Dashboard", style: titleStyle),
