@@ -53,6 +53,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   var parentIdController = TextEditingController();
   Future categoryListFeature = fetchCategoriesFromDatabase();
   List<Map> categoryDropDownList = List();
+  Color themeColor;
   // String _currentParentId = '0';
   
 
@@ -61,6 +62,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
     super.initState();
     db.init();
     initFormDefaultValues(this.listData);
+    getTheme();
   }
 
   @override
@@ -83,6 +85,17 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
     }
     setState(() {
       // this._currentParentId = parentIdController.text;
+    });
+  }
+
+  getTheme() {
+    String sqlStmt = "SELECT * FROM Settings where name='themeColor' limit 1";
+    models.rawQuery(sqlStmt).then((res){
+      if(res.isNotEmpty) {
+        setState(() {
+          themeColor = Color(int.parse(res[0]['value']));
+        });
+      }
     });
   }
 
@@ -115,7 +128,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
       key: categoryScaffoldKey,
       appBar: AppBar(
           title: Text(this.title),
-          backgroundColor: Colors.amber,
+          // backgroundColor: themeColor,
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.view_list),

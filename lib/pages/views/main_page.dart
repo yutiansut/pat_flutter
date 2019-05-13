@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
+import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 import 'package:pat_flutter/Xwidgets/XColorPicker.dart';
-import 'package:pat_flutter/pages/views/accounttypelist.dart';
+// import 'package:pat_flutter/pages/views/accounttypelist.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import './../../dbutils/DBhelper.dart' show Models;
@@ -33,24 +34,50 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
   ];
 
   TabController _tabController;
-  Color subIconColor = Colors.green;
+  Color subIconColor = Colors.white;
   Color themeColor = stylex.violet;
 
   @override
   void initState() {
     super.initState();
+    models.init();
     _tabController = new TabController(vsync: this, length: myTabs.length);
+    getTheme();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    models.disposed();
     super.dispose();
   }
 
-  Future updateTheme(colorValue) async{
-    String sqlStmt = "UPDATE Settings set value='" + colorValue.toString() + "' where name='ThemeColor'";
-    await models.rawQuery(sqlStmt);
+  getTheme() {
+    String sqlStmt = "SELECT * FROM Settings where name='themeColor' limit 1";
+    models.rawQuery(sqlStmt).then((res){
+      if(res.isNotEmpty) {
+        setState(() {
+          themeColor = Color(int.parse(res[0]['value']));
+        });
+      }
+    });
+  }
+  Future updateTheme({colorValue=0}) async{
+    // print(models.values['Settings']);
+    String sqlStmt = "SELECT * FROM Settings where name='themeColor' limit 1";
+    await models.rawQuery(sqlStmt).then((res){
+      if(res.isNotEmpty) {
+        models.values['Settings']['id'] = res[0]['id'];
+      }
+      models.values['Settings']['name'] = 'themeColor';
+      models.values['Settings']['value'] = colorValue.toString();
+      models.save("Settings");
+      Future.delayed(new Duration(seconds: 4), () {
+        setState(() {
+           themeColor = Color(colorValue);
+        });
+      });
+    });
   }
 
   @override
@@ -66,7 +93,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
             child: IconButton(
               icon: Icon(Icons.donut_small, color: Colors.red, size: 33),
               onPressed: (){
-                print(Colors.red);
+                updateTheme(colorValue: Colors.pink.value);
                 setState(() {
                   themeColor = Color(Colors.pink.value);
                 });
@@ -78,11 +105,10 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
             child: IconButton(
               icon: Icon(Icons.donut_small, color: Colors.green, size: 33),
               onPressed: (){
-                print(Colors.green);
                 setState(() {
                   themeColor = Color(Colors.green.value);
                 });
-                // updateTheme(Colors.red.value);
+                updateTheme(colorValue: Colors.green.value);
               },
             ),
           ),
@@ -96,6 +122,8 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     //   }
     // });
     Future themes = fetchSettingsFromDatabase();
+
+    
     
 
     return MaterialApp(
@@ -105,6 +133,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
               backgroundColor: themeColor,
               appBar: AppBar(
                   title: Text(conf.appName, textAlign: TextAlign.center,),
+                  centerTitle: true,
                   bottom: TabBar(
                     controller: _tabController,
                     indicatorColor: Colors.white,
@@ -123,7 +152,9 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   AccountsPage(),
                 ],
               ),
-              drawer: Drawer(
+              drawer: SizedBox(
+      width: 190.0,
+      child: Drawer(
                 child: Container(
                   color: themeColor,
                   child: ListView(
@@ -133,16 +164,18 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                         accountName: Text(conf.appAuthor),
                         accountEmail: Text(conf.appEmail),
                         currentAccountPicture: CircleAvatar(backgroundColor: Colors.black26,child: Text(conf.appAuthor[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
-                        // decoration: BoxDecoration(
-                        //   gradient: LinearGradient(
-                        //       colors: <Color>[ //7928D1
-                        //         const Color(0xFF7928D2), const Color(0xFF9A4DFF)],
-                        //       stops: <double>[0.3, 0.5],
-                        //       begin: Alignment.topRight, end: Alignment.bottomLeft
-                        //   ),
-                        // ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: <Color>[ //7928D1
+                                // const Color(0xFF7928D2), const Color(0xFF9A4DFF)
+                                themeColor, themeColor
+                              ],
+                              stops: <double>[0.3, 0.5],
+                              begin: Alignment.topRight, end: Alignment.bottomLeft
+                          ),
+                        ),
                       ),
-                      
+                      // topArea(),
                       ExpansionTile(
                         title: Text("Pages", style: titleStyle),
                         initiallyExpanded: false,
@@ -173,13 +206,13 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                               Navigator.push(context, MaterialPageRoute(builder: (context) => categList.MyCategoryList()));
                             },
                           ),
-                          ListTile(
-                            title: Text("Account Type", style: titleStyle),
-                            leading: Icon(Icons.tab_unselected, color: subIconColor, size: 23),
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeList()));
-                            },
-                          ),
+                          // ListTile(
+                          //   title: Text("Account Type", style: titleStyle),
+                          //   leading: Icon(Icons.tab_unselected, color: subIconColor, size: 23),
+                          //   onTap: () {
+                          //     Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeList()));
+                          //   },
+                          // ),
                         ],
                       ),
 
@@ -204,6 +237,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                     ],
                   ),
                 )
+              ),
               ),
               floatingActionButton: FloatingActionButton(
                 elevation: 0.0,

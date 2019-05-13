@@ -31,7 +31,8 @@ class MyCategoryListPageState extends State<MyCategoryList> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Category List'),
-        backgroundColor: Colors.amber,
+        centerTitle: true,
+        // backgroundColor: Colors.amber,
         actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.add),
@@ -49,6 +50,8 @@ class MyCategoryListPageState extends State<MyCategoryList> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return new ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     // return new Column(
@@ -67,16 +70,45 @@ class MyCategoryListPageState extends State<MyCategoryList> {
                     //     ],
                     // );
                     return Card(
-                      elevation: 2.0,
-                      child: ListTile(
-                        leading: CircleAvatar(
+                      elevation: 8.0,
+                      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                      child: Container(
+                    decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
+                    child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+                        leading: Container(
+                          padding: EdgeInsets.only(right: 12.0),
+                          decoration: new BoxDecoration(
+                              border: new Border(
+                                  right: new BorderSide(width: 1.0, color: Colors.black45))),
+                          child: CircleAvatar(
                           backgroundColor: categColor[snapshot.data[index]['categoryType']],
                           child: Text(snapshot.data[index]['name'][0].toUpperCase(), style:  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
                         ),
-                        title: Text(snapshot.data[index]['name'].toString(), style: titleStyle),
+                        ),
+                        title: Text(
+                          snapshot.data[index]['name'].toString(),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
                         subtitle: Row(
                           children: <Widget>[
-                            Text(snapshot.data[index]['categoryType']),
+                            // Text(snapshot.data[index]['categoryType']),
+                            Expanded(
+                              flex: 1,
+                              child: Container(
+                                // tag: 'hero',
+                                child: LinearProgressIndicator(
+                                    backgroundColor: Color.fromRGBO(209, 224, 224, 0.2),
+                                    value: 2/10,
+                                    valueColor: AlwaysStoppedAnimation(Colors.orange)),
+                              )),
+                          Expanded(
+                            flex: 4,
+                            child: Padding(
+                                padding: EdgeInsets.only(left: 10.0),
+                                child: Text(snapshot.data[index]['categoryType'],
+                                    style: TextStyle(color: Colors.white))),
+                          )
                             // Text(snapshot.data[index]['createDate'],),
                             // Text(snapshot.data[index]['parentId'].toString()),
                           ],
@@ -97,6 +129,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
                           navigateToCategoryDetail("Edit Category(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
                         },
                       ),
+                      )
                     );
                   });
             } else if (snapshot.hasError) {

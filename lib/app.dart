@@ -12,11 +12,13 @@ class MyApp extends StatelessWidget
     (
       title: 'PAT',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        // primaryColor: Colors.teal
+        // primarySwatch: Colors.green,
         primaryColor: Colors.black,
         
         // scaffoldBackgroundColor: Colors.green,
-        backgroundColor: Colors.cyan,
+        // backgroundColor: Colors.cyan,
+        // fontFamily: '',
       ),
       home: MainPage(),
     );
