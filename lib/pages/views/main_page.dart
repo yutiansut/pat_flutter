@@ -251,7 +251,6 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                     _tabController.animateTo((2 + 1) % 2);
                   }
                 },
-
                 tooltip: 'Add Account Type',
 
                 child: Image(
