@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/services.dart';
-import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
-import 'package:pat_flutter/Xwidgets/XColorPicker.dart';
-// import 'package:pat_flutter/pages/views/accounttypelist.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import './../../dbutils/DBhelper.dart' show Models;
@@ -152,7 +148,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     //     print(settings[i]);
     //   }
     // });
-    Future themes = fetchSettingsFromDatabase();
+    // Future themes = fetchSettingsFromDatabase();
 
     
     

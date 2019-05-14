@@ -1,16 +1,12 @@
 import 'dart:async' show Future;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import './../../Xwidgets/XDialog.dart' as Dialog;
-import './../../config/config.dart' as conf;
 
-import '../models/category.dart' show categColor;
 import './accountdetail.dart' show AccountDetailPage;
 
 import '../../Xwidgets/XlistTile.dart';
-// import '../models/category.dart' show categoryTypes, transactionTypes;
 import '../../dbutils/DBhelper.dart' show Models;
 
 Models models = Models();
@@ -34,18 +30,7 @@ class _AccountsPageState  extends State<AccountsPage>{
 
   @override
   Widget build(BuildContext context) {
-    TextStyle titleStyle = TextStyle(color: Colors.black87, fontSize: 18);
-    // return ListView(
-    //   shrinkWrap: true,
-    //   padding: EdgeInsets.all(0.8),
-    //   children: <Widget>[
-    //     XListTile(desc: "Room Rent", category: categoryTypes[2], transactionType: transactionTypes[1], amount: 2500),
-    //     XListTile(desc: "Salary", category: categoryTypes[1], transactionType: transactionTypes[1], amount: 27500),
-    //     XListTile(desc: "Abi", category: categoryTypes[3], transactionType: transactionTypes[0], amount: 500),
-    //     XListTile(desc: "BalaVignesh", category: categoryTypes[0], transactionType: transactionTypes[0], amount: 2500),
-    //   ],
-    // );
-    // double c_width = MediaQuery.of(context).size.width*0.2;
+    // TextStyle titleStyle = TextStyle(color: Colors.black87, fontSize: 18);
     return new Container(
         margin: EdgeInsets.all(10.0),
         child: new FutureBuilder<List<Map>>(

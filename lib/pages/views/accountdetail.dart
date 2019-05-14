@@ -27,7 +27,7 @@ void main(){
 
 class AccountDetailPage extends StatefulWidget {
   final String title;
-  Map listData;
+  final Map listData;
 
   AccountDetailPage(this.title, this.listData);
 
@@ -116,7 +116,6 @@ class AccountDetailPageState extends State<AccountDetailPage> {
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
           title: Text(this.title),
-          backgroundColor: Colors.amber,
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.view_list),
@@ -131,7 +130,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: accountFormKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 controller: nameController,
@@ -253,13 +252,13 @@ class AccountDetailPageState extends State<AccountDetailPage> {
               ), */
               
               Container(
-                margin: const EdgeInsets.only(top: 10.0),
+                margin: const EdgeInsets.only(top: 8.0),
                 child: RaisedButton(
                   onPressed: _submit,
                   child: Text('Submit'),
                 ),
               ),
-              Container(
+              /* Container(
                 margin: const EdgeInsets.only(top: 10.0),
                 child: RaisedButton(
                   onPressed: (){
@@ -268,7 +267,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   },
                   child: Text('test'),
                 ),
-              ),
+              ), */
             ],
           ),
         ),

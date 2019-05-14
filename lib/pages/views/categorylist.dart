@@ -27,7 +27,7 @@ class MyCategoryListPageState extends State<MyCategoryList> {
   
   @override
   Widget build(BuildContext context) {
-    TextStyle titleStyle = Theme.of(context).textTheme.subhead;
+    // TextStyle titleStyle = Theme.of(context).textTheme.subhead;
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Category List'),

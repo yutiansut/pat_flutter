@@ -26,7 +26,7 @@ void main(){
 
 class CategoryDetailPage extends StatefulWidget {
   final String title;
-  Map listData;
+  final Map listData;
 
   CategoryDetailPage(this.title, this.listData);
 

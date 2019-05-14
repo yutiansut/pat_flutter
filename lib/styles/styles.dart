@@ -7,3 +7,9 @@ Color violet = Color.fromRGBO(102, 58, 182, 1);
 
 // TextStyles
 TextStyle tStyleHead = TextStyle(color: Colors.red, fontStyle: FontStyle.italic, fontSize: 25.0);
+
+class Styles {
+  static ThemeData theme1 = ThemeData(
+    primarySwatch: Colors.blue,
+  );
+}

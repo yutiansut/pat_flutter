@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../config/config.dart' as conf;
-import '../pages/models/category.dart' as categ;
 
 class XListTile extends StatefulWidget {
   int index;

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class AcTypeDetail extends StatefulWidget {
 
 	final String appBarTitle;
-	ModelAccountType acType;
+	final ModelAccountType acType;
 
 	AcTypeDetail(this.acType, this.appBarTitle);
 
