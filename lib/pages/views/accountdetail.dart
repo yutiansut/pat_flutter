@@ -2,12 +2,13 @@ import 'dart:async' show Future;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:pat_flutter/pages/views/main_page.dart';
+// import 'package:intl/intl.dart';
 
 import './../../dbutils/DBhelper.dart' show Models;
-import './../models/category.dart' show categoryTypes, transactionTypes;
+import './../models/category.dart' show transactionTypes;
 
-// import './../../Xwidgets/Xcommon.dart' show getM2o;
+import './../../Xwidgets/fields.dart' show WidgetMany2One;
 
 Models models = Models();
 
@@ -53,7 +54,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   var amountController = TextEditingController();
   var categoryTypeController = TextEditingController();
   var transTypeController = TextEditingController();
-  List<DropdownMenuItem> categoryDropDownList;
+  Future categlistFeature = fetchCategoryFromDatabase();
   
 
   @override
@@ -75,33 +76,12 @@ class AccountDetailPageState extends State<AccountDetailPage> {
     if(recId != null) {
       nameController.text = listData['name'];
       amountController.text = listData['amount'].toString();
-      categoryTypeController.text = listData['categoryType'];
+      categoryTypeController.text = listData['categoryType'].toString();
       transTypeController.text = listData['transType'].toString();
     } else {
       transTypeController.text = '-';
-      categoryTypeController.text = '-';
     }
     setState(() {
-    });
-  }
-
-
-  buildAndGetDropDownMenuItems() async {
-    List<DropdownMenuItem> items;
-    // List<DropdownMenuItem<String>> items = List();
-    // items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
-    await fetchCategoryFromDatabase().then((lists){
-      items.add(DropdownMenuItem(value: '-', child: Text("No Data"),));
-      for (var i = 0; i < lists.length; i++) {
-        // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
-        items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
-        // items.add({'id': lists[i]['id'], 'name':  lists[i]['name']});
-      }
-      // setState(() {
-      //   this.categoryDropDownList = items;
-      // });
-      print(items);
-      return items;  
     });
   }
 
@@ -172,84 +152,22 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 },
                 onSaved: (val) => db.values['Accounts']['transType'] =  transTypeController.text,
               ),
-              DropdownButtonFormField(
-                decoration: InputDecoration(labelText: 'Category Type'),
-                value: (categoryTypeController.text != null) ? categoryTypeController.text : '-',
-                items: categoryTypes.map((item){
-                  return DropdownMenuItem(
-                    value: item,
-                    child:Text(item)
-                  );
-                }).toList()
-                ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
+              
+              WidgetMany2One(
+                tbl: 'Category',
+                valueKeyField: 'name',
+                defaultValue: {'-': 'No'},
+                valueField1: 'categoryType',
+                controllerText: categoryTypeController.text,
                 onChanged: (val){
-                  // print(val);
                   setState(() {
                     categoryTypeController.text = val;
                   });
                 },
-                onSaved: (val) => db.values['Accounts']['categoryType'] =  categoryTypeController.text,
+                onSaved: (val){
+                  db.values['Accounts']['categoryType'] =  categoryTypeController.text;
+                },
               ),
-              // FutureBuilder(
-              //   future: buildAndGetDropDownMenuItems(),
-              //   builder: (context, snapshot){
-              //     if(snapshot.hasData){
-              //       return DropdownButtonFormField(
-              //         decoration: InputDecoration(labelText: 'Category'),
-              //         value: '-',
-              //         items: [DropdownMenuItem(value: '-', child: Text("No Data"),)],
-              //         // ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
-              //         onChanged: (val){
-              //           // print(val);
-              //           setState(() {
-              //             categoryTypeController.text = val;
-              //             db.values['Accounts']['category'] =  categoryTypeController.text;
-              //           });
-              //         },
-              //       );
-              //     }
-              //   },
-              // ),
-              
-              
-              // TextFormField(
-              //   controller: parentIdController,
-              //   keyboardType: TextInputType.phone,
-              //   decoration: InputDecoration(labelText: 'Parent Category'),
-              //   validator: (val){
-              //     db.values['Category']['parentId'] =  parentIdController.text;
-              //   },
-              // ),
-              
-              /* Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  FutureBuilder(
-                    future: categoryListFeature,
-                    builder: (context, snapshot) {
-                      return DropdownButton(
-                        isExpanded: true,
-                        value: parentIdController.text,
-                        items: this.categoryDropDownList.map((Map item){
-                          return DropdownMenuItem<String>(
-                            value: item['id'].toString(),
-                            child: new Text(item['name']),
-                          );
-                        }).toList()
-                        ..add(DropdownMenuItem<String>(value: '0', child: Text('Default'),)),
-                        onChanged: (val){
-                          parentIdController.text = val;
-                          print(parentIdController.text);
-                          db.values['Category']['parentId'] =  parentIdController.text;
-                          setState(() {
-                            this._currentParentId = parentIdController.text;
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ), */
               
               Container(
                 margin: const EdgeInsets.only(top: 8.0),
@@ -276,17 +194,21 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   }
 
   void _submit() {
-    db.values['Accounts']['createDate'] = DateTime.now().toString();
-    if (this.accountFormKey.currentState.validate()) {
-      accountFormKey.currentState.save();
-    }else{
-      return null;
+    try {
+      db.values['Accounts']['createDate'] = DateTime.now().toString();
+      if (this.accountFormKey.currentState.validate()) {
+        accountFormKey.currentState.save();
+      }else{
+        return null;
+      }
+      db.save('Accounts');
+      // _showSnackBar("Data saved successfully");
+
+      moveToLastScreen();
+    } catch (e) {
+      _showSnackBar(e.toString());
+      throw e;
     }
-
-    db.save('Accounts');
-    _showSnackBar("Data saved successfully");
-
-    moveToLastScreen();
   }
 
   void _showSnackBar(String text) {
@@ -296,7 +218,8 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   
 
   void moveToLastScreen(){
-    Navigator.pop(context, true);
+    // Navigator.pop(context, true);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
   }
   
 }

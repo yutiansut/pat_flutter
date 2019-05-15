@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import './../../dbutils/DBhelper.dart' show Models;
 import './../models/category.dart' show categoryTypes;
+import '../../Xwidgets/fields.dart' show WidgetMany2One;
 
 // import './../../Xwidgets/Xcommon.dart' show getM2o;
 
@@ -73,19 +74,20 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
-    buildAndGetDropDownMenuItems(categoryListFeature);
+    // print(listData);
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
       categoryTypeController.text = listData['categoryType'];
       parentIdController.text = listData['parentId'].toString();
     } else {
-      parentIdController.text = '0';
-      categoryTypeController.text = '-';
+      // parentIdController.text = '0';
+      categoryTypeController.text = null;
     }
     setState(() {
       // this._currentParentId = parentIdController.text;
     });
+    // print(parentIdController.text);
   }
 
   getTheme() {
@@ -96,24 +98,6 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
           themeColor = Color(int.parse(res[0]['value']));
         });
       }
-    });
-  }
-
-
-  buildAndGetDropDownMenuItems(Future listItems) {
-    List<Map> items = List();
-    // List<DropdownMenuItem<String>> items = List();
-    // items.add(DropdownMenuItem(value: 0.toString(), child: new Text('Choose')));
-    listItems.then((lists){
-      for (var i = 0; i < lists.length; i++) {
-        // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
-        // items.add(DropdownMenuItem(value: lists[i]['id'].toString(), child: new Text(lists[i]['name'])));
-        items.add({'id': lists[i]['id'], 'name':  lists[i]['name']});
-      }
-      setState(() {
-        this.categoryDropDownList = items;
-      }); 
-      return items;  
     });
   }
 
@@ -158,14 +142,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                 },
                 onSaved: (val) => db.values['Category']['name'] = val,
               ),
-              // TextFormField(
-              //   controller: categoryTypeController,
-              //   keyboardType: TextInputType.text,
-              //   decoration: InputDecoration(labelText: 'Type'),
-              //   validator: (val){
-              //     db.values['Category']['categoryType'] =  categoryTypeController.text;
-              //   },
-              // ),
+              
               DropdownButtonFormField(
                 decoration: InputDecoration(labelText: 'Type'),
                 value: (categoryTypeController.text != null) ? categoryTypeController.text : '-',
@@ -185,44 +162,24 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                 },
                 onSaved: (val) => db.values['Category']['categoryType'] = categoryTypeController.text,
               ),
-              // TextFormField(
-              //   controller: parentIdController,
-              //   keyboardType: TextInputType.phone,
-              //   decoration: InputDecoration(labelText: 'Parent Category'),
-              //   validator: (val){
-              //     db.values['Category']['parentId'] =  parentIdController.text;
-              //   },
-              // ),
-              
-              /* Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  FutureBuilder(
-                    future: categoryListFeature,
-                    builder: (context, snapshot) {
-                      return DropdownButton(
-                        isExpanded: true,
-                        value: parentIdController.text,
-                        items: this.categoryDropDownList.map((Map item){
-                          return DropdownMenuItem<String>(
-                            value: item['id'].toString(),
-                            child: new Text(item['name']),
-                          );
-                        }).toList()
-                        ..add(DropdownMenuItem<String>(value: '0', child: Text('Default'),)),
-                        onChanged: (val){
-                          parentIdController.text = val;
-                          print(parentIdController.text);
-                          db.values['Category']['parentId'] =  parentIdController.text;
-                          setState(() {
-                            this._currentParentId = parentIdController.text;
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ), */
+
+              WidgetMany2One(
+                tbl: 'Category',
+                label: 'Parent Category',
+                defaultValue: {null.toString(): 'No-Data'},
+                valueField1: 'parentId',
+                controllerText: parentIdController.text,
+                onChanged: (val){
+                  // print(val);
+                  setState((){
+                    parentIdController.text = val.toString();
+                  });
+                },
+                onSaved: (val){
+                  // print(parentIdController.text);
+                  db.values['Category']['parentId'] = int.parse(parentIdController.text);
+                },
+              ),
               
               Container(
                 margin: const EdgeInsets.only(top: 10.0),
@@ -239,17 +196,23 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
   }
 
   void _submit() {
-    db.values['Category']['createDate'] = DateFormat.yMMMd().format(DateTime.now());
-    if (this.categoryFormKey.currentState.validate()) {
-      categoryFormKey.currentState.save();
-    }else{
-      return null;
+    try {
+      db.values['Category']['createDate'] = DateFormat.yMMMd().format(DateTime.now());
+      if (this.categoryFormKey.currentState.validate()) {
+        categoryFormKey.currentState.save();
+      }else{
+        return null;
+      }
+      // print(db.values['Category']);
+      db.save('Category');
+      _showSnackBar("Data saved successfully");
+
+      moveToLastScreen();
+    } catch (e) {
+      _showSnackBar(e.toString());
+      throw e;
     }
-
-    db.save('Category');
-    _showSnackBar("Data saved successfully");
-
-    moveToLastScreen();
+    
   }
 
   void _showSnackBar(String text) {

@@ -5,6 +5,8 @@ class Dialog{
 
   TextEditingController _textFieldController = TextEditingController();
 
+  // btn(txt, fn) => FlatButton(child: Text(txt), onPressed: fn, textColor: _c1);
+
 
   Future<bool> asyncConfirm(BuildContext context) async {
     return showDialog<bool>(

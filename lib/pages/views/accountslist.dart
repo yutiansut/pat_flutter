@@ -19,14 +19,21 @@ Future<List<Map>> fetchAccountsFromDatabase() async {
 }
 
 class AccountsPage extends StatefulWidget {
-
   
   @override
   _AccountsPageState createState() => _AccountsPageState();
 }
 
 class _AccountsPageState  extends State<AccountsPage>{
-  Future listViewFeature = fetchAccountsFromDatabase();
+  Future listViewFeature;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      listViewFeature = fetchAccountsFromDatabase();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class _AccountsPageState  extends State<AccountsPage>{
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    child: XListTile(index: index, desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType'], transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount'], createDate: snapshot.data[index]['createDate']),
+                    child: XListTile(index: index, desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType']??'', transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount'], createDate: snapshot.data[index]['createDate']),
                     onTap: (){
                       navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
                     },

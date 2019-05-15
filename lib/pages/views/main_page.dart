@@ -25,8 +25,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixin {
 
   final List<Tab> myTabs = <Tab>[
-    Tab(text: "Dashboard"),
     Tab(text: "Accounts"),
+    Tab(text: "Summary"),
   ];
 
   TabController _tabController;
@@ -175,102 +175,101 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
               body: TabBarView(
                 controller: _tabController,
                 children: [
-                  DashboardPage(),
                   AccountsPage(),
+                  DashboardPage(),
                 ],
               ),
               drawer: SizedBox(
-      width: 190.0,
-      child: Drawer(
-                child: Container(
-                  color: themeColor,
-                  child: ListView(
-                    padding: EdgeInsets.all(0),
-                    children: <Widget>[
-                      UserAccountsDrawerHeader(
-                        accountName: Text(conf.appAuthor),
-                        accountEmail: Text(conf.appEmail),
-                        currentAccountPicture: CircleAvatar(backgroundColor: Colors.black26,child: Text(conf.appAuthor[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: <Color>[ //7928D1
-                                // const Color(0xFF7928D2), const Color(0xFF9A4DFF)
-                                themeColor, themeColor
-                              ],
-                              stops: <double>[0.3, 0.5],
-                              begin: Alignment.topRight, end: Alignment.bottomLeft
+                width: 190.0,
+                child: Drawer(
+                  child: Container(
+                    color: themeColor,
+                    child: ListView(
+                      padding: EdgeInsets.all(0),
+                      children: <Widget>[
+                        UserAccountsDrawerHeader(
+                          accountName: Text(conf.appAuthor),
+                          accountEmail: Text(conf.appEmail),
+                          currentAccountPicture: CircleAvatar(backgroundColor: Colors.black26,child: Text(conf.appAuthor[0], style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold, color: Colors.white),),),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: <Color>[ //7928D1
+                                  // const Color(0xFF7928D2), const Color(0xFF9A4DFF)
+                                  themeColor, themeColor
+                                ],
+                                stops: <double>[0.3, 0.5],
+                                begin: Alignment.topRight, end: Alignment.bottomLeft
+                            ),
                           ),
                         ),
-                      ),
-                      // topArea(),
-                      ExpansionTile(
-                        title: Text("Pages", style: titleStyle),
-                        initiallyExpanded: false,
-                        trailing: Icon(Icons.pages, color: this.subIconColor),
-                        children: <Widget>[
-                          ListTile(
-                            title: Text("Dashboard", style: titleStyle),
-                            leading: Icon(Icons.access_alarm, color: this.subIconColor, size: 23),onTap: () => _tabController.animateTo((1 + 1) % 2),
-                          ),
-                          ListTile(
-                            title: Text("Accounts", style: titleStyle),
-                            leading: Icon(Icons.data_usage, color: subIconColor, size: 23),
-                            onTap: () {
-                              // _tabController.animateTo((_tabController.index + 1) % 2);
-                              _tabController.animateTo((2 + 1) % 2);
-                            },
-                          ),
-                        ],
-                      ),
-                      ExpansionTile(
-                        title: Text("Masters", style: titleStyle),
-                        trailing: Icon(Icons.compare_arrows, color: Colors.white,),
-                        children: <Widget>[
-                          ListTile(
-                            title: Text("Category", style: titleStyle),
-                            leading: Icon(Icons.view_compact, color: subIconColor, size: 23),
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => categList.MyCategoryList()));
-                            },
-                          ),
-                          // ListTile(
-                          //   title: Text("Account Type", style: titleStyle),
-                          //   leading: Icon(Icons.tab_unselected, color: subIconColor, size: 23),
-                          //   onTap: () {
-                          //     Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeList()));
-                          //   },
-                          // ),
-                        ],
-                      ),
+                        // topArea(),
+                        ExpansionTile(
+                          title: Text("Pages", style: titleStyle),
+                          initiallyExpanded: false,
+                          trailing: Icon(Icons.pages, color: this.subIconColor),
+                          children: <Widget>[
+                            ListTile(
+                              title: Text("Dashboard", style: titleStyle),
+                              leading: Icon(Icons.access_alarm, color: this.subIconColor, size: 23),onTap: () => _tabController.animateTo((1 + 1) % 2),
+                            ),
+                            ListTile(
+                              title: Text("Accounts", style: titleStyle),
+                              leading: Icon(Icons.data_usage, color: subIconColor, size: 23),
+                              onTap: () {
+                                // _tabController.animateTo((_tabController.index + 1) % 2);
+                                _tabController.animateTo((2 + 1) % 2);
+                              },
+                            ),
+                          ],
+                        ),
+                        ExpansionTile(
+                          title: Text("Masters", style: titleStyle),
+                          trailing: Icon(Icons.compare_arrows, color: Colors.white,),
+                          children: <Widget>[
+                            ListTile(
+                              title: Text("Category", style: titleStyle),
+                              leading: Icon(Icons.view_compact, color: subIconColor, size: 23),
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => categList.MyCategoryList()));
+                              },
+                            ),
+                            // ListTile(
+                            //   title: Text("Account Type", style: titleStyle),
+                            //   leading: Icon(Icons.tab_unselected, color: subIconColor, size: 23),
+                            //   onTap: () {
+                            //     Navigator.push(context, MaterialPageRoute(builder: (context) => AccountTypeList()));
+                            //   },
+                            // ),
+                          ],
+                        ),
 
-                      ExpansionTile(
-                        title: Text("Preferences", style: titleStyle),
-                        trailing: Icon(Icons.settings, color: Colors.white,),
-                        children: <Widget>[
-                          ExpansionTile(
-                            title: Text("Theme", style: titleStyle),
-                            leading: Icon(Icons.ac_unit, color: subIconColor, size: 23),
-                            children: themesList,
-                          ),
-                          ListTile(
-                            title: Text("Logout", style: titleStyle),
-                            leading: Icon(Icons.lock_outline, color: subIconColor, size: 23),
-                            onTap: () {
-                              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ),
+                        ExpansionTile(
+                          title: Text("Preferences", style: titleStyle),
+                          trailing: Icon(Icons.settings, color: Colors.white,),
+                          children: <Widget>[
+                            ExpansionTile(
+                              title: Text("Theme", style: titleStyle),
+                              leading: Icon(Icons.ac_unit, color: subIconColor, size: 23),
+                              children: themesList,
+                            ),
+                            ListTile(
+                              title: Text("Logout", style: titleStyle),
+                              leading: Icon(Icons.lock_outline, color: subIconColor, size: 23),
+                              onTap: () {
+                                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                ),
               ),
               floatingActionButton: FloatingActionButton(
                 elevation: 0.0,
                 
                 onPressed: () async {
-                  debugPrint('FAB clicked');
                   bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return AccountDetailPage("Add Entry", {});
                   }));
@@ -278,7 +277,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                     _tabController.animateTo((2 + 1) % 2);
                   }
                 },
-                tooltip: 'Add Account Type',
+                tooltip: 'Add Account Line',
 
                 child: Image(
                   width: 50,
@@ -293,32 +292,3 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     );
   } 
 }
-
-
-// DropdownButton _dropDownButtonList() => DropdownButton<String>(
-//   items: [
-//     DropdownMenuItem(
-//       value: "1",
-//       child: ListTile(
-//         title: Text("Accounts", style: titleStyle),
-//         trailing: Icon(Icons.data_usage, color: Colors.yellowAccent, size: 33),
-//         onTap: () {
-//           // _tabController.animateTo((_tabController.index + 1) % 2);
-//           _tabController.animateTo((2 + 1) % 2);
-//         },
-//       ),
-//     ),
-//     DropdownMenuItem(
-//       value: "2",
-//       child: Text(
-//         "Second",
-//       ),
-//     ),
-//   ],
-//   onChanged: (value) {
-//     setState(() {
-//       _value = value;
-//     });
-//   },
-//   value: _value,
-// );
