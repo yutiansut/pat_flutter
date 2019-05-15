@@ -45,7 +45,7 @@ class WidgetMany2OneState extends State<WidgetMany2One> {
     valueKeyField = widget.valueKeyField ?? 'id';
     valueField = widget.valueField ?? 'name';
     valueField1 = widget.valueField1 ?? '';
-    defaultValue = widget.defaultValue ?? {null.toString(): 'No-Data'};
+    defaultValue = widget.defaultValue ?? {'': 'No-Data'};
     label = widget.label ?? widget.tbl[0].toUpperCase() + widget.tbl.substring(1);
     controllerText = widget.controllerText;
   }
@@ -55,38 +55,41 @@ class WidgetMany2OneState extends State<WidgetMany2One> {
     return FutureBuilder<List<Map>>(
       future: tableDataFeature,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.done) {
           var data = snapshot.data;
           var dataLen = data.length;
-          dynamic dropItems = [DropdownMenuItem(value: defaultValue.keys.first, child: Text(defaultValue.values.first),)];
-          for (var i = 0; i < dataLen; i++) {
-            dropItems.add(
-              DropdownMenuItem(
-                value: data[i][valueKeyField].toString() ?? defaultValue.keys.first,
-                // value: '-',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(data[i][valueField]),
-                    SizedBox(width: 5,),
-                    Text((valueField1 != '' || valueField1 != null || valueField1 != '0') ? data[i][valueField1].toString() : '', style: TextStyle(fontSize: 12, color: Colors.grey[400])),
-                  ],
-                ),
-              )
+          if(dataLen > 0){
+            dynamic dropItems = [DropdownMenuItem(value: defaultValue.keys.first, child: Text(defaultValue.values.first),)];
+            for (var i = 0; i < dataLen; i++) {
+              dropItems.add(
+                DropdownMenuItem(
+                  value: data[i][valueKeyField].toString(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(data[i][valueField]),
+                      SizedBox(width: 5,),
+                      Text((valueField1 != '' || valueField1 != null || valueField1 != '0' || valueField1.length == 0) ? data[i][valueField1].toString() : '', style: TextStyle(fontSize: 12, color: Colors.grey[400])),
+                    ],
+                  ),
+                )
+              );
+            }
+            return DropdownButtonFormField(
+              decoration: InputDecoration(labelText: label),
+              value: validateStr(controllerText) ? controllerText : defaultValue.keys.first,
+              // value: defaultValue.keys.first,
+              items: dropItems,
+              onChanged: (val){
+                setState(() {
+                  controllerText = val;
+                  val = (val == null || val == '-') ? null : val;
+                  widget.onChanged(val);
+                });
+              },
+              onSaved: widget.onSaved,
             );
           }
-          return DropdownButtonFormField(
-            decoration: InputDecoration(labelText: label),
-            value: (controllerText != null) ? controllerText : defaultValue.keys.first,
-            items: dropItems,
-            onChanged: (val){
-              setState(() {
-                controllerText = val;
-                widget.onChanged(val);
-              });
-            },
-            onSaved: widget.onSaved,
-          );
         }
         return new Container(alignment: AlignmentDirectional.center,child: new CircularProgressIndicator(),);
       }
@@ -94,8 +97,7 @@ class WidgetMany2OneState extends State<WidgetMany2One> {
   }
 
   bool validateStr(String s){
-    print(s);
-    if (s != '' || s != 'null' || s != '0') {
+    if (s != '' || s != null || s != '0') {
       return true;
     }
     return false;

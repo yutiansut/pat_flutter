@@ -81,8 +81,8 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
       categoryTypeController.text = listData['categoryType'];
       parentIdController.text = listData['parentId'].toString();
     } else {
-      // parentIdController.text = '0';
-      categoryTypeController.text = null;
+      parentIdController.text = '0';
+      categoryTypeController.text = '-';
     }
     setState(() {
       // this._currentParentId = parentIdController.text;
@@ -157,7 +157,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                   // print(val);
                   setState(() {
                     categoryTypeController.text = val;
-                    db.values['Category']['categoryType'] =  categoryTypeController.text;
+                    // db.values['Category']['categoryType'] =  categoryTypeController.text;
                   });
                 },
                 onSaved: (val) => db.values['Category']['categoryType'] = categoryTypeController.text,
@@ -166,13 +166,13 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
               WidgetMany2One(
                 tbl: 'Category',
                 label: 'Parent Category',
-                defaultValue: {null.toString(): 'No-Data'},
+                defaultValue: {'0': 'No-Data'},
                 valueField1: 'parentId',
                 controllerText: parentIdController.text,
                 onChanged: (val){
                   // print(val);
                   setState((){
-                    parentIdController.text = val.toString();
+                    parentIdController.text = val;
                   });
                 },
                 onSaved: (val){

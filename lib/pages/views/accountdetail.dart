@@ -79,6 +79,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
       categoryTypeController.text = listData['categoryType'].toString();
       transTypeController.text = listData['transType'].toString();
     } else {
+      categoryTypeController.text = '';
       transTypeController.text = '-';
     }
     setState(() {
@@ -156,7 +157,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
               WidgetMany2One(
                 tbl: 'Category',
                 valueKeyField: 'name',
-                defaultValue: {'-': 'No'},
+                // defaultValue: {'': 'No'},
                 valueField1: 'categoryType',
                 controllerText: categoryTypeController.text,
                 onChanged: (val){
@@ -165,7 +166,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   });
                 },
                 onSaved: (val){
-                  db.values['Accounts']['categoryType'] =  categoryTypeController.text;
+                  db.values['Accounts']['categoryType'] =  categoryTypeController.text ?? '';
                 },
               ),
               
