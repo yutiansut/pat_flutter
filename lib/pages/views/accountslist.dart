@@ -99,7 +99,6 @@ class _AccountsPageState  extends State<AccountsPage>{
     bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
 		  return AccountDetailPage(title, listData);
 	  }));
-    // print(result);
 	  if (result == true) {
 	  	updateListView();
 	  }

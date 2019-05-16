@@ -69,7 +69,7 @@ class WidgetMany2OneState extends State<WidgetMany2One> {
                     children: <Widget>[
                       Text(data[i][valueField]),
                       SizedBox(width: 5,),
-                      Text((valueField1 != '' || valueField1 != null || valueField1 != '0' || valueField1.length == 0) ? data[i][valueField1].toString() : '', style: TextStyle(fontSize: 12, color: Colors.grey[400])),
+                      Text(validateStr(valueField1) ? data[i][valueField1].toString() : defaultValue.keys.first, style: TextStyle(fontSize: 12, color: Colors.grey[400])),
                     ],
                   ),
                 )
@@ -97,7 +97,7 @@ class WidgetMany2OneState extends State<WidgetMany2One> {
   }
 
   bool validateStr(String s){
-    if (s != '' || s != null || s != '0') {
+    if (s != '' || s != null || s != '0' || s.length == 0) {
       return true;
     }
     return false;

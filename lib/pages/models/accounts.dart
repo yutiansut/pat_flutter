@@ -18,5 +18,5 @@ String createQry = """
         $colCategoryType TEXT,
         $colTransType TEXT
         )
-     """;  // rec_name
-String defaultOrderBy = '$colAcDate ASC';  // rec_name
+     """;
+String defaultOrderBy = '$colAcDate ASC';
