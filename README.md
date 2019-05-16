@@ -9,6 +9,8 @@
 
    - [https://github.com/flutter/samples/blob/master/INDEX.md] A curated list of samples
 
+   - [https://medium.com/flutter-io/the-flutter-create-winners-are-40980f2d20b3] Flutter Create winners 2018
+
    - https://kodestat.gitbook.io/flutter/
 
    - https://www.flaticon.com/free-icon/
