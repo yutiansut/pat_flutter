@@ -11,6 +11,8 @@
 
    - [https://medium.com/flutter-io/the-flutter-create-winners-are-40980f2d20b3] Flutter Create winners 2018
 
+   - [https://github.com/MSzalek-Mobile/weight_tracker/blob/v0.2.1/lib/weight_entry_dialog.dart] DateTimeItem Widget
+
    - https://kodestat.gitbook.io/flutter/
 
    - https://www.flaticon.com/free-icon/

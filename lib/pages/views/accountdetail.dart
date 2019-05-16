@@ -56,6 +56,8 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   var categoryIdController = TextEditingController();
   var transTypeController = TextEditingController();
   Future categlistFeature = fetchCategoryFromDatabase();
+
+  DateTime _dateTime = new DateTime.now();
   
 
   @override
@@ -82,6 +84,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
         categoryIdController.text = listData['categoryId'].toString();
       }
       transTypeController.text = listData['transType'].toString();
+      // _dateTime = listData['acDate'];
     } else {
       categoryIdController.text = '';
       transTypeController.text = '';
@@ -100,16 +103,16 @@ class AccountDetailPageState extends State<AccountDetailPage> {
       key: accountScaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-          title: Text(this.title),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.view_list),
-              tooltip: 'Accounts List',
-              onPressed: () {
-                moveToLastScreen();
-              },
-            ),
-          ]
+        title: Text(this.title),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.view_list),
+            tooltip: 'Accounts List',
+            onPressed: () {
+              moveToLastScreen();
+            },
+          ),
+        ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -167,10 +170,20 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                   db.values['Accounts']['categoryId'] =  categoryIdController.text ?? '';
                 },
               ),
+
+              ListTile(
+                leading: new Icon(Icons.today, color: Colors.grey[500]),
+                title: new DateTimeItem(
+                  dateTime: _dateTime,
+                  onChanged: (dateTime) => setState(() => _dateTime = dateTime),
+                ),
+              ),
               
               Container(
                 margin: const EdgeInsets.only(top: 8.0),
                 child: RaisedButton(
+                  color: Colors.amber,
+                  shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(20.0)),
                   onPressed: _submit,
                   child: Text('Submit'),
                 ),

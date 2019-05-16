@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget
         // fontFamily: '',
       ),
       home: MainPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

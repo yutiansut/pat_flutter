@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pat_flutter/utils/download.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import './../../dbutils/DBhelper.dart' show Models;
@@ -170,6 +171,15 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                     },
                   ),
                   backgroundColor: themeColor,
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.file_download),
+                      onPressed: (){
+                        print("File Clicked");
+                        downloadFile('https://randomuser.me/api/?results=15', 'test.json');
+                      },
+                    ),
+                  ],
               ),
 
               body: TabBarView(

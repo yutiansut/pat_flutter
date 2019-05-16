@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import './../../dbutils/DBhelper.dart' show Models;
 import './../models/category.dart' show categoryTypes;
-import '../../Xwidgets/fields.dart' show WidgetMany2One, WidgetSelection;
+import '../../Xwidgets/fields.dart' show DateTimeItem, WidgetMany2One, WidgetSelection;
 
 // import './../../Xwidgets/Xcommon.dart' show getM2o;
 
