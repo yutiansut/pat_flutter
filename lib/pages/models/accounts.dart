@@ -5,7 +5,7 @@ String colName = 'name';
 String colAmount = 'amount';
 String colAcDate = 'acDate';
 String colCreateDate = 'createDate';
-String colCategoryType = 'categoryType';
+String colCategoryId = 'categoryId';
 String colTransType = "transType";
 
 String createQry = """
@@ -15,8 +15,12 @@ String createQry = """
         $colAmount REAL DEFAULT 0,
         $colAcDate DATETIME,
         $colCreateDate TEXT,
-        $colCategoryType TEXT,
-        $colTransType TEXT
+        $colCategoryId INTEGER,
+        $colTransType TEXT,
+        CONSTRAINT fk_CategoryId
+          FOREIGN KEY ($colCategoryId)
+          REFERENCES Category(id)
+          ON DELETE SET NULL
         )
      """;
 String defaultOrderBy = '$colAcDate ASC';

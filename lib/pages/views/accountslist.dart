@@ -15,8 +15,19 @@ Dialog.Dialog dialog = Dialog.Dialog();
 
 //Future<List<Map<String, dynamic>>>
 Future<List<Map>> fetchAccountsFromDatabase() async {
-  return models.getTableData('Accounts', orderBy: 'createDate ASC');
+  String qry = """
+    select 
+      ac.*,
+      cat.name as categoryName,
+      cat.categoryType
+    from Accounts ac
+    left join Category cat on cat.id = ac.categoryId
+  """;
+  Future<List<Map>> result = models.rawQuery(qry);
+  // return models.getTableData('Accounts', orderBy: 'createDate ASC');
+  return result;
 }
+
 
 class AccountsPage extends StatefulWidget {
   
@@ -26,6 +37,7 @@ class AccountsPage extends StatefulWidget {
 
 class _AccountsPageState  extends State<AccountsPage>{
   Future listViewFeature;
+  Map categoryM2O;
 
   @override
   void initState() {
@@ -48,7 +60,15 @@ class _AccountsPageState  extends State<AccountsPage>{
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    child: XListTile(index: index, desc: snapshot.data[index]['name'], category: snapshot.data[index]['categoryType']??'', transactionType: snapshot.data[index]['transType'], amount: snapshot.data[index]['amount'], createDate: snapshot.data[index]['createDate']),
+                    child: XListTile(
+                      index: index,
+                      desc: snapshot.data[index]['name'],
+                      category: snapshot.data[index]['categoryName'] ?? '',
+                      categoryType: snapshot.data[index]['categoryType'] ?? '',
+                      transactionType: snapshot.data[index]['transType'],
+                      amount: snapshot.data[index]['amount'],
+                      createDate: snapshot.data[index]['createDate']
+                    ),
                     onTap: (){
                       navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
                     },

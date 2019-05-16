@@ -2,13 +2,14 @@ import 'dart:async' show Future;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pat_flutter/Xwidgets/fields.dart';
 import 'package:pat_flutter/pages/views/main_page.dart';
 // import 'package:intl/intl.dart';
 
 import './../../dbutils/DBhelper.dart' show Models;
 import './../models/category.dart' show transactionTypes;
 
-import './../../Xwidgets/fields.dart' show WidgetMany2One;
+import './../../Xwidgets/fields.dart' show WidgetMany2One, WidgetSelection;
 
 Models models = Models();
 
@@ -52,7 +53,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
   var nameController = TextEditingController();
   var amountController = TextEditingController();
-  var categoryTypeController = TextEditingController();
+  var categoryIdController = TextEditingController();
   var transTypeController = TextEditingController();
   Future categlistFeature = fetchCategoryFromDatabase();
   
@@ -76,11 +77,11 @@ class AccountDetailPageState extends State<AccountDetailPage> {
     if(recId != null) {
       nameController.text = listData['name'];
       amountController.text = listData['amount'].toString();
-      categoryTypeController.text = listData['categoryType'].toString();
+      categoryIdController.text = listData['categoryId'].toString();
       transTypeController.text = listData['transType'].toString();
     } else {
-      categoryTypeController.text = '';
-      transTypeController.text = '-';
+      // categoryIdController.text = '';
+      // transTypeController.text = '';
     }
     setState(() {
     });
@@ -135,18 +136,12 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 },
                 onSaved: (val) => db.values['Accounts']['amount'] =  double.parse(amountController.text),
               ),
-              DropdownButtonFormField(
-                decoration: InputDecoration(labelText: 'Transaction Type'),
-                value: (transTypeController.text != null) ? transTypeController.text : '-',
-                items: transactionTypes.map((item){
-                  return DropdownMenuItem(
-                    value: item,
-                    child:Text(item)
-                  );
-                }).toList()
-                ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
+              
+              WidgetSelection(
+                label: 'TransactionType',
+                controllerText: transTypeController.text,
+                items: transactionTypes,
                 onChanged: (val){
-                  // print(val);
                   setState(() {
                     transTypeController.text = val;
                   });
@@ -156,17 +151,17 @@ class AccountDetailPageState extends State<AccountDetailPage> {
               
               WidgetMany2One(
                 tbl: 'Category',
-                valueKeyField: 'name',
+                // valueKeyField: 'name',
                 // defaultValue: {'': 'No'},
                 valueField1: 'categoryType',
-                controllerText: categoryTypeController.text,
+                controllerText: categoryIdController.text,
                 onChanged: (val){
                   setState(() {
-                    categoryTypeController.text = val;
+                    categoryIdController.text = val;
                   });
                 },
                 onSaved: (val){
-                  db.values['Accounts']['categoryType'] =  categoryTypeController.text ?? '';
+                  db.values['Accounts']['categoryId'] =  categoryIdController.text ?? '';
                 },
               ),
               

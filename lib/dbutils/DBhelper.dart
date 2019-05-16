@@ -47,4 +47,5 @@ class Models extends DBInterface{
   Future<List<Map>> getTableData(String table, {String orderBy: 'name ASC'}) async {
     return await this.rawQuery('SELECT * FROM $table order by $orderBy');
   }
+
 }

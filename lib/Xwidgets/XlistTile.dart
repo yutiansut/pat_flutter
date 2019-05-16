@@ -5,12 +5,13 @@ class XListTile extends StatefulWidget {
   int index;
   String desc = "";
   String category = "";
+  String categoryType = "";
   String transactionType = "";
   double amount = 0.0;
   String createDate;
   Widget leading = Icon(Icons.account_balance_wallet);
 
-  XListTile({Key key, this.index, @required this.desc, this.createDate, @required this.category, this.transactionType, this.amount, this.leading}): super(key: key);
+  XListTile({Key key, this.index, @required this.desc, this.createDate, @required this.category, this.categoryType, this.transactionType, this.amount, this.leading}): super(key: key);
 
   @override
   _XListTileState createState() => _XListTileState();
@@ -47,12 +48,12 @@ class _XListTileState  extends State<XListTile>{
     //     Divider()
     //   ],
     // );
-    String amtStr = ((widget.category == 'Lend' || widget.category == 'Expense') ? '-' : '+') + r" ₹ "+ widget.amount.toString();
+    String amtStr = ((widget.categoryType == 'Lend' || widget.categoryType == 'Expense') ? '-' : '+') + r" ₹ "+ widget.amount.toString();
     
-    return accountItems(widget.desc, amtStr , widget.createDate != null ? DateFormat.yMMMd().format(DateTime.parse(widget.createDate))  : '', widget.category , widget.transactionType, oddColour: oddColor);
+    return accountItems(widget.desc, amtStr , widget.createDate != null ? DateFormat.yMMMd().format(DateTime.parse(widget.createDate))  : '', widget.category , widget.categoryType, widget.transactionType, oddColour: oddColor);
   }
 
-  Container accountItems(String item, String charge, String dateString, String category, String type,{Color oddColour = Colors.white}) =>
+  Container accountItems(String item, String charge, String dateString, String category, String categoryType, String type,{Color oddColour = Colors.white}) =>
       Container(
         decoration: BoxDecoration(color: oddColour),
         padding:
@@ -63,7 +64,7 @@ class _XListTileState  extends State<XListTile>{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(dateString, style: TextStyle(color: Colors.grey, fontSize: 14.0, fontStyle: FontStyle.italic )),
-                Text(category + ' / ' + type, style: TextStyle(color: Colors.grey, fontSize: 14.0, fontStyle: FontStyle.italic ))
+                Text(type + ' / ' + categoryType + ' / ' + category, style: TextStyle(color: Colors.grey, fontSize: 14.0, fontStyle: FontStyle.italic ))
               ],
             ),
             SizedBox(
@@ -74,7 +75,7 @@ class _XListTileState  extends State<XListTile>{
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Flexible(child: Text(item, style: TextStyle(fontSize: 16.0))),
-                Text(charge, style: TextStyle(fontSize: 16.0, color: ((widget.category == 'Lend' || widget.category == 'Expense') ? Colors.red : Colors.green), fontStyle: FontStyle.italic ))
+                Text(charge, style: TextStyle(fontSize: 16.0, color: ((widget.categoryType == 'Lend' || widget.categoryType == 'Expense') ? Colors.red : Colors.green), fontStyle: FontStyle.italic ))
               ],
             ),
           ],

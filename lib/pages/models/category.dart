@@ -27,6 +27,10 @@ String createQry = """
         $colCreateDate TEXT,
         $colCategoryType TEXT,
         $colParentId INTEGER,
-        FOREIGN KEY($colParentId) REFERENCES $categoryTable($colId)) ON DELETE SET NULL
+        CONSTRAINT fk_CategoryId
+          FOREIGN KEY($colParentId)
+          REFERENCES $categoryTable($colId)
+          ON DELETE SET NULL
+        )
      """;
 String defaultOrderBy = '$colName ASC';

@@ -10,6 +10,13 @@ Future<List<Map>> fetchTableFromDatabase(tbl) async {
   return models.getTableData(tbl);
 }
 
+bool validateStr(String s){
+  if (s != '' || s != null || s != '0' || s.length == 0) {
+    return true;
+  }
+  return false;
+}
+
 class WidgetMany2One extends StatefulWidget {
   
   final String label;
@@ -94,12 +101,56 @@ class WidgetMany2OneState extends State<WidgetMany2One> {
         return new Container(alignment: AlignmentDirectional.center,child: new CircularProgressIndicator(),);
       }
     );
+  }  
+}
+
+class WidgetSelection extends StatefulWidget {
+  final String label;
+  final String controllerText;
+  final String defaultValue;
+  final List items;
+  final onChanged;
+  final onSaved;
+
+  WidgetSelection({Key key, @required this.label, @required this.controllerText, this.defaultValue, @required this.items, this.onChanged, this.onSaved}) : super(key: key);
+
+  _WidgetSelectionState createState() => _WidgetSelectionState();
+}
+
+class _WidgetSelectionState extends State<WidgetSelection> {
+
+  String controllerText;
+  String defaultValue;
+  List items;
+
+  @override
+  void initState() {
+    super.initState();
+    defaultValue = widget.defaultValue ?? '';
+    controllerText = widget.controllerText;
+    items = widget.items;
   }
 
-  bool validateStr(String s){
-    if (s != '' || s != null || s != '0' || s.length == 0) {
-      return true;
-    }
-    return false;
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      decoration: InputDecoration(labelText: widget.label),
+      value: validateStr(controllerText) ? controllerText : defaultValue,
+      items: items.map((item){
+        return DropdownMenuItem(
+          value: item,
+          child:Text(item)
+        );
+      }).toList()
+      ..add(DropdownMenuItem(value: defaultValue, child: Text(defaultValue),)),
+      onChanged: (val){
+        setState(() {
+          controllerText = val;
+          val = (val == null || val == '') ? null : val;
+          widget.onChanged(val);
+        });
+      },
+      onSaved: widget.onSaved,
+    );
   }
 }
