@@ -209,8 +209,8 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                           trailing: Icon(Icons.pages, color: this.subIconColor),
                           children: <Widget>[
                             ListTile(
-                              title: Text("Dashboard", style: titleStyle),
-                              leading: Icon(Icons.access_alarm, color: this.subIconColor, size: 23),onTap: () => _tabController.animateTo((1 + 1) % 2),
+                              title: Text("Summary", style: titleStyle),
+                              leading: Icon(Icons.show_chart, color: this.subIconColor, size: 23),onTap: () => _tabController.animateTo((1 + 1) % 2),
                             ),
                             ListTile(
                               title: Text("Accounts", style: titleStyle),

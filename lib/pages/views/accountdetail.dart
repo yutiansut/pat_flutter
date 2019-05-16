@@ -73,15 +73,18 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
+    print(listData);
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
       amountController.text = listData['amount'].toString();
-      categoryIdController.text = listData['categoryId'].toString();
+      if(listData['categoryName'] != null){
+        categoryIdController.text = listData['categoryId'].toString();
+      }
       transTypeController.text = listData['transType'].toString();
     } else {
-      // categoryIdController.text = '';
-      // transTypeController.text = '';
+      categoryIdController.text = '';
+      transTypeController.text = '';
     }
     setState(() {
     });

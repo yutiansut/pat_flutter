@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 
 import './../../dbutils/DBhelper.dart' show Models;
 import './../models/category.dart' show categoryTypes;
-import '../../Xwidgets/fields.dart' show WidgetMany2One;
+import '../../Xwidgets/fields.dart' show WidgetMany2One, WidgetSelection;
 
 // import './../../Xwidgets/Xcommon.dart' show getM2o;
 
@@ -82,7 +82,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
       parentIdController.text = listData['parentId'].toString();
     } else {
       parentIdController.text = '0';
-      categoryTypeController.text = '-';
+      categoryTypeController.text = '';
     }
     setState(() {
       // this._currentParentId = parentIdController.text;
@@ -110,6 +110,7 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
 
     return Scaffold(
       key: categoryScaffoldKey,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
           title: Text(this.title),
           // backgroundColor: themeColor,
@@ -143,21 +144,32 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
                 onSaved: (val) => db.values['Category']['name'] = val,
               ),
               
-              DropdownButtonFormField(
-                decoration: InputDecoration(labelText: 'Type'),
-                value: (categoryTypeController.text != null) ? categoryTypeController.text : '-',
-                items: categoryTypes.map((item){
-                  return DropdownMenuItem(
-                    value: item,
-                    child:Text(item)
-                  );
-                }).toList()
-                ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
+              // DropdownButtonFormField(
+              //   decoration: InputDecoration(labelText: 'Type'),
+              //   value: (categoryTypeController.text != null) ? categoryTypeController.text : '-',
+              //   items: categoryTypes.map((item){
+              //     return DropdownMenuItem(
+              //       value: item,
+              //       child:Text(item)
+              //     );
+              //   }).toList()
+              //   ..add(DropdownMenuItem(value: '-', child: Text("No Data"),)),
+              //   onChanged: (val){
+              //     // print(val);
+              //     setState(() {
+              //       categoryTypeController.text = val;
+              //       // db.values['Category']['categoryType'] =  categoryTypeController.text;
+              //     });
+              //   },
+              //   onSaved: (val) => db.values['Category']['categoryType'] = categoryTypeController.text,
+              // ),
+              WidgetSelection(
+                label: 'Type',
+                controllerText: categoryTypeController.text,
+                items: categoryTypes,
                 onChanged: (val){
-                  // print(val);
                   setState(() {
                     categoryTypeController.text = val;
-                    // db.values['Category']['categoryType'] =  categoryTypeController.text;
                   });
                 },
                 onSaved: (val) => db.values['Category']['categoryType'] = categoryTypeController.text,
