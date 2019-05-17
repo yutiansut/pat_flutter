@@ -9,5 +9,5 @@ List createTables = [
 ];
 
 void main() {
-  print("----");
+  print("--Init Models--");
 }

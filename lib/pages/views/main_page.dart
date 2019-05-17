@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:pat_flutter/utils/download.dart';
+import './../../dbutils/download.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import './../../dbutils/DBhelper.dart' show Models;
@@ -9,6 +9,7 @@ import 'accountslist.dart';
 import './categorylist.dart' as categList;
 import './accountdetail.dart' show AccountDetailPage;
 import './../../Xwidgets/XDialog.dart' as Dialog;
+
 Dialog.Dialog dialog = Dialog.Dialog();
 
 Models models = Models();
@@ -24,6 +25,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixin {
+
+  final mainScaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<Tab> myTabs = <Tab>[
     Tab(text: "Accounts"),
@@ -77,8 +80,13 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     });
   }
 
+  void showSnackBar(String text) {
+    mainScaffoldKey.currentState.showSnackBar(SnackBar(content: Text(text)));
+  }
+
   @override
   Widget build(BuildContext context) {
+
     TextStyle titleStyle = TextStyle(color: Colors.white);
     
     
@@ -158,6 +166,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
         home: DefaultTabController(
             length: 2,
             child: Scaffold(
+              key: mainScaffoldKey,
               // backgroundColor: themeColor,
               appBar: AppBar(
                   title: Text(conf.appName, textAlign: TextAlign.center,),
@@ -174,9 +183,24 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.file_download),
-                      onPressed: (){
+                      tooltip: 'Create Json File',
+                      onPressed: () async {
                         print("File Clicked");
-                        downloadFile('https://randomuser.me/api/?results=15', 'test.json');
+                        // downloadFile('https://randomuser.me/api/?results=15', 'test.json');
+                        var dumpJson = await models.saveDumpDb();
+                        print(dumpJson.path);
+                        showSnackBar("Data Saved to " + dumpJson.path);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.file_upload),
+                      tooltip: 'Get Local Stored Json File',
+                      onPressed: () async {
+                        print("File Clicked");
+                        // downloadFile('https://randomuser.me/api/?results=15', 'test.json');
+                        var dumpJson = await models.readLocalJsonDb();
+                        print(dumpJson);
+                        showSnackBar("Data Saved to " + dumpJson.toString());
                       },
                     ),
                   ],
@@ -300,5 +324,5 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
             ),
         ),
     );
-  } 
+  }
 }

@@ -24,11 +24,27 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
-
+import 'package:simple_permissions/simple_permissions.dart';
 
 class Files {
 
+  static bool _allowWriteFile = false;
+  
+  void main() {
+    requestWritePermission();
+  }
+
   static String _path;
+
+  Future<bool> requestWritePermission() async {
+    PermissionStatus permissionStatus = await SimplePermissions.requestPermission(Permission.WriteExternalStorage);
+
+    if (permissionStatus == PermissionStatus.authorized) {
+      _allowWriteFile = true;
+      return _allowWriteFile;
+    }
+    return _allowWriteFile;
+  }
 
   static Future<String> get localPath async {
 
@@ -68,15 +84,20 @@ class Files {
 
 
   static Future<File> write(String fileName, String content) async {
+    if(!_allowWriteFile){
+      await Files().requestWritePermission();
+    }
     var file = await get(fileName);
     // Write the file
     return writeFile(file, content);
   }
 
 
-
   static Future<File> writeFile(File file, String content) async {
     // Write the file
+    if(!_allowWriteFile){
+      await Files().requestWritePermission();
+    }
     return file.writeAsString(content, flush: true);
   }
 
@@ -91,4 +112,5 @@ class Files {
     var path = await localPath;
     return File('$path/$fileName');
   }
+  
 }

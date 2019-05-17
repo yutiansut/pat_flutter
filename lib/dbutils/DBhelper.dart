@@ -1,6 +1,9 @@
 
 import 'dart:async' show Future;
+import 'dart:io';
+import 'dart:convert';
 
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' show Database;
 
 import 'sqllitedb.dart' show DBInterface;
@@ -8,6 +11,8 @@ import 'sqllitedb.dart' show DBInterface;
 import './../config/config.dart' as conf;
 
 import 'initModels.dart' as initModels;
+
+import 'files.dart';
 
 
 class Models extends DBInterface{
@@ -45,7 +50,53 @@ class Models extends DBInterface{
   }
 
   Future<List<Map>> getTableData(String table, {String orderBy: 'name ASC'}) async {
-    return await this.rawQuery('SELECT * FROM $table order by $orderBy');
+    try {
+      return await this.rawQuery('SELECT * FROM $table order by $orderBy');
+    } catch (e) {
+      return await this.rawQuery('SELECT * FROM $table');
+    }
   }
 
+  Future<String> getDumpJson() async{
+    List dumpJson = [];
+    List tblNames = await this.tableNames();
+    for (var i = 0; i < tblNames.length; i++) {
+      var tblName = tblNames[i]['name'];
+      if(tblName != 'android_metadata'){
+        var tblData = await this.getTableData(tblName);
+        dumpJson.add({
+          'table': tblName,
+          'rows': tblData
+        });
+      }
+    }
+    return jsonEncode(dumpJson);
+  }
+
+  Future<File> loadLocalJsonDb() async {
+    var extPath = (await getApplicationDocumentsDirectory()).path;
+    String filePath = extPath + "/test.json";
+    File file = new File(filePath);
+    if(await file.exists()){
+      return file;
+    }
+    return file;
+  }
+
+
+  Future<File> saveDumpDb() async {
+    // Json 
+    var dumpJson = await this.getDumpJson();
+    // get Local Json DB
+    var dbFile = await loadLocalJsonDb();
+    await Files.writeFile(dbFile, dumpJson);  
+    return dbFile;
+  }
+
+  Future<List> readLocalJsonDb() async {
+    var dbFile = await loadLocalJsonDb();
+    var strData = await Files.readFile(dbFile);
+    List json = jsonDecode(strData);
+    return json;
+  }
 }

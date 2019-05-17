@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:pat_flutter/utils/files.dart';
+import 'files.dart';
 import 'package:path_provider/path_provider.dart';
 
 
@@ -11,7 +11,9 @@ Future<File> downloadFile(String url, String filename) async {
     var bytes = req.bodyBytes;
     String dir = (await getApplicationDocumentsDirectory()).path;
     print(dir);
-    File file = new File('$dir/$filename');
+    String extDir = (await getExternalStorageDirectory()).path;
+    print(extDir);
+    File file = new File('$extDir/$filename');
     // print(req.body);
     // await file.writeAsBytes(bytes);
     await Files.writeFile(file, req.body);
