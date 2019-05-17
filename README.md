@@ -13,6 +13,8 @@
 
    - [https://github.com/MSzalek-Mobile/weight_tracker/blob/v0.2.1/lib/weight_entry_dialog.dart] DateTimeItem Widget
 
+   - [https://www.woolha.com/tutorials/flutter-reading-and-writing-files-example] File operations - Crud
+
    - https://kodestat.gitbook.io/flutter/
 
    - https://www.flaticon.com/free-icon/
