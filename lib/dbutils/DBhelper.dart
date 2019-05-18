@@ -94,9 +94,12 @@ class Models extends DBInterface{
   }
 
   Future<List> readLocalJsonDb() async {
+    List json = [];
     var dbFile = await loadLocalJsonDb();
     var strData = await Files.readFile(dbFile);
-    List json = jsonDecode(strData);
+    if(strData != "") {
+      json = jsonDecode(strData);
+    }
     return json;
   }
 }

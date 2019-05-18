@@ -2,8 +2,10 @@ import 'dart:async' show Future;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pat_flutter/Xwidgets/fields.dart';
 import 'package:pat_flutter/pages/views/main_page.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 // import 'package:intl/intl.dart';
 
 import './../../dbutils/DBhelper.dart' show Models;
@@ -48,6 +50,13 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
   Models db = models;
 
+  final formats = {
+    InputType.both: DateFormat("EEEE, MMMM d, yyyy 'at' h:mma"),
+    InputType.date: DateFormat('yyyy-MM-dd'),
+    InputType.time: DateFormat("HH:mm"),
+  };
+
+
   final accountScaffoldKey = GlobalKey<ScaffoldState>();
   final accountFormKey = GlobalKey<FormState>();
 
@@ -57,8 +66,8 @@ class AccountDetailPageState extends State<AccountDetailPage> {
   var transTypeController = TextEditingController();
   Future categlistFeature = fetchCategoryFromDatabase();
 
-  DateTime _dateTime = new DateTime.now();
-  
+  DateTime dateTime;
+  InputType inputType = InputType.both;
 
   @override
   initState(){
@@ -171,12 +180,17 @@ class AccountDetailPageState extends State<AccountDetailPage> {
                 },
               ),
 
-              ListTile(
-                leading: new Icon(Icons.today, color: Colors.grey[500]),
-                title: new DateTimeItem(
-                  dateTime: _dateTime,
-                  onChanged: (dateTime) => setState(() => _dateTime = dateTime),
-                ),
+              DateTimePickerFormField(
+                inputType: inputType,
+                format: formats[inputType],
+                editable: true,
+                decoration: InputDecoration(labelText: 'Date/Time'),
+                // onChanged: (dt) {
+                //   setState(() => dateTime = dt);
+                // },
+                onSaved:(dt){
+                  db.values['Accounts']['acDate'] =  dt.toString();
+                },
               ),
               
               Container(

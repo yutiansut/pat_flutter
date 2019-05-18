@@ -99,7 +99,7 @@ class AcTypeDetailState extends State<AcTypeDetail> {
 						    controller: nameController,
 						    style: textStyle,
 						    onChanged: (value) {
-						    	debugPrint('Something changed in Title Text Field');
+						    	// debugPrint('Something changed in Title Text Field');
 						    	updateName();
 						    },
 						    decoration: InputDecoration(
@@ -147,7 +147,7 @@ class AcTypeDetailState extends State<AcTypeDetail> {
 									    ),
 									    onPressed: () {
 									    	setState(() {
-									    	  debugPrint("Save button clicked");
+									    	  // debugPrint("Save button clicked");
 									    	  _save();
 									    	});
 									    },
@@ -166,7 +166,7 @@ class AcTypeDetailState extends State<AcTypeDetail> {
 									    ),
 									    onPressed: () {
 										    setState(() {
-											    debugPrint("Delete button clicked");
+											    // debugPrint("Delete button clicked");
 											    _delete();
 										    });
 									    },

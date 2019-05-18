@@ -50,7 +50,8 @@ class _XListTileState  extends State<XListTile>{
     // );
     String amtStr = ((widget.categoryType == 'Lend' || widget.categoryType == 'Expense') ? '-' : '+') + r" ₹ "+ widget.amount.toString();
     
-    return accountItems(widget.desc, amtStr , widget.createDate != null ? DateFormat.yMMMd().format(DateTime.parse(widget.createDate))  : '', widget.category , widget.categoryType, widget.transactionType, oddColour: oddColor);
+    // return accountItems(widget.desc, amtStr , widget.createDate != null ? DateFormat.yMMMd().format(DateTime.parse(widget.createDate))  : '', widget.category , widget.categoryType, widget.transactionType, oddColour: oddColor);
+    return accountItems(widget.desc, amtStr , widget.createDate != null ? DateFormat("EEEE, MMMM d, yyyy 'at' h:mma").format(DateTime.parse(widget.createDate))  : '', widget.category , widget.categoryType, widget.transactionType, oddColour: oddColor);
   }
 
   Container accountItems(String item, String charge, String dateString, String category, String categoryType, String type,{Color oddColour = Colors.white}) =>

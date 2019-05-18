@@ -1,6 +1,8 @@
+// import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import './../../dbutils/download.dart';
+// import './../../dbutils/download.dart';
 import '../../config/config.dart' as conf;
 import '../../styles/styles.dart' as stylex;
 import './../../dbutils/DBhelper.dart' show Models;
@@ -9,6 +11,7 @@ import 'accountslist.dart';
 import './categorylist.dart' as categList;
 import './accountdetail.dart' show AccountDetailPage;
 import './../../Xwidgets/XDialog.dart' as Dialog;
+// import 'package:file_picker/file_picker.dart';
 
 Dialog.Dialog dialog = Dialog.Dialog();
 
@@ -163,6 +166,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: DefaultTabController(
             length: 2,
             child: Scaffold(
@@ -193,16 +197,28 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.file_upload),
+                      icon: Icon(Icons.grain),
                       tooltip: 'Get Local Stored Json File',
                       onPressed: () async {
                         print("File Clicked");
                         // downloadFile('https://randomuser.me/api/?results=15', 'test.json');
                         var dumpJson = await models.readLocalJsonDb();
                         print(dumpJson);
-                        showSnackBar("Data Saved to " + dumpJson.toString());
+                        showSnackBar("Data get " + dumpJson.toString());
                       },
                     ),
+                    // IconButton(
+                    //   icon: Icon(Icons.file_upload),
+                    //   tooltip: 'Get Local Stored Json File',
+                    //   onPressed: () async {
+                    //     print("File Clicked");
+                    //     // downloadFile('https://randomuser.me/api/?results=15', 'test.json');
+                    //     // File file = await FilePicker.getFile(type: FileType.CUSTOM, fileExtension: 'json');
+                    //     // var dumpJson = await file.readAsString();
+                    //     // print(file);
+                    //     // showSnackBar("Data get " + dumpJson.toString());
+                    //   },
+                    // ),
                   ],
               ),
 

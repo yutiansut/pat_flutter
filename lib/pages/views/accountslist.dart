@@ -67,7 +67,7 @@ class _AccountsPageState  extends State<AccountsPage>{
                       categoryType: snapshot.data[index]['categoryType'] ?? '',
                       transactionType: snapshot.data[index]['transType'],
                       amount: snapshot.data[index]['amount'],
-                      createDate: snapshot.data[index]['createDate']
+                      createDate: snapshot.data[index]['acDate']
                     ),
                     onTap: (){
                       navigateToAccountDetail("Edit Entry(" + snapshot.data[index]['id'].toString() + ")", snapshot.data[index]);
