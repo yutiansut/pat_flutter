@@ -165,9 +165,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     
     
 
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: DefaultTabController(
+    return DefaultTabController(
             length: 2,
             child: Scaffold(
               key: mainScaffoldKey,
@@ -189,10 +187,10 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                       icon: Icon(Icons.file_download),
                       tooltip: 'Create Json File',
                       onPressed: () async {
-                        print("File Clicked");
+                        // print("File Clicked");
                         // downloadFile('https://randomuser.me/api/?results=15', 'test.json');
                         var dumpJson = await models.saveDumpDb();
-                        print(dumpJson.path);
+                        // print(dumpJson.path);
                         showSnackBar("Data Saved to " + dumpJson.path);
                       },
                     ),
@@ -200,10 +198,10 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                       icon: Icon(Icons.grain),
                       tooltip: 'Get Local Stored Json File',
                       onPressed: () async {
-                        print("File Clicked");
+                        // print("File Clicked");
                         // downloadFile('https://randomuser.me/api/?results=15', 'test.json');
                         var dumpJson = await models.readLocalJsonDb();
-                        print(dumpJson);
+                        // print(dumpJson);
                         showSnackBar("Data get " + dumpJson.toString());
                       },
                     ),
@@ -338,7 +336,6 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
 
               ),
             ),
-        ),
-    );
+        );
   }
 }

@@ -12,7 +12,10 @@ Future<List<Map>> fetchTableFromDatabase(tbl) async {
 }
 
 bool validateStr(String s){
-  if (s != '' || s != null || s != '0' || s.length == 0) {
+  if(s == 'null' || s == null || s.isEmpty){
+    return false;
+  }
+  if (s != '0' || s.length == 0) {
     return true;
   }
   return false;
@@ -134,7 +137,7 @@ class _WidgetSelectionState extends State<WidgetSelection> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField(
+    return DropdownButtonFormField( 
       decoration: InputDecoration(labelText: widget.label),
       value: validateStr(controllerText) ? controllerText : defaultValue,
       items: items.map((item){

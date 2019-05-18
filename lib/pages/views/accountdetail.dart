@@ -84,7 +84,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
-    print(listData);
+    // print(listData);
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
@@ -93,7 +93,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
         categoryIdController.text = listData['categoryId'].toString();
       }
       transTypeController.text = listData['transType'].toString();
-      // _dateTime = listData['acDate'];
+      dateTime = DateTime.parse(listData['acDate']);
     } else {
       categoryIdController.text = '';
       transTypeController.text = '';
@@ -181,6 +181,7 @@ class AccountDetailPageState extends State<AccountDetailPage> {
               ),
 
               DateTimePickerFormField(
+                initialValue: dateTime,
                 inputType: inputType,
                 format: formats[inputType],
                 editable: true,

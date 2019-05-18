@@ -74,14 +74,14 @@ class CategoryDetailPageState extends State<CategoryDetailPage> {
 
   // Initiate Form view values
   initFormDefaultValues(Map listData){
-    // print(listData);
+    print(listData);
     int recId = listData['id'];
     if(recId != null) {
       nameController.text = listData['name'];
       categoryTypeController.text = listData['categoryType'];
       parentIdController.text = listData['parentId'].toString();
     } else {
-      parentIdController.text = '0';
+      // parentIdController.text = '';
       categoryTypeController.text = '';
     }
     setState(() {

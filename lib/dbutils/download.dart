@@ -10,9 +10,9 @@ Future<File> downloadFile(String url, String filename) async {
     var req = await client.get(Uri.parse(url));
     var bytes = req.bodyBytes;
     String dir = (await getApplicationDocumentsDirectory()).path;
-    print(dir);
+    // print(dir);
     String extDir = (await getExternalStorageDirectory()).path;
-    print(extDir);
+    // print(extDir);
     File file = new File('$extDir/$filename');
     // print(req.body);
     // await file.writeAsBytes(bytes);
