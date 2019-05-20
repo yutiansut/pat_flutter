@@ -7,13 +7,13 @@
 
 # Tutorial Pages
 
-   - [https://github.com/flutter/samples/blob/master/INDEX.md] A curated list of samples
+   - [A curated list of samples](https://github.com/flutter/samples/blob/master/INDEX.md)
 
-   - [https://medium.com/flutter-io/the-flutter-create-winners-are-40980f2d20b3] Flutter Create winners 2018
+   - [Flutter Create winners 2018](https://medium.com/flutter-io/the-flutter-create-winners-are-40980f2d20b3)
 
-   - [https://github.com/MSzalek-Mobile/weight_tracker/blob/v0.2.1/lib/weight_entry_dialog.dart] DateTimeItem Widget
+   - [DateTimeItem Widget](https://www.woolha.com/tutorials/flutter-date-time-datetime-picker-input-example)
 
-   - [https://www.woolha.com/tutorials/flutter-reading-and-writing-files-example] File operations - Crud
+   - [File operations - Crud](https://www.woolha.com/tutorials/flutter-reading-and-writing-files-example)
 
    - https://kodestat.gitbook.io/flutter/
 
