@@ -335,8 +335,7 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                 ),
               ),
               floatingActionButton: FloatingActionButton(
-                elevation: 0.0,
-                
+                elevation: 0.0,           
                 onPressed: () async {
                   bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return AccountDetailPage("Add Entry", {});
@@ -346,14 +345,11 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
                   }
                 },
                 tooltip: 'Add Account Line',
-
                 child: Image(
                   width: 50,
                   image: AssetImage("assets/inc_pen.png"),
                 ),
-
                 backgroundColor: Colors.transparent,
-
               ),
             ),
         );
