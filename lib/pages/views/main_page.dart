@@ -11,7 +11,7 @@ import 'accountslist.dart';
 import './categorylist.dart' as categList;
 import './accountdetail.dart' show AccountDetailPage;
 import './../../Xwidgets/XDialog.dart' as Dialog;
-// import 'package:file_picker/file_picker.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 Dialog.Dialog dialog = Dialog.Dialog();
 
@@ -46,6 +46,26 @@ class _MainPageState  extends State<MainPage> with SingleTickerProviderStateMixi
     models.init();
     _tabController = new TabController(vsync: this, length: myTabs.length);
     getTheme();
+    final QuickActions quickActions = const QuickActions();
+    quickActions.initialize((String shortcutType) async {
+      if (shortcutType == 'action_add') {
+        print('The user tapped on the "Add" action.');
+        bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return AccountDetailPage("Add Entry", {});
+        }));
+        if(result == true){
+          _tabController.animateTo((2 + 1) % 2);
+        } else {
+          print('The user tapped on the "increment" action.');
+        }
+      }
+    });
+    quickActions.setShortcutItems(<ShortcutItem>[
+      const ShortcutItem(
+          type: 'action_add', localizedTitle: 'Add Item', icon: 'AppIcon'),
+      // const ShortcutItem(
+      //     type: 'action_increment', localizedTitle: 'Info', icon: 'minus')
+    ]);
   }
 
   @override

@@ -15,6 +15,8 @@
 
    - [File operations - Crud](https://www.woolha.com/tutorials/flutter-reading-and-writing-files-example)
 
+   - [Quick Action Shortcuts](https://medium.com/flutter-community/quick-actions-in-flutter-c455caa4f2ba)
+
    - https://kodestat.gitbook.io/flutter/
 
    - https://www.flaticon.com/free-icon/
