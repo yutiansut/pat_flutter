@@ -1,5 +1,9 @@
 ## PAT_flutter - Hari
 
+### Screenshots
+
+<img src="screenshots/1.jpeg" height="300em" alt="Left Side bar with all configuration"/> <img src="screenshots/2.jpeg" height="300em" alt="List view"/> <img src="screenshots/3.jpeg" height="300em" alt="Entry form"/> <img src="screenshots/4.jpeg" height="300em" alt="Quick Action Shortcuts"/>
+
 # Based on Awasome guide of https://github.com/AndriousSolutions
 
 # Flutter Plugin Details:
