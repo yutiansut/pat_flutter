@@ -47,6 +47,13 @@
 
 	- http://www.sqlitetutorial.net/sqlite-date/
 
+  Platforms Enable:
+
+   - Enable Linux Desktop
+         - `flutter config --enable-linux-desktop`
+   - Enable Mac OS Desktop
+         - `flutter config --enable-macos-desktop`
+
 
 Git Clone by branch:
 -------------------
